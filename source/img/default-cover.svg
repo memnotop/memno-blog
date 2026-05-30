@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Blog cover">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#102033"/>
+      <stop offset="52%" stop-color="#245a63"/>
+      <stop offset="100%" stop-color="#f2b66d"/>
+    </linearGradient>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#ffffff" stroke-opacity=".09" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <circle cx="1240" cy="210" r="150" fill="#ffffff" fill-opacity=".12"/>
+  <circle cx="350" cy="710" r="220" fill="#ffffff" fill-opacity=".08"/>
+  <path d="M210 535c180-190 377-208 590-58 183 129 376 119 579-26" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="16" stroke-linecap="round"/>
+  <text x="150" y="385" fill="#fff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="78" font-weight="700">明见的博客</text>
+  <text x="154" y="468" fill="#eef6f5" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="34">想法 · 照片 · 资源 · 技术分享</text>
+</svg>
