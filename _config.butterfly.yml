@@ -168,8 +168,9 @@ subtitle:
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
-    - 把想法写下来，把经验留下来
-    - 技术、资源、照片和生活记录
+    - 求真
+    - 活在当下
+    -
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
