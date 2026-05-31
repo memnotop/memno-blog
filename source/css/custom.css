@@ -13,7 +13,24 @@ body {
 }
 
 #page-header.full_page {
-  min-height: 62vh;
+  min-height: 100vh;
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: #102033;
+}
+
+#page-header.full_page::before {
+  background: linear-gradient(
+    180deg,
+    rgba(5, 13, 22, 0.22) 0%,
+    rgba(5, 13, 22, 0.08) 46%,
+    rgba(5, 13, 22, 0.38) 100%
+  ) !important;
+}
+
+#scroll-down {
+  bottom: 34px;
 }
 
 #site-title {
@@ -107,6 +124,12 @@ body {
 
 .avatar-img img {
   object-fit: cover;
+  transform: rotate(0deg);
+  transition: transform 0.5s ease;
+}
+
+.avatar-img:hover img {
+  transform: rotate(360deg);
 }
 
 .mem-grid {

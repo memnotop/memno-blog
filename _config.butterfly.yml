@@ -60,7 +60,7 @@ favicon: /img/favicon.png
 
 avatar:
   img: /img/avatar.png
-  effect: true
+  effect: false
 
 # Disable all banner images
 disable_top_img: false
@@ -148,7 +148,7 @@ post_meta:
 # The position of site info, eg: 300px/300em/300rem/10%
 index_site_info_top:
 # The height of top_img, eg: 300px/300em/300rem
-index_top_img_height: 62vh
+index_top_img_height: 100vh
 
 # The subtitle on homepage
 subtitle:
@@ -322,8 +322,8 @@ aside:
   card_tags:
     enable: true
     # If set 0 will show all
-    limit: 40
-    color: false
+    limit: 24
+    color: true
     custom_colors:
     # Order of tags, random/name/length
     orderby: random
@@ -517,7 +517,7 @@ search:
 share:
   # Choose: sharejs / addtoany
   # Leave it empty if you don't need share
-  use: sharejs
+  use:
 
   # Share.js
   # https://github.com/overtrue/share.js
