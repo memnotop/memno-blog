@@ -7,3 +7,5 @@ public/
 .deploy*/
 _multiconfig.yml
 .kanna/
+*.swp
+.*.swp

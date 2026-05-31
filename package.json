@@ -6,7 +6,10 @@
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "preview": "bash tools/preview.sh",
+    "new:post": "bash tools/new-post.sh",
+    "publish": "bash tools/publish.sh"
   },
   "hexo": {
     "version": "8.1.2"
