@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Blog: Preview",
+      "type": "shell",
+      "command": "npm run preview",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Blog: Build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Blog: New Post",
+      "type": "shell",
+      "command": "read -p 'Post title: ' title && npm run new:post -- \"$title\"",
+      "problemMatcher": []
+    },
+    {
+      "label": "Blog: Publish",
+      "type": "shell",
+      "command": "read -p 'Commit message: ' message && npm run publish -- \"${message:-update blog content}\"",
+      "problemMatcher": []
+    }
+  ]
+}
