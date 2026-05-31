@@ -5,7 +5,7 @@ categories: 技术分享
 tags:
   - 待分类
 description: 
-cover: /img/default-cover.svg
+cover: /img/default-cover.png
 ---
 
 ## 背景

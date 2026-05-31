@@ -5,7 +5,7 @@ categories: 想法
 tags:
   - 草稿
 description:
-cover: /img/default-cover.svg
+cover: /img/default-cover.png
 ---
 
 ## 记录

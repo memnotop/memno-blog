@@ -5,7 +5,7 @@ categories: 资源
 tags:
   - 工具
 description: 一句话说明这个资源的用途。
-cover: /img/default-cover.svg
+cover: /img/default-cover.png
 ---
 
 ## 链接
