@@ -192,6 +192,7 @@ body {
 
 .avatar-img img {
   object-fit: cover;
+  border-radius: 50%;
   transform: rotate(0deg);
   transition: transform 0.5s ease;
 }
@@ -200,21 +201,27 @@ body {
   position: relative;
   display: inline-block;
   overflow: visible;
+  border-radius: 50%;
+}
+
+.card-info .avatar-img img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  border-radius: 50%;
 }
 
 .card-info .avatar-img::before {
   position: absolute;
-  top: -18px;
+  top: -4px;
   left: 50%;
-  z-index: 3;
-  color: #e0ab2f;
-  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
-  font-size: 1.2rem;
-  font-weight: 900;
-  line-height: 1;
-  content: "\f521";
-  transform: translateX(-50%) rotate(-6deg);
-  text-shadow: 0 2px 8px rgba(224, 171, 47, 0.28);
+  z-index: 2;
+  width: 38px;
+  height: 28px;
+  background: url("/img/crown.png") center / contain no-repeat;
+  content: "";
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2px 6px rgba(184, 144, 52, 0.22));
   pointer-events: none;
 }
 
