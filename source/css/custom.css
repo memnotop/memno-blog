@@ -196,38 +196,94 @@ body {
   transition: transform 0.5s ease;
 }
 
+.card-info .avatar-img {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+
+.card-info .avatar-img::before {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  z-index: 3;
+  color: #e0ab2f;
+  font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1;
+  content: "\f521";
+  transform: translateX(-50%) rotate(-6deg);
+  text-shadow: 0 2px 8px rgba(224, 171, 47, 0.28);
+  pointer-events: none;
+}
+
 .avatar-img:hover img {
   transform: rotate(360deg);
 }
 
 .card-info {
-  border: 2px solid rgba(173, 216, 255, 0.95) !important;
+  border: 2px solid transparent !important;
   background: rgba(232, 244, 255, 0.95) !important;
   box-shadow: 0 10px 24px rgba(173, 216, 255, 0.28) !important;
 }
 
 .card-announcement {
-  border: 2px solid rgba(244, 181, 181, 0.95) !important;
+  border: 2px solid transparent !important;
   background: rgba(255, 238, 238, 0.95) !important;
   box-shadow: 0 10px 24px rgba(244, 181, 181, 0.24) !important;
 }
 
 .card-categories {
-  border: 2px solid rgba(210, 193, 248, 0.95) !important;
+  border: 2px solid transparent !important;
   background: rgba(245, 239, 255, 0.96) !important;
   box-shadow: 0 10px 24px rgba(210, 193, 248, 0.24) !important;
 }
 
 .card-tags {
-  border: 2px solid rgba(176, 222, 176, 0.95) !important;
+  border: 2px solid transparent !important;
   background: rgba(236, 251, 236, 0.96) !important;
   box-shadow: 0 10px 24px rgba(176, 222, 176, 0.24) !important;
 }
 
+.card-archives {
+  border: 2px solid transparent !important;
+  background: rgba(242, 244, 247, 0.96) !important;
+  box-shadow: 0 10px 24px rgba(173, 181, 189, 0.2) !important;
+}
+
 .card-webinfo {
-  border: 2px solid rgba(243, 194, 219, 0.95) !important;
+  border: 2px solid transparent !important;
   background: rgba(255, 239, 246, 0.96) !important;
   box-shadow: 0 10px 24px rgba(243, 194, 219, 0.24) !important;
+}
+
+.card-info:hover {
+  border-color: rgba(173, 216, 255, 0.95) !important;
+}
+
+.card-announcement:hover {
+  border-color: rgba(244, 181, 181, 0.95) !important;
+}
+
+.card-categories:hover {
+  border-color: rgba(210, 193, 248, 0.95) !important;
+}
+
+.card-tags:hover {
+  border-color: rgba(176, 222, 176, 0.95) !important;
+}
+
+.card-archives:hover {
+  border-color: rgba(173, 181, 189, 0.95) !important;
+}
+
+.card-webinfo:hover {
+  border-color: rgba(243, 194, 219, 0.95) !important;
+}
+
+.card-recent-post {
+  display: none !important;
 }
 
 .card-webinfo .webinfo-item {
