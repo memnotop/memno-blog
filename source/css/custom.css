@@ -12,6 +12,13 @@ body {
   letter-spacing: 0;
 }
 
+#body-wrap {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(214, 232, 228, 0.82) 0, rgba(214, 232, 228, 0) 26%),
+    radial-gradient(circle at 78% 20%, rgba(187, 214, 222, 0.62) 0, rgba(187, 214, 222, 0) 24%),
+    linear-gradient(180deg, rgba(235, 243, 243, 0.98) 0%, rgba(228, 239, 237, 0.98) 42%, rgba(221, 234, 229, 0.99) 100%);
+}
+
 #page-header.full_page {
   min-height: 100vh;
   background-size: cover !important;
