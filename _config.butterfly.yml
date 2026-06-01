@@ -168,10 +168,11 @@ subtitle:
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
-    - 求真
-    - 活在当下
-    - 记录
     - 经历
+    - 理解
+    - 记录
+    - 求真
+
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
@@ -291,7 +292,7 @@ aside:
     category: true
   card_author:
     enable: true
-    description: 记录想法、照片、资源与技术分享
+    description: 如切如磋，如琢如磨。
     button:
       enable: true
       icon: fab fa-github
@@ -299,7 +300,7 @@ aside:
       link: https://github.com/memnotop
   card_announcement:
     enable: true
-    content: 欢迎来到我的个人博客。这里会沉淀想法、照片、资源和技术分享。
+    content: 欢迎来到我的个人博客。现在正在慢慢发展中。
   card_recent_post:
     enable: true
     # If set 0 will show all
