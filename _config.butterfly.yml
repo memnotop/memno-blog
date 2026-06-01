@@ -148,7 +148,7 @@ post_meta:
 # The position of site info, eg: 300px/300em/300rem/10%
 index_site_info_top:
 # The height of top_img, eg: 300px/300em/300rem
-index_top_img_height: 46vh
+index_top_img_height: 100vh
 
 # The subtitle on homepage
 subtitle:
@@ -191,7 +191,7 @@ index_layout: 3
 index_post_content:
   method: 2
   # If you set method to 2 or 3, the length need to config
-  length: 120
+  length: 150
 
 # --------------------------------------
 # Post Settings
