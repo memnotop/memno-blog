@@ -197,10 +197,18 @@ body {
   transition: transform 0.5s ease;
 }
 
+.avatar-img {
+  width: min(330px, 100%);
+  height: min(330px, 100%);
+  border-radius: 50%;
+}
+
 .card-info .avatar-img {
   position: relative;
   display: inline-block;
   overflow: visible;
+  width: min(330px, 100%);
+  height: min(330px, 100%);
   border-radius: 50%;
 }
 
@@ -213,11 +221,11 @@ body {
 
 .card-info .avatar-img::before {
   position: absolute;
-  top: -4px;
+  top: 10px;
   left: 50%;
   z-index: 2;
-  width: 38px;
-  height: 28px;
+  width: 96px;
+  height: 66px;
   background: url("/img/crown.png") center / contain no-repeat;
   content: "";
   transform: translateX(-50%);
