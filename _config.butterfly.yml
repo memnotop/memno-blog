@@ -59,17 +59,17 @@ social:
 favicon: /img/favicon.png
 
 avatar:
-  img: /img/avatar.png
+  img: /img/avatar.webp
   effect: false
 
 # Disable all banner images
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img: /img/default-cover.png
+default_top_img: /img/default-cover.webp
 
 # The banner image of index page
-index_img: /img/default-cover.png
+index_img: /img/default-cover.webp
 
 # The banner image of archive page
 archive_img:
@@ -105,7 +105,7 @@ cover:
   archives_enable: true
   # When cover is not set, the default cover is displayed
   default_cover:
-    - /img/default-cover.png
+    - /img/default-cover.webp
 
 # Replace Broken Images
 error_img:
@@ -1026,7 +1026,7 @@ instantpage: false
 # Lazyload
 # https://github.com/verlok/vanilla-lazyload
 lazyload:
-  enable: false
+  enable: true
   # Use browser's native lazyload instead of vanilla-lazyload
   native: false
   # Specify the field to use lazyload (site or post)
@@ -1085,14 +1085,14 @@ CDN:
   # Note: Dev version can only use 'local' for internal scripts
   # Note: When setting third-party scripts to 'local', you need to install hexo-butterfly-extjs
   internal_provider: local
-  third_party_provider: jsdelivr
+  third_party_provider: custom
 
   # Add version number to url, true or false
   version: true
 
   # Custom format
   # For example: https://cdn.staticfile.org/${cdnjs_name}/${version}/${min_cdnjs_file}
-  custom_format:
+  custom_format: https://npm.onmicrosoft.cn/${name}@${version}/${min_file}
 
   option:
     # abcjs_basic_js:
@@ -1115,18 +1115,18 @@ CDN:
     # disqusjs_css:
     # docsearch_css:
     # docsearch_js:
-    # egjs_infinitegrid:
+    egjs_infinitegrid: https://npm.onmicrosoft.cn/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js
     # fancybox:
     # fancybox_css:
     # fireworks:
-    # fontawesome:
+    fontawesome: https://npm.onmicrosoft.cn/@fortawesome/fontawesome-free@7.1.0/css/all.min.css
     # gitalk:
     # gitalk_css:
     # giscus:
     # instantpage:
     # katex:
     # katex_copytex:
-    # lazyload:
+    lazyload: https://npm.onmicrosoft.cn/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js
     # local_search:
     # main:
     # main_css:
@@ -1144,7 +1144,7 @@ CDN:
     # snackbar_css:
     # translate:
     # twikoo:
-    # typed:
+    typed: https://npm.onmicrosoft.cn/typed.js@3.0.0/dist/typed.umd.js
     # utils:
     # valine:
     # waline_css:

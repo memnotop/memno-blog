@@ -6,7 +6,7 @@ tags:
   - GitHub Pages
   - 维护
 description: 记录这个博客常用的配置位置、写作流程和部署方式。
-cover: /img/default-cover.png
+cover: /img/default-cover.webp
 abbrlink: 7a24c421
 date: 2026-05-31 00:35:00
 ---
@@ -39,7 +39,7 @@ categories: 技术分享
 tags:
   - 标签
 description: 一句话说明这篇文章解决什么问题。
-cover: /img/default-cover.png
+cover: /img/default-cover.webp
 ---
 ```
 

@@ -4,7 +4,7 @@ categories: 想法
 tags:
   - 说明
 description: 这是这个博客的第一篇文章，用来记录建站初衷和内容方向。
-cover: /img/default-cover.png
+cover: /img/default-cover.webp
 abbrlink: 79bc8be2
 date: 2026-05-30 22:00:00
 ---

@@ -5,7 +5,7 @@ tags:
   - Hexo
   - 建站
 description: 这是一篇技术分享模板，可以复制它来写后续技术文章。
-cover: /img/default-cover.png
+cover: /img/default-cover.webp
 abbrlink: ecf05a39
 date: 2026-05-30 22:20:00
 ---

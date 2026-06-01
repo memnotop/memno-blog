@@ -5,7 +5,7 @@ tags:
   - 工具
   - 收藏
 description: 这是一篇资源整理模板，用来沉淀工具、网站和资料。
-cover: /img/default-cover.png
+cover: /img/default-cover.webp
 abbrlink: 536d021c
 date: 2026-05-30 22:25:00
 ---
