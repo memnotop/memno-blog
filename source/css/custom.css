@@ -61,9 +61,9 @@ body {
   min-height: 0;
   margin-bottom: 18px !important;
   overflow: hidden;
-  border: 1px solid rgba(228, 184, 91, 0.42);
+  border: 1.5px solid rgba(218, 166, 55, 0.72);
   border-radius: 8px !important;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 251, 235, 0.86);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
@@ -73,7 +73,7 @@ body {
   top: 50%;
   right: -18px;
   z-index: 0;
-  color: rgba(228, 184, 91, 0.18);
+  color: rgba(36, 90, 99, 0.08);
   font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
   font-size: 9.4rem;
   font-weight: 900;
@@ -84,20 +84,23 @@ body {
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E6%83%B3%E6%B3%95"])::after {
+  color: rgba(216, 138, 61, 0.12);
   content: "\f0eb";
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E8%B5%84%E6%BA%90"])::after {
+  color: rgba(36, 90, 99, 0.1);
   content: "\f07b";
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB"])::after {
+  color: rgba(65, 92, 130, 0.1);
   content: "\f121";
 }
 
 .recent-post-item:hover {
   transform: translateY(-2px);
-  border-color: rgba(228, 184, 91, 0.68);
+  border-color: rgba(218, 166, 55, 0.95);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
 }
 
