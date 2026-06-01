@@ -62,7 +62,7 @@ body {
   margin-bottom: 18px !important;
   overflow: hidden;
   border: 2px solid rgba(197, 228, 197, 0.96);
-  border-radius: 8px !important;
+  border-radius: 26px !important;
   background: rgba(231, 246, 231, 0.42);
   box-shadow:
     inset 0 0 14px rgba(115, 166, 115, 0.08),
@@ -74,7 +74,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
-  border-radius: 2px;
+  border-radius: 22px;
   background: rgba(240, 251, 240, 0.98);
   box-shadow:
     inset 0 0 14px rgba(115, 166, 115, 0.12),
@@ -198,8 +198,8 @@ body {
 }
 
 .avatar-img {
-  width: min(180px, 100%);
-  height: min(180px, 100%);
+  width: min(140px, 100%);
+  height: min(140px, 100%);
   border-radius: 50%;
 }
 
@@ -207,8 +207,8 @@ body {
   position: relative;
   display: inline-block;
   overflow: visible;
-  width: min(180px, 100%);
-  height: min(180px, 100%);
+  width: min(140px, 100%);
+  height: min(140px, 100%);
   padding: 6px;
   background: linear-gradient(135deg, #ff6b6b, #ffb86b, #ffe66d, #6bff95, #6bcBff, #8c6bff, #ff6bd6);
   border-radius: 50%;
@@ -230,63 +230,45 @@ body {
 }
 
 .card-info {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(173, 216, 255, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(232, 244, 255, 0.95) !important;
   box-shadow: 0 10px 24px rgba(173, 216, 255, 0.28) !important;
 }
 
 .card-announcement {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(244, 181, 181, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(255, 238, 238, 0.95) !important;
   box-shadow: 0 10px 24px rgba(244, 181, 181, 0.24) !important;
 }
 
 .card-categories {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(210, 193, 248, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(245, 239, 255, 0.96) !important;
   box-shadow: 0 10px 24px rgba(210, 193, 248, 0.24) !important;
 }
 
 .card-tags {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(232, 205, 122, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(255, 247, 220, 0.96) !important;
   box-shadow: 0 10px 24px rgba(232, 205, 122, 0.22) !important;
 }
 
 .card-archives {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(173, 181, 189, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(242, 244, 247, 0.96) !important;
   box-shadow: 0 10px 24px rgba(173, 181, 189, 0.2) !important;
 }
 
 .card-webinfo {
-  border: 2px solid transparent !important;
+  border: 2px solid rgba(243, 194, 219, 0.95) !important;
+  border-radius: 26px !important;
   background: rgba(255, 239, 246, 0.96) !important;
   box-shadow: 0 10px 24px rgba(243, 194, 219, 0.24) !important;
-}
-
-.card-info:hover {
-  border-color: rgba(173, 216, 255, 0.95) !important;
-}
-
-.card-announcement:hover {
-  border-color: rgba(244, 181, 181, 0.95) !important;
-}
-
-.card-categories:hover {
-  border-color: rgba(210, 193, 248, 0.95) !important;
-}
-
-.card-tags:hover {
-  border-color: rgba(232, 205, 122, 0.95) !important;
-}
-
-.card-archives:hover {
-  border-color: rgba(173, 181, 189, 0.95) !important;
-}
-
-.card-webinfo:hover {
-  border-color: rgba(243, 194, 219, 0.95) !important;
 }
 
 .card-recent-post {
