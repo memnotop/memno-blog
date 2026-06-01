@@ -68,17 +68,34 @@ body {
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
+.recent-post-item::before {
+  position: absolute;
+  top: 24px;
+  right: 30px;
+  width: 112px;
+  height: 64px;
+  border-top: 1px solid rgba(36, 90, 99, 0.12);
+  border-right: 1px solid rgba(36, 90, 99, 0.12);
+  background:
+    linear-gradient(90deg, rgba(36, 90, 99, 0.1), rgba(36, 90, 99, 0)) 0 24px / 100% 1px no-repeat,
+    linear-gradient(180deg, rgba(36, 90, 99, 0.08), rgba(36, 90, 99, 0)) 34px 0 / 1px 100% no-repeat;
+  content: "";
+  pointer-events: none;
+}
+
 .recent-post-item::after {
   position: absolute;
-  right: -8px;
-  bottom: -18px;
+  top: 50%;
+  right: -18px;
+  z-index: 0;
   color: rgba(36, 90, 99, 0.08);
   font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
-  font-size: 7.4rem;
+  font-size: 9.4rem;
   font-weight: 900;
   line-height: 1;
   content: "\f02e";
   pointer-events: none;
+  transform: translateY(-42%);
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E6%83%B3%E6%B3%95"])::after {
@@ -243,6 +260,19 @@ body {
 @media (max-width: 768px) {
   .recent-post-item {
     min-height: auto;
+  }
+
+  .recent-post-item::before {
+    top: 18px;
+    right: 18px;
+    width: 74px;
+    height: 44px;
+  }
+
+  .recent-post-item::after {
+    right: -16px;
+    font-size: 6.6rem;
+    transform: translateY(-34%);
   }
 
   .recent-post-info {
