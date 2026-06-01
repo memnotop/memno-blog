@@ -306,6 +306,29 @@ body {
   border-radius: 8px !important;
 }
 
+#post-comment {
+  margin-top: 2rem;
+  padding: 22px 24px 24px;
+  border: 2px solid rgba(210, 193, 248, 0.95) !important;
+  border-radius: 8px !important;
+  background: rgba(245, 239, 255, 0.96) !important;
+  box-shadow: 0 10px 24px rgba(210, 193, 248, 0.24) !important;
+}
+
+#post-comment .comment-head {
+  margin-bottom: 16px;
+}
+
+#post-comment .comment-headline {
+  color: #3b3340;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+#giscus-wrap {
+  min-height: 170px;
+}
+
 .card-recent-post {
   display: none !important;
 }
@@ -448,6 +471,16 @@ body {
 
 [data-theme='dark'] #post {
   background: rgba(28, 43, 32, 0.96) !important;
+}
+
+[data-theme='dark'] #post-comment {
+  border-color: rgba(122, 98, 176, 0.95) !important;
+  background: rgba(42, 34, 62, 0.96) !important;
+  box-shadow: 0 10px 24px rgba(66, 48, 104, 0.3) !important;
+}
+
+[data-theme='dark'] #post-comment .comment-headline {
+  color: #e8e1ff;
 }
 
 [data-theme='dark'] #card-toc .toc-link.active {

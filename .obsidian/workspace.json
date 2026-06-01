@@ -11,10 +11,14 @@
             "id": "b5e541f6ea2bcf14",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "source/about/index.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "index"
             }
           }
         ]
@@ -69,8 +73,19 @@
               "icon": "lucide-bookmark",
               "title": "书签"
             }
+          },
+          {
+            "id": "1cb8edafbae54690",
+            "type": "leaf",
+            "state": {
+              "type": "mk-path-view",
+              "state": {},
+              "icon": "layout-grid",
+              "title": "Navigator"
+            }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -157,6 +172,16 @@
               "icon": "lucide-list",
               "title": "大纲"
             }
+          },
+          {
+            "id": "89d9e17622f64b72",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
           }
         ]
       }
@@ -173,31 +198,42 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "b5e541f6ea2bcf14",
   "lastOpenFiles": [
+    "public/tags/说明/index.html",
+    "public/tags/说明",
+    "source/_posts/道德经-1.md",
+    "source/_posts/resource-collection-template.md",
+    "source/_posts/first-tech-note.md",
+    "source/_posts/hello-world.md",
+    "source/resources/index.md",
+    "().md",
+    "source/photos/index.md",
+    "source/_posts/blog-maintenance-guide.md",
+    "source/_posts/Untitled.md",
+    "source/_posts/测试2.md",
+    "source/img/favicon.png",
+    "source/img/default-coverr.png",
+    "source/img/default-cover.png",
+    "source/img/default-cove.png",
+    "source/img/crown.png",
+    "source/img/cat-icon.png",
+    "source/img/avatar.png",
+    "source/img/image-20260601145019.png",
+    "source/img/image-20260601145131.png",
+    "source/img/image-20260601144632.png",
+    "Tags",
     "db.json",
-    "public/img/default-cover.png",
-    "public/img/default-coverr.png",
-    "public/img/default-cove.png",
-    "public/img/avatar.png",
-    "public/img/butterfly-icon.png",
     "public/css/var.css",
     "public/css/index.css",
     "public/tags/收藏/index.html",
     "public/tags/收藏",
     "public/tags/建站/index.html",
     "public/tags/建站",
-    "public/tags/工具/index.html",
-    "public/tags/工具",
-    "public/tags/记录/index.html",
-    "public/tags/记录",
-    "public/img/cat-icon.png",
-    "public/img/favicon.png",
-    "public/img/error-page.png",
-    "public/img/friend_404.gif",
-    "public/img/404.jpg"
+    "public/tags/工具/index.html"
   ]
 }

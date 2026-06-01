@@ -6,6 +6,8 @@ type: resources
 
 这里适合整理常用工具、网站、教程、书籍和资料。
 
+**此模块不完善，正在发展中**
+
 <div class="mem-grid">
   <a class="mem-card" href="#工具">
     <h3>工具</h3>
@@ -27,6 +29,9 @@ type: resources
 - [Vercel](https://vercel.com/)：静态网站和前端项目部署。
 - [MDN Web Docs](https://developer.mozilla.org/)：Web 技术文档。
 - [西部数码](https://www.west.cn/)：域名注册与 DNS 解析管理。
+- [z_library](https://zh.101sun.ru/)：下载图书，资源丰富。
+- [Koodo Reader](https://koodoreader.com/zh/download?version=developer)：阅读工具，功能强且免费。
+
 
 ## 学习资料
 
