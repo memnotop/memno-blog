@@ -61,26 +61,11 @@ body {
   min-height: 0;
   margin-bottom: 18px !important;
   overflow: hidden;
-  border: 1px solid rgba(36, 90, 99, 0.12);
+  border: 1px solid rgba(228, 184, 91, 0.42);
   border-radius: 8px !important;
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.055);
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-.recent-post-item::before {
-  position: absolute;
-  top: 24px;
-  right: 30px;
-  width: 112px;
-  height: 64px;
-  border-top: 1px solid rgba(36, 90, 99, 0.12);
-  border-right: 1px solid rgba(36, 90, 99, 0.12);
-  background:
-    linear-gradient(90deg, rgba(36, 90, 99, 0.1), rgba(36, 90, 99, 0)) 0 24px / 100% 1px no-repeat,
-    linear-gradient(180deg, rgba(36, 90, 99, 0.08), rgba(36, 90, 99, 0)) 34px 0 / 1px 100% no-repeat;
-  content: "";
-  pointer-events: none;
 }
 
 .recent-post-item::after {
@@ -88,7 +73,7 @@ body {
   top: 50%;
   right: -18px;
   z-index: 0;
-  color: rgba(36, 90, 99, 0.08);
+  color: rgba(228, 184, 91, 0.18);
   font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
   font-size: 9.4rem;
   font-weight: 900;
@@ -99,23 +84,20 @@ body {
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E6%83%B3%E6%B3%95"])::after {
-  color: rgba(216, 138, 61, 0.12);
   content: "\f0eb";
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E8%B5%84%E6%BA%90"])::after {
-  color: rgba(36, 90, 99, 0.1);
   content: "\f07b";
 }
 
 .recent-post-item:has(.article-meta__categories[href*="%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB"])::after {
-  color: rgba(65, 92, 130, 0.1);
   content: "\f121";
 }
 
 .recent-post-item:hover {
   transform: translateY(-2px);
-  border-color: rgba(216, 138, 61, 0.36);
+  border-color: rgba(228, 184, 91, 0.68);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
 }
 
@@ -260,13 +242,6 @@ body {
 @media (max-width: 768px) {
   .recent-post-item {
     min-height: auto;
-  }
-
-  .recent-post-item::before {
-    top: 18px;
-    right: 18px;
-    width: 74px;
-    height: 44px;
   }
 
   .recent-post-item::after {
