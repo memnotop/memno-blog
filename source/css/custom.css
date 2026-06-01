@@ -14,7 +14,7 @@ body {
 
 #page-header.full_page {
   min-height: 100vh;
-  background-size: contain !important;
+  background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-color: #102033;
