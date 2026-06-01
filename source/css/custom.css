@@ -311,21 +311,30 @@ body {
 }
 
 .card-webinfo .webinfo-item {
-  padding: 6px 6px 0 !important;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 8px 4px !important;
 }
 
 .card-webinfo .item-name,
 .card-webinfo .item-count {
-  font-size: 1rem;
+  font-size: 1.08rem;
 }
 
 .card-webinfo .item-name {
+  flex: 1 1 auto;
   color: #5b4b58;
+  font-weight: 500;
 }
 
 .card-webinfo .item-count {
+  flex: 0 0 auto;
   color: #3b3340;
+  font-size: 1.12rem;
   font-weight: 500;
+  letter-spacing: 0.01em;
   text-align: right;
 }
 
