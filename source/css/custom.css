@@ -271,6 +271,22 @@ body {
   box-shadow: 0 10px 24px rgba(243, 194, 219, 0.24) !important;
 }
 
+#card-toc {
+  border: 2px solid rgba(210, 193, 248, 0.95) !important;
+  border-radius: 8px !important;
+  background: rgba(245, 239, 255, 0.96) !important;
+  box-shadow: 0 10px 24px rgba(210, 193, 248, 0.24) !important;
+}
+
+#card-toc .toc-link.active {
+  background: rgba(210, 193, 248, 0.7) !important;
+  color: #3b3340 !important;
+}
+
+#card-toc .toc-content .toc-link:hover {
+  color: #6d5ca6 !important;
+}
+
 #post {
   background: rgba(237, 249, 237, 0.98) !important;
   border-radius: 8px !important;
