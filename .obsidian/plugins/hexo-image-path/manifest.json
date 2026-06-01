@@ -1,0 +1,9 @@
+{
+  "id": "hexo-image-path",
+  "name": "Hexo Image Path",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Save pasted images to source/img and insert Hexo readable /img links.",
+  "author": "memnotop",
+  "isDesktopOnly": false
+}
