@@ -221,11 +221,11 @@ body {
 
 .card-info .avatar-img::before {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 50%;
   z-index: 2;
-  width: 96px;
-  height: 66px;
+  width: 144px;
+  height: 99px;
   background: url("/img/crown.png") center / contain no-repeat;
   content: "";
   transform: translateX(-50%);
