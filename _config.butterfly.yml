@@ -302,7 +302,7 @@ aside:
     enable: true
     content: 欢迎来到我的个人博客。现在正在慢慢发展中。
   card_recent_post:
-    enable: true
+    enable: false
     # If set 0 will show all
     limit: 5
     # Sort: date / updated
@@ -360,7 +360,7 @@ aside:
     # Time difference between publish date and now
     # Formal: Month/Day/Year Time or Year/Month/Day Time
     # Leave it empty if you don't enable this feature
-    runtime_date:
+    runtime_date: 2026/05/30 22:00:00
 
 # --------------------------------------
 # Bottom right button
@@ -437,7 +437,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -447,8 +447,8 @@ wordcount:
 
 # Busuanzi count for PV / UV in site
 busuanzi:
-  site_uv: false
-  site_pv: false
+  site_uv: true
+  site_pv: true
   page_pv: false
 
 # --------------------------------------
