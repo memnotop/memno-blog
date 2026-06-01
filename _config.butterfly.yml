@@ -168,10 +168,10 @@ subtitle:
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
-    - 经历
-    - 理解
-    - 记录
-    - 求真
+    - 经 历
+    - 理 解
+    - 记 录
+    - 求 真
 
 
 # Article layout on the homepage
@@ -447,8 +447,8 @@ wordcount:
 
 # Busuanzi count for PV / UV in site
 busuanzi:
-  site_uv: true
-  site_pv: true
+  site_uv: false
+  site_pv: false
   page_pv: false
 
 # --------------------------------------
