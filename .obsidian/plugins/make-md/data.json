@@ -41,12 +41,13 @@
     "/",
     "//source",
     "//source/source/_posts",
-    "//source/source/photos",
     "//source/source/img/source/img/photos",
     "//source/source/resources",
     "//source/source/thoughts",
     "//source/source/links",
-    "//source/source/about"
+    "//source/source/about",
+    "//source/source/daily-life",
+    "//source/source/photos"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
