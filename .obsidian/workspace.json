@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "source/thoughts/index.md",
+                "file": "source/_posts/hello-world.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "hello-world"
             }
           }
         ]
@@ -75,7 +75,7 @@
             }
           },
           {
-            "id": "1cb8edafbae54690",
+            "id": "0179ae3898032d3d",
             "type": "leaf",
             "state": {
               "type": "mk-path-view",
@@ -204,17 +204,30 @@
   },
   "active": "b5e541f6ea2bcf14",
   "lastOpenFiles": [
-    "source/resources/index.md",
-    "source/photos/index.md",
+    "db.json",
+    "public/reading/index.html",
+    "public/reading",
+    "public/links/index.html",
+    "public/links",
+    "public/daily-life/index.html",
+    "public/daily-life",
     "source/_posts/blog-maintenance-guide.md",
     "source/_posts/hello-world.md",
+    "source/reading/index.md",
+    "source/reading",
+    "source/daily-life/index.md",
+    "source/daily-life",
+    "source/links/index.md",
+    "source/links",
+    "source/thoughts/index.md",
+    "source/resources/index.md",
+    "source/photos/index.md",
     "source/_posts/first-tech-note.md",
     "source/_posts/resource-collection-template.md",
     "source/_posts/道德经-1.md",
     "source/about/index.md",
     "source/_posts/_posts.md",
     "source/source.md",
-    "db.json",
     "public/img/uploads/11.png",
     "public/img/uploads",
     "public/img/default-cover.png",
@@ -222,15 +235,7 @@
     "public/img/default-cove.png",
     "public/img/avatar.png",
     "public/img/butterfly-icon.png",
-    "public/css/index.css",
-    "public/css/var.css",
-    "public/archives/2026/index.html",
-    "public/tags/维护/index.html",
-    "public/tags/维护",
     "public/img/favicon.png",
-    "public/tags/说明/index.html",
-    "public/tags/说明",
-    "public/js/search/local-search.js",
     "public/img/crown.png",
     "public/img/cat-icon.png",
     "public/img/friend_404.gif",
