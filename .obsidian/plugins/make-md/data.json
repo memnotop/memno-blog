@@ -44,7 +44,9 @@
     "//source/source/photos",
     "//source/source/img/source/img/photos",
     "//source/source/resources",
-    "//source/source/thoughts"
+    "//source/source/thoughts",
+    "//source/source/links",
+    "//source/source/about"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",

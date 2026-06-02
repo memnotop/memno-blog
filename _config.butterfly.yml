@@ -18,16 +18,16 @@ nav:
   fixed: true
 
 menu:
-  Home: /
-  Blog:
-    Daily Life: /daily-life/
-    Reading: /reading/
-    Technical: /categories/技术分享/
-    Picture: /photos/
-  Archives: /archives/
-  Links: /links/
-  About: /about/
-  Traveling: https://www.travellings.cn/go
+  Home: / || fas fa-home
+  Blog||fas fa-book-open:
+    Daily Life: /daily-life/ || fas fa-mug-hot
+    Reading: /reading/ || fas fa-book
+    Technical: /categories/技术分享/ || fas fa-code
+    Picture: /photos/ || fas fa-image
+  Links: /links/ || fas fa-link
+  Archives: /archives/ || fas fa-archive
+  About: /about/ || fas fa-user
+  Traveling: https://www.travellings.cn/go || fas fa-train
 
 # --------------------------------------
 # Code Blocks Settings

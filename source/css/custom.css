@@ -211,6 +211,11 @@ body {
   transition: transform 0.5s ease;
 }
 
+.avatar-img a {
+  display: inline-block;
+  cursor: pointer;
+}
+
 .avatar-img {
   width: min(140px, 100%);
   height: min(140px, 100%);
@@ -237,6 +242,12 @@ body {
   height: 100%;
   background: #fff;
   border-radius: 50%;
+}
+
+.card-info .avatar-img a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .avatar-img:hover img {

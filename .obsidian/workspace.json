@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "source/_posts/hello-world.md",
+                "file": "source/about/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "hello-world"
+              "title": "index"
             }
           }
         ]
@@ -75,7 +75,7 @@
             }
           },
           {
-            "id": "0179ae3898032d3d",
+            "id": "7ac4b733692dee1f",
             "type": "leaf",
             "state": {
               "type": "mk-path-view",
@@ -204,21 +204,32 @@
   },
   "active": "b5e541f6ea2bcf14",
   "lastOpenFiles": [
-    "db.json",
-    "public/reading/index.html",
-    "public/reading",
-    "public/links/index.html",
-    "public/links",
-    "public/daily-life/index.html",
-    "public/daily-life",
-    "source/_posts/blog-maintenance-guide.md",
-    "source/_posts/hello-world.md",
-    "source/reading/index.md",
-    "source/reading",
-    "source/daily-life/index.md",
-    "source/daily-life",
+    "public/tags",
+    "public",
+    "public/img/uploads/11.png",
+    "public/img/uploads",
+    "public/img/default-cover.png",
+    "public/img/default-coverr.png",
+    "public/img/avatar.png",
+    "public/img/default-cove.png",
+    "public/img/butterfly-icon.png",
+    "public/css/index.css",
+    "public/img/default-cover.webp",
+    "public/css/var.css",
+    "public/archives/2026/index.html",
+    "public/js/search/local-search.js",
+    "public/js/search/algolia.js",
+    "public/js/utils.js",
+    "public/js/tw_cn.js",
+    "public/js/search",
+    "public/img/favicon.png",
+    "public/img/crown.png",
+    "public/img/cat-icon.png",
     "source/links/index.md",
-    "source/links",
+    "source/_posts/hello-world.md",
+    "source/_posts/blog-maintenance-guide.md",
+    "source/reading/index.md",
+    "source/daily-life/index.md",
     "source/thoughts/index.md",
     "source/resources/index.md",
     "source/photos/index.md",
@@ -228,17 +239,6 @@
     "source/about/index.md",
     "source/_posts/_posts.md",
     "source/source.md",
-    "public/img/uploads/11.png",
-    "public/img/uploads",
-    "public/img/default-cover.png",
-    "public/img/default-coverr.png",
-    "public/img/default-cove.png",
-    "public/img/avatar.png",
-    "public/img/butterfly-icon.png",
-    "public/img/favicon.png",
-    "public/img/crown.png",
-    "public/img/cat-icon.png",
-    "public/img/friend_404.gif",
     "().md",
     "source/_posts/Untitled.md",
     "source/_posts/测试2.md"
