@@ -8,9 +8,9 @@ comments: false
 这里用于整理读书笔记、摘录、文章阅读和长期学习材料。
 
 <div class="mem-grid">
-  <a class="mem-card" href="/resources/">
-    <h3>Reading Resources</h3>
-    <p>和阅读、资料整理相关的工具与链接。</p>
+  <a class="mem-card" href="/reading/">
+    <h3>Reading</h3>
+    <p>已经整理成文章的读书笔记、摘录和文章阅读记录。</p>
   </a>
   <a class="mem-card" href="/tags/">
     <h3>Tags</h3>

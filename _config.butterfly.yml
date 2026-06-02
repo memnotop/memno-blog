@@ -20,9 +20,10 @@ nav:
 menu:
   Home: / || fas fa-home
   Blog||fas fa-book-open:
-    Daily Life: /categories/想法/ || fas fa-mug-hot
-    Reading: /categories/资源/ || fas fa-book
-    Technical: /categories/技术分享/ || fas fa-code
+    daily life: /categories/daily-life/ || fas fa-mug-hot
+    Training: /training/ || fas fa-dumbbell
+    Reading: /categories/reading/ || fas fa-book
+    Technical: /categories/Technical/ || fas fa-code
     Picture: /photos/ || fas fa-image
   Links: /links/ || fas fa-link
   Archives: /archives/ || fas fa-archive

@@ -1,10 +1,10 @@
 ---
-title: 想法
+title: daily life
 date: 2026-05-30 22:16:00
 type: thoughts
 ---
 
-这里可以放一些不一定需要写成长文的记录。短想法可以先在这里沉淀，值得展开的内容再整理成文章。
+这里可以放一些不一定需要写成长文的日常记录。短内容可以先在这里沉淀，值得展开的内容再整理成文章。
 
 ## 记录方向
 
@@ -23,7 +23,7 @@ type: thoughts
   </div>
 </div>
 
-如果某个想法值得展开，可以新建一篇文章并归类到 `想法`：
+如果某个日常记录值得展开，可以新建一篇文章并归类到 `daily life`：
 
 ```bash
 npx hexo new post "文章标题"
@@ -32,7 +32,7 @@ npx hexo new post "文章标题"
 然后在文章开头设置：
 
 ```yaml
-categories: 想法
+categories: daily life
 tags:
   - 生活
   - 记录

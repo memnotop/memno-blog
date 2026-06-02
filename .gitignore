@@ -9,3 +9,21 @@ _multiconfig.yml
 .kanna/
 *.swp
 .*.swp
+
+# Obsidian local state and plugin runtime data
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/types.json
+.obsidian/cache/
+.obsidian/plugins/*/data.json
+
+# Make.md / Obsidian generated workspace data
+.makemd/
+.space/
+.trash/
+source/**/.space/
+source/**/.trash/
+
+# Accidental pasted files in the repository root
+Pasted image*.png
+Untitled*.md

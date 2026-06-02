@@ -1,6 +1,6 @@
 ---
 title: 博客维护手册
-categories: 技术分享
+categories: Technical
 tags:
   - Hexo
   - GitHub Pages
@@ -35,7 +35,7 @@ npx hexo new post "文章标题"
 ---
 title: 文章标题
 date: 2026-05-31 00:00:00
-categories: 技术分享
+categories: Technical
 tags:
   - 标签
 description: 一句话说明这篇文章解决什么问题。

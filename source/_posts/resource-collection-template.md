@@ -1,6 +1,6 @@
 ---
 title: 资源整理模板
-categories: 资源
+categories: reading
 tags:
   - 工具
   - 收藏

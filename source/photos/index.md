@@ -1,5 +1,5 @@
 ---
-title: 照片
+title: Picture
 date: 2026-05-30 22:12:00
 type: photos
 ---

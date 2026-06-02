@@ -1,6 +1,6 @@
 ---
 title: 第一篇技术分享模板
-categories: 技术分享
+categories: Technical
 tags:
   - Hexo
   - 建站
