@@ -14,17 +14,16 @@
 ### 1. 安装依赖
 
 ```bash
-bun install
+npm install
 ```
 
 ### 2. 运行工具
 
 ```bash
-# 使用 npm script
-bun date
+npm run date
 
-# 或直接运行
-bun scripts/updateBlogDates.ts
+# 或直接运行脚本
+npx tsx scripts/updateBlogDates.ts
 ```
 
 ## 工作原理

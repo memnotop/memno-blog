@@ -1,9 +1,5 @@
 import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
 
-
-
-
-
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
@@ -158,8 +154,8 @@ export const integ: IntegrationUserConfig = {
   // Comment system
   waline: {
     enable: false,
-    // Server service link
-    server: 'https://waline.arthals.ink',
+    // Fill in your own Waline service URL before enabling comments.
+    server: '',
     // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html

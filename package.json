@@ -1,7 +1,7 @@
 {
-  "name": "astro-theme-pure",
+  "name": "memno-blog",
   "type": "module",
-  "version": "4.0.8",
+  "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
@@ -10,12 +10,9 @@
     "sync": "astro sync",
     "check": "astro check",
     "astro": "astro",
-    "pure": "astro-pure",
-    "new": "astro-pure new",
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
-    "yijiansilian": "bun lint && bun sync && bun check && bun format",
-    "clean": "rm -rf .astro .vercel dist",
+    "clean": "rm -rf .astro dist",
     "date": "tsx scripts/updateBlogDates.ts",
     "cache:avatars": "tsx scripts/cacheAvatars.ts"
   },
@@ -24,8 +21,6 @@
     "@astrojs/mdx": "^4.3.1",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.4.1",
-    "@astrojs/vercel": "^8.2.2",
-    "@playform/compress": "^0.2.0",
     "@waline/client": "^3.6.0",
     "astro": "^5.12.0",
     "astro-pure": "file:packages/pure",
@@ -46,8 +41,9 @@
     "eslint-plugin-astro": "^1.3.1",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
-    "rollup-plugin-visualizer": "^6.0.3",
     "tsx": "^4.19.1",
     "typescript-eslint": "^8.37.0"
-  }
+  },
+  "description": "memno.top personal site",
+  "private": true
 }
