@@ -16,7 +16,8 @@
     "new:post": "tsx scripts/new-post.ts",
     "date": "tsx scripts/updateBlogDates.ts",
     "verify": "npm run check && npm run build",
-    "cache:avatars": "tsx scripts/cacheAvatars.ts"
+    "cache:avatars": "tsx scripts/cacheAvatars.ts",
+    "github": "git add . && git commit -m \"update\" && git push origin main"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

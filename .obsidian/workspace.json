@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/blog/training-log.md",
+                "file": "src/content/blog/7a24c421.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "training-log"
+              "title": "7a24c421"
             }
           }
         ]
@@ -185,6 +185,9 @@
   },
   "active": "4c363fafeca08585",
   "lastOpenFiles": [
+    "src/content/blog/第一篇.md",
+    "src/content/blog/7a24c421.md",
+    "src/content/blog/training-log.md",
     "dist/sitemap-0.xml",
     "dist/sitemap-index.xml",
     "dist/pagefind/pagefind-entry.json",
@@ -195,7 +198,6 @@
     "dist/pagefind/pagefind-modular-ui.js",
     "dist/pagefind/pagefind-ui.css",
     "dist/pagefind/pagefind-ui.js",
-    "dist/pagefind/pagefind-worker.js",
     "dist/_astro/avatar.C1wqNjWy_2jtj11.webp",
     "dist/_astro/wen-qiao-g_w8I64FiO0-unsplash.DwDGsRMl.jpg",
     "dist/_astro/kseniia-zapiatkina-yATU3rg8tNI-unsplash.Y3hxziJK.jpg",
@@ -207,10 +209,7 @@
     "dist/img/default-cover.webp",
     "dist/img/default-cover.png",
     "src/content/blog/__probe__/index.md",
-    "src/content/blog/第一篇.md",
-    "src/content/blog/training-log.md",
     "README.md",
-    "src/content/blog/7a24c421.md",
     "src/content/blog/ecf05a39.md",
     "src/content/blog/ba8fd803.md"
   ]
