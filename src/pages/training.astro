@@ -56,15 +56,35 @@ function parseTrainingYearFile(filePath: string): TrainingRecord[] {
   return records
 }
 
-const yearsDir = '/home/liumingjian/Mycode/web/source/training/years'
-const trainingRecords = fs.existsSync(yearsDir)
-  ? fs
-      .readdirSync(yearsDir)
-      .filter((file) => /^\d{4}\.md$/.test(file))
-      .sort()
-      .flatMap((file) => parseTrainingYearFile(path.join(yearsDir, file)))
-      .sort((a, b) => a.date.localeCompare(b.date))
-  : []
+function loadTrainingRecords(): TrainingRecord[] {
+  const projectRoot = process.cwd()
+  const records: TrainingRecord[] = []
+  const sources = [
+    path.join(projectRoot, 'src/content/blog/training-log.md'),
+    path.join(projectRoot, 'src/content/blog/training-log.mdx')
+  ]
+  const yearsDir = path.join(projectRoot, 'source/training/years')
+
+  if (fs.existsSync(yearsDir)) {
+    records.push(
+      ...fs
+        .readdirSync(yearsDir)
+        .filter((file) => /^\d{4}\.md$/.test(file))
+        .sort()
+        .flatMap((file) => parseTrainingYearFile(path.join(yearsDir, file)))
+    )
+  }
+
+  for (const source of sources) {
+    if (fs.existsSync(source)) records.push(...parseTrainingYearFile(source))
+  }
+
+  return Array.from(new Map(records.map((record) => [record.date, record])).values()).sort((a, b) =>
+    a.date.localeCompare(b.date)
+  )
+}
+
+const trainingRecords = loadTrainingRecords()
 const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
 ---
 
@@ -246,7 +266,17 @@ const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
         grid.appendChild(button)
       })
 
-      const selectedKey = activeKey && dates.some((date) => toKey(date) === activeKey) ? activeKey : toKey(today)
+      const fallbackRecord = [...dates]
+        .reverse()
+        .find((date) => date <= today && dataMap.has(toKey(date)))
+      const selectedKey =
+        activeKey && dates.some((date) => toKey(date) === activeKey)
+          ? activeKey
+          : dataMap.has(toKey(today))
+            ? toKey(today)
+            : fallbackRecord
+              ? toKey(fallbackRecord)
+              : toKey(today)
       const selectedButton = grid.querySelector(`[data-day="${selectedKey}"]`)
       if (selectedButton) {
         selectedButton.classList.add('active')
