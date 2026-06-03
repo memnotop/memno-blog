@@ -18,6 +18,15 @@ const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
 )
 
 const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
+  const getLocalImagePath = (url: string) => {
+    const cleanUrl = url.replace(/^\.\//, '')
+    const candidates = [
+      `/src/content/blog/${cleanUrl}`,
+      `/src/content/blog/${post.id}/${cleanUrl}`
+    ]
+    return candidates.find((candidate) => imagesGlob[candidate])
+  }
+
   // Replace image links with the correct path
   function remarkReplaceImageLink() {
     /**
@@ -26,11 +35,11 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
     return async function (tree: Root) {
       const promises: Promise<void>[] = []
       visit(tree, 'image', (node) => {
-        if (node.url.startsWith('/images')) {
+        if (node.url.startsWith('/')) {
           node.url = `${site}${node.url.replace('/', '')}`
         } else {
-          const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
-          const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
+          const imagePath = getLocalImagePath(node.url)
+          const promise = imagePath && imagesGlob[imagePath]?.().then(async (res) => {
             const imagePath = res?.default
             if (imagePath) {
               node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`

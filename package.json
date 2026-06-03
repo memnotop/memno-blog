@@ -13,7 +13,9 @@
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
     "clean": "rm -rf .astro dist",
+    "new:post": "tsx scripts/new-post.ts",
     "date": "tsx scripts/updateBlogDates.ts",
+    "verify": "npm run check && npm run build",
     "cache:avatars": "tsx scripts/cacheAvatars.ts"
   },
   "dependencies": {

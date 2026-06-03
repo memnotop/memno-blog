@@ -3,52 +3,24 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { blogTopics, type BlogTopic } from '@/site-config'
 import '@/assets/styles/blog-topic.css'
 
-type TopicLink = {
-  title: string
-  href: string
-  description: string
-}
-
 interface Props {
-  title: string
-  description: string
-  matchTags: string[]
+  topic: BlogTopic
 }
 
-const { title, description, matchTags } = Astro.props
-const normalizedTags = matchTags.map((tag) => tag.toLowerCase())
+const { topic } = Astro.props
+const { description, source, title } = topic
+const sourceLabel = source.field === 'tags' ? 'Tags' : 'Repositories'
+const normalizedValues = source.values.map((value) => value.toLowerCase())
 const allPosts = sortMDByDate(await getBlogCollection())
 const posts = allPosts.filter((post) =>
-  post.data.tags.some((tag) => normalizedTags.includes(tag.toLowerCase()))
+  post.data[source.field].some((value) => normalizedValues.includes(value.toLowerCase()))
 )
-const uniqueTags = [
-  ...new Set(posts.flatMap((post) => post.data.tags))
+const sourceValues = [
+  ...new Set(posts.flatMap((post) => post.data[source.field]))
 ].sort((a, b) => a.localeCompare(b))
-
-const collections: TopicLink[] = [
-  {
-    title: 'Technical',
-    href: '/blog/technical',
-    description: 'Linux、工具使用、网页搭建与项目复盘。'
-  },
-  {
-    title: 'daily life',
-    href: '/blog/daily-life',
-    description: '生活记录、想法、训练和日常记录。'
-  },
-  {
-    title: 'Reading',
-    href: '/blog/reading',
-    description: '阅读笔记、书籍、论文和资料整理。'
-  },
-  {
-    title: 'Picture',
-    href: '/blog/picture',
-    description: '照片、旅行和一些值得保存的画面。'
-  }
-]
 
 const meta = {
   description,
@@ -99,8 +71,12 @@ const meta = {
           </h2>
           <div class='topic-collection-list'>
             {
-              collections.map((item) => (
-                <a class={item.title === title ? 'active' : ''} href={item.href} data-astro-prefetch>
+              blogTopics.map((item) => (
+                <a
+                  class={item.slug === topic.slug ? 'active' : ''}
+                  href={`/blog/${item.slug}`}
+                  data-astro-prefetch
+                >
                   <span>
                     <strong>{item.title}</strong>
                     <small>{item.description}</small>
@@ -116,19 +92,23 @@ const meta = {
         <section>
           <h2>
             <Icon name='tag-2' class='topic-sidebar-icon' />
-            Tags
+            {sourceLabel}
           </h2>
           {
-            uniqueTags.length > 0 ? (
+            sourceValues.length > 0 ? (
               <ul class='topic-tags'>
-                {uniqueTags.map((tag) => (
+                {sourceValues.map((value) => (
                   <li>
-                    <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                    <Button
+                      title={value}
+                      href={source.field === 'tags' ? `/tags/${value}` : undefined}
+                      variant='pill'
+                    />
                   </li>
                 ))}
               </ul>
             ) : (
-              <p class='topic-muted'>暂无标签。</p>
+              <p class='topic-muted'>暂无{sourceLabel.toLowerCase()}。</p>
             )
           }
         </section>

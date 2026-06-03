@@ -3,7 +3,64 @@
 `~/Mycode/web` 是当前实际发布到 `https://memno.top` 的仓库。  
 `~/Mycode/web-arthals-ink` 只是之前下载和整理时用的副本，后续维护请以这个仓库为准。
 
-## 开发命令
+## 项目结构
+
+```text
+web/
+├─ .github/workflows/        GitHub Pages 自动部署配置
+├─ public/                   直接原样发布的静态资源
+│  ├─ favicon/               标签栏图标、PWA 图标
+│  ├─ fonts/                 字体文件
+│  ├─ img/                   站内通用图片
+│  ├─ images/                站点分享图等
+│  ├─ links.json             友链数据
+│  └─ styles/global.css      全站公共样式
+├─ scripts/                  维护脚本
+├─ src/
+│  ├─ assets/                由 Astro 打包处理的资源
+│  │  ├─ styles/             页面样式
+│  │  └─ avatar.webp         站点头像
+│  ├─ components/            可复用组件
+│  ├─ content/blog/          博客文章 Markdown
+│  ├─ layouts/               页面布局
+│  ├─ pages/                 各页面入口
+│  ├─ plugins/               Markdown / Shiki 插件
+│  ├─ content.config.ts      内容集合定义
+│  └─ site.config.ts         站点配置中心
+├─ package.json              常用命令入口
+└─ astro.config.ts           Astro 构建配置
+```
+
+## 各目录是做什么的
+
+- `src/site.config.ts`
+  - 站点标题、导航、页脚、社交链接、排版参数
+- `src/pages/`
+  - 每个页面的入口
+  - `index.astro` 首页
+  - `about/index.astro` About
+  - `training.astro` 训练记录
+  - `links/index.astro` 友链页
+  - `projects/index.astro` 项目页
+- `src/content/blog/`
+  - 所有文章内容
+  - 支持 `md` 和 `mdx`
+  - 每篇文章的配图建议放在同名目录里，例如 `post.md` 的图片放 `post/`
+- `src/assets/styles/`
+  - 站内页面样式
+  - `app.css` 全站基准样式
+  - `mem-home.css` 首页
+  - `training.css` 训练页
+- `public/`
+  - 不经处理直接发布的文件
+  - 改 favicon、友链数据、固定图片时主要看这里
+- `scripts/`
+  - 维护脚本，例如自动补 `updatedDate`、新建文章
+- `packages/pure/`
+  - 主题本体
+  - 能不动尽量别动，除非你明确要改主题行为
+
+## 常用命令
 
 ```bash
 npm install
@@ -12,26 +69,48 @@ npm run dev
 
 本地预览地址通常是 `http://localhost:4321`。
 
-## 常改的位置
+更多命令：
+
+```bash
+npm run new:post -- "文章标题"   # 一键新建文章
+npm run date                   # 按内容变化更新 updatedDate
+npm run verify                 # 发布前检查，等于 check + build
+npm run build                  # 生成生产构建
+npm run preview                # 预览生产构建
+```
+
+## 我之后通常改哪些地方
 
 - 站点基础信息：[src/site.config.ts](./src/site.config.ts)
   - 站点标题、作者、导航、页脚、社交链接都在这里
 - 首页内容：[src/pages/index.astro](./src/pages/index.astro)
-- About 页面：[src/pages/about.astro](./src/pages/about.astro)
+- About 页面：[src/pages/about/index.astro](./src/pages/about/index.astro)
 - Training 页面：[src/pages/training.astro](./src/pages/training.astro)
 - 友链数据：[public/links.json](./public/links.json)
 - favicon 和站点图标：`public/favicon/`
 - 公共图片：`public/img/`
+- 全站字体和基准字号：[src/assets/styles/app.css](./src/assets/styles/app.css)
 
-## 写新文章
+## 如何发布新内容
 
-文章目录：
+### 1. 新建普通文章
 
-```text
-src/content/blog/
+最快方式：
+
+```bash
+npm run new:post -- "文章标题"
 ```
 
-新建一个 `*.md` 或 `*.mdx` 文件即可，例如：
+这会自动在 `src/content/blog/` 里生成一个 Markdown 文件模板。
+同时会创建一个同名图片目录，例如标题生成的文件是 `my-post.md`，图片目录就是 `src/content/blog/my-post/`。
+
+然后打开新文件，填写正文。
+
+### 2. 手动新建文章
+
+也可以直接在 `src/content/blog/` 下新建 `*.md` 或 `*.mdx` 文件。
+
+例如：
 
 ```md
 ---
@@ -40,6 +119,12 @@ description: "一句话摘要"
 publishDate: "2026-06-03 10:00:00"
 tags:
   - technical
+repositories:
+  - technical
+# heroImage:
+#   src: ./article-slug/cover.webp
+#   alt: "封面图说明"
+#   color: "#659EB9"
 language: "中文"
 draft: false
 ---
@@ -47,48 +132,210 @@ draft: false
 这里写正文。
 ```
 
-训练记录也已经收进博客内容里，位置是：
+说明：
+
+- `title`：文章标题
+- `description`：摘要，列表页和 SEO 会用到
+- `publishDate`：发布时间
+- `tags`：文章标签页会用到，也可以作为专题页筛选来源
+- `repositories`：文章所属内容仓库，适合 `daily life` 这种不想依赖标签的专题页
+- `heroImage`：文章封面图，取消注释后把 `src` 改成实际图片路径
+- `draft: false`：表示允许发布；如果写成 `true`，通常不会出现在正式内容里
+
+### 3. 组织文章图片
+
+推荐结构：
+
+```text
+src/content/blog/
+├─ my-post.md
+└─ my-post/
+   ├─ cover.webp
+   └─ image-01.webp
+```
+
+正文图片这样写：
+
+```md
+![图片说明](./my-post/image-01.webp)
+```
+
+封面图在 frontmatter 里这样写：
+
+```yaml
+heroImage:
+  src: ./my-post/cover.webp
+  alt: "封面图说明"
+  color: "#659EB9"
+```
+
+固定站内公共图片继续放 `public/img/`，正文里用 `/img/xxx.webp` 引用。
+
+### 4. 修改专题页来源
+
+专题页配置在 [src/site.config.ts](./src/site.config.ts) 的 `blogTopics`。
+
+现在 `daily life` 不按标签筛选，而是按仓库字段筛选：
+
+```ts
+{
+  slug: 'daily-life',
+  title: 'daily life',
+  description: '生活记录、想法、训练和日常记录。',
+  source: {
+    field: 'repositories',
+    values: ['daily-life']
+  }
+}
+```
+
+如果想让它重新按标签筛选，改成：
+
+```ts
+source: {
+  field: 'tags',
+  values: ['daily life', 'training']
+}
+```
+
+文章需要进入某个仓库时，在 frontmatter 里写：
+
+```yaml
+repositories:
+  - daily-life
+```
+
+### 5. 更新训练记录
+
+训练内容已经并入博客内容，位置是：
 
 ```text
 src/content/blog/training-log.md
 ```
 
-## 修改界面内容
+直接编辑这个文件即可。
 
-常见改法：
+## 如何修改界面内容
 
-1. 改导航、站点名、页脚链接：编辑 `src/site.config.ts`
-2. 改首页文案和卡片：编辑 `src/pages/index.astro`
-3. 改训练页样式：编辑 `src/pages/training.astro` 和 `src/assets/styles/training.css`
-4. 改首页样式：编辑 `src/assets/styles/mem-home.css`
-5. 改头像或 favicon：替换 `src/assets/avatar.webp`、`public/favicon/*`
+### 改站点基础信息
 
-修改后先本地检查：
+编辑 [src/site.config.ts](./src/site.config.ts)：
+
+- 网站标题
+- 作者名
+- 顶部导航
+- 页脚链接
+- 社交链接
+- 正文字号类名
+
+### 改首页
+
+- 内容：[src/pages/index.astro](./src/pages/index.astro)
+- 样式：[src/assets/styles/mem-home.css](./src/assets/styles/mem-home.css)
+
+### 改训练页
+
+- 内容逻辑：[src/pages/training.astro](./src/pages/training.astro)
+- 样式：[src/assets/styles/training.css](./src/assets/styles/training.css)
+
+### 改 About / Projects / Links
+
+- About：`src/pages/about/index.astro`
+- Projects：`src/pages/projects/index.astro`
+- Links：`src/pages/links/index.astro`
+- 友链数据：`public/links.json`
+
+### 改头像、图标、图片
+
+- 头像：`src/assets/avatar.webp`
+- favicon：`public/favicon/*`
+- 固定图片：`public/img/*`
+
+### 改全站字体大小
+
+- 基准字号：`src/assets/styles/app.css`
+- 公共样式：`public/styles/global.css`
+
+## 每次修改后的检查步骤
+
+### 只改了文章内容
 
 ```bash
+npm run date
 npm run build
 ```
 
-## 发布到网站
+### 改了页面、样式或配置
 
 ```bash
+npm run verify
+```
+
+### 本地预览
+
+```bash
+npm run dev
+```
+
+浏览器打开 `http://localhost:4321`。
+
+## 如何正式发布到网站
+
+建议固定按这个顺序：
+
+```bash
+npm run verify
+git status
 git add .
 git commit -m "update site content"
 git push origin main
 ```
 
-推送后 GitHub Actions 会自动构建并发布到 GitHub Pages。
+推送后会自动触发 GitHub Pages 部署。
 
-检查位置：
+## 发布后的检查位置
 
-1. GitHub 仓库 `Actions`
-2. 最新的 `Deploy Astro to GitHub Pages`
-3. 状态变成绿色后访问 `https://memno.top`
+1. 打开 GitHub 仓库 `Actions`
+2. 查看最新一次 `Deploy Astro to GitHub Pages`
+3. 等状态变绿
+4. 打开 `https://memno.top`
 
-## 辅助脚本
+如果页面没立刻更新，先强刷浏览器缓存。
 
-- `npm run date`：根据文章内容变化自动刷新 `updatedDate`
-- `npm run cache:avatars`：缓存友链头像
+## 便捷命令说明
+
+### `npm run new:post -- "文章标题"`
+
+- 自动创建文章模板
+- 自动生成文件名
+- 自动带上当前时间的 `publishDate`
+
+### `npm run date`
+
+- 检测 `src/content/blog/` 下文章内容是否变化
+- 如果变了，自动更新 `updatedDate`
+
+### `npm run verify`
+
+- 等于：
+```bash
+npm run check
+npm run build
+```
+- 适合发布前最后跑一次
+
+### `npm run cache:avatars`
+
+- 把友链头像缓存到本地
+- 只有在你调整友链头像策略时才需要
+
+## 维护原则
+
+- 以后只维护 `~/Mycode/web`
+- `packages/pure/` 是主题代码，没必要不要改
+- 发内容优先改 `src/content/blog/`
+- 改界面优先改 `src/pages/`、`src/assets/styles/`、`src/site.config.ts`
+- 发布前至少跑一次 `npm run verify`
 
 ## License
 

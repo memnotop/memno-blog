@@ -1,9 +1,6 @@
 ---
 import TopicLanding from '@/components/blog/TopicLanding.astro'
+import { getBlogTopic } from '@/site-config'
 ---
 
-<TopicLanding
-  title='daily life'
-  description='生活记录、想法、训练和日常记录。'
-  matchTags={['daily life', 'training']}
-/>
+<TopicLanding topic={getBlogTopic('daily-life')} />

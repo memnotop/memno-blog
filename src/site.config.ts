@@ -1,5 +1,62 @@
 import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
 
+export type BlogTopicSourceField = 'tags' | 'repositories'
+
+export type BlogTopic = {
+  slug: string
+  title: string
+  description: string
+  source: {
+    field: BlogTopicSourceField
+    values: string[]
+  }
+}
+
+export const blogTopics = [
+  {
+    slug: 'daily-life',
+    title: 'daily life',
+    description: '生活记录、想法、训练和日常记录。',
+    source: {
+      field: 'repositories',
+      values: ['daily-life']
+    }
+  },
+  {
+    slug: 'reading',
+    title: 'Reading',
+    description: '阅读笔记、书籍、论文和资料整理。',
+    source: {
+      field: 'tags',
+      values: ['reading', '收藏', '工具']
+    }
+  },
+  {
+    slug: 'technical',
+    title: 'Technical',
+    description: '技术分享、工具使用、网页搭建与项目复盘。',
+    source: {
+      field: 'tags',
+      values: ['technical']
+    }
+  },
+  {
+    slug: 'picture',
+    title: 'Picture',
+    description: '照片、旅行和一些值得保存的画面。',
+    source: {
+      field: 'tags',
+      values: ['picture', 'photo', 'photos', '照片']
+    }
+  }
+] satisfies BlogTopic[]
+
+export function getBlogTopic(slug: string) {
+  const topic = blogTopics.find((item) => item.slug === slug)
+  if (!topic) throw new Error(`Unknown blog topic: ${slug}`)
+  return topic
+}
+
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
@@ -52,16 +109,14 @@ export const theme: ThemeUserConfig = {
         title: 'Blog',
         link: '/blog',
         children: [
-          { title: 'Technical', link: '/blog/technical' },
-          { title: 'daily life', link: '/blog/daily-life' },
-          { title: 'Reading', link: '/blog/reading' },
-          { title: 'Picture', link: '/blog/picture' }
+          ...blogTopics.map(({ slug, title }) => ({ title, link: `/blog/${slug}` })),
+          { title: 'Training', link: '/training' },
         ]
       },
       { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },
-      { title: 'Training', link: '/training' }
+
     ]
   },
 
