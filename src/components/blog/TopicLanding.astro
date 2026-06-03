@@ -1,0 +1,138 @@
+---
+import { PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import '@/assets/styles/blog-topic.css'
+
+type TopicLink = {
+  title: string
+  href: string
+  description: string
+}
+
+interface Props {
+  title: string
+  description: string
+  matchTags: string[]
+}
+
+const { title, description, matchTags } = Astro.props
+const normalizedTags = matchTags.map((tag) => tag.toLowerCase())
+const allPosts = sortMDByDate(await getBlogCollection())
+const posts = allPosts.filter((post) =>
+  post.data.tags.some((tag) => normalizedTags.includes(tag.toLowerCase()))
+)
+const uniqueTags = [
+  ...new Set(posts.flatMap((post) => post.data.tags))
+].sort((a, b) => a.localeCompare(b))
+
+const collections: TopicLink[] = [
+  {
+    title: 'Technical',
+    href: '/blog/technical',
+    description: 'Linux、工具使用、网页搭建与项目复盘。'
+  },
+  {
+    title: 'daily life',
+    href: '/blog/daily-life',
+    description: '生活记录、想法、训练和日常记录。'
+  },
+  {
+    title: 'Reading',
+    href: '/blog/reading',
+    description: '阅读笔记、书籍、论文和资料整理。'
+  },
+  {
+    title: 'Picture',
+    href: '/blog/picture',
+    description: '照片、旅行和一些值得保存的画面。'
+  }
+]
+
+const meta = {
+  description,
+  title
+}
+---
+
+<PageLayout {meta}>
+  <main class='topic-page mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='topic-title'>
+        {title}
+        <span aria-hidden='true'>⌃</span>
+        <span aria-hidden='true'>⌄</span>
+      </h1>
+    </div>
+
+    <div class='topic-layout'>
+      <section aria-label={`${title} posts list`} class='animate' id='content'>
+        <div class='topic-list-head'>
+          <span>Page 1 - Showing {posts.length} of {posts.length} posts</span>
+          <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
+            View all posts by years →
+          </a>
+        </div>
+
+        {
+          posts.length === 0 ? (
+            <div class='topic-empty'>
+              <h2>No posts yet.</h2>
+              <p>这个主题暂时还没有文章。</p>
+            </div>
+          ) : (
+            <ul class='topic-post-list'>
+              {posts.map((post) => (
+                <PostPreview as='h2' {post} detailed />
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <aside class='topic-sidebar animate' id='sidebar'>
+        <section>
+          <h2>
+            <Icon name='package' class='topic-sidebar-icon' />
+            Collections
+          </h2>
+          <div class='topic-collection-list'>
+            {
+              collections.map((item) => (
+                <a class={item.title === title ? 'active' : ''} href={item.href} data-astro-prefetch>
+                  <span>
+                    <strong>{item.title}</strong>
+                    <small>{item.description}</small>
+                  </span>
+                  <span aria-hidden='true'>›</span>
+                </a>
+              ))
+            }
+          </div>
+          <a class='topic-view-all' href='/blog'>View all →</a>
+        </section>
+
+        <section>
+          <h2>
+            <Icon name='tag-2' class='topic-sidebar-icon' />
+            Tags
+          </h2>
+          {
+            uniqueTags.length > 0 ? (
+              <ul class='topic-tags'>
+                {uniqueTags.map((tag) => (
+                  <li>
+                    <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class='topic-muted'>暂无标签。</p>
+            )
+          }
+        </section>
+      </aside>
+    </div>
+  </main>
+</PageLayout>

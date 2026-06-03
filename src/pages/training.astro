@@ -1,0 +1,259 @@
+---
+import fs from 'node:fs'
+import path from 'node:path'
+
+import PageLayout from '@/layouts/BaseLayout.astro'
+import '@/assets/styles/training.css'
+
+type TrainingRecord = {
+  date: string
+  title: string
+  level: number
+  items: string[]
+  rpe: string
+  body: string
+}
+
+function parseTrainingYearFile(filePath: string): TrainingRecord[] {
+  const source = fs.readFileSync(filePath, 'utf8')
+  const body = source.replace(/^---[\s\S]*?---\s*/, '')
+  const records: TrainingRecord[] = []
+  const entryPattern = /^##\s+(\d{4}-\d{2}-\d{2})\s*[|｜]\s*(.*?)\s*[|｜]\s*level\s+([0-5])\s*$/gm
+  const matches = [...body.matchAll(entryPattern)]
+
+  for (let index = 0; index < matches.length; index += 1) {
+    const match = matches[index]
+    const next = matches[index + 1]
+    const contentStart = (match.index ?? 0) + match[0].length
+    const contentEnd = next?.index ?? body.length
+    const content = body.slice(contentStart, contentEnd).trim()
+    const rawLines = content.split(/\r?\n/).map((line) => line.trim())
+    const lines = rawLines.filter(Boolean)
+    const rpeLine = lines.find((line) => /^RPE[：:]/i.test(line))
+    const trainingStart = rawLines.findIndex((line) => /^训练内容[：:]/.test(line))
+    const items: string[] = []
+
+    if (trainingStart !== -1) {
+      for (const line of rawLines.slice(trainingStart + 1)) {
+        if (!line && items.length) break
+        if (!line) continue
+        if (/^RPE[：:]/i.test(line)) break
+        if (/^(推荐|分享|今天|做一个总结|这里对|相信|坚持|细水|野火|寒假)/.test(line)) break
+        items.push(line.replace(/^[-*]\s*/, ''))
+      }
+    }
+
+    records.push({
+      date: match[1],
+      title: match[2].trim(),
+      level: Number(match[3]),
+      items,
+      rpe: rpeLine ? rpeLine.replace(/^RPE[：:]\s*/i, '') : '',
+      body: content
+    })
+  }
+
+  return records
+}
+
+const yearsDir = '/home/liumingjian/Mycode/web/source/training/years'
+const trainingRecords = fs.existsSync(yearsDir)
+  ? fs
+      .readdirSync(yearsDir)
+      .filter((file) => /^\d{4}\.md$/.test(file))
+      .sort()
+      .flatMap((file) => parseTrainingYearFile(path.join(yearsDir, file)))
+      .sort((a, b) => a.date.localeCompare(b.date))
+  : []
+const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
+---
+
+<PageLayout meta={{ title: 'Training' }} highlightColor='#8fcf91'>
+  <main class='training-page animate' id='content'>
+    <div class='training-board' id='training-board'>
+      <div class='training-summary'>
+        <div>
+          <p class='training-eyebrow'>Training Log</p>
+          <h1>训练记录</h1>
+          <p>展示最近一年的训练完成情况。点击色块可以查看当天训练内容。</p>
+        </div>
+        <div class='training-legend' aria-label='训练感受颜色说明'>
+          <span>轻松</span>
+          <i class='training-cell level-1'></i>
+          <i class='training-cell level-2'></i>
+          <i class='training-cell level-3'></i>
+          <i class='training-cell level-4'></i>
+          <i class='training-cell level-5'></i>
+          <span>困难</span>
+        </div>
+      </div>
+
+      <div class='training-heatmap' aria-label='训练日期选择'>
+        <div class='training-chart-wrap'>
+          <div class='training-months' id='training-months'></div>
+          <div class='training-chart'>
+            <div class='training-weekdays' aria-hidden='true'>
+              <span></span>
+              <span>Mon</span>
+              <span></span>
+              <span>Wed</span>
+              <span></span>
+              <span>Fri</span>
+              <span></span>
+            </div>
+            <div class='training-grid' id='training-grid'></div>
+          </div>
+        </div>
+      </div>
+
+      <div class='training-detail' id='training-detail'></div>
+    </div>
+  </main>
+</PageLayout>
+
+<script is:inline define:vars={{ trainingJson }}>
+  window.TRAINING_DATA = JSON.parse(trainingJson)
+</script>
+<script is:inline>
+  ;(() => {
+    const board = document.getElementById('training-board')
+    if (!board) return
+
+    const levels = {
+      0: '暂无记录',
+      1: '轻松',
+      2: '较轻松',
+      3: '合适',
+      4: '较困难',
+      5: '困难'
+    }
+    const trainingData = Array.isArray(window.TRAINING_DATA) ? window.TRAINING_DATA : []
+
+    const grid = document.getElementById('training-grid')
+    const months = document.getElementById('training-months')
+    const detail = document.getElementById('training-detail')
+    if (!grid || !months || !detail) return
+
+    const dataMap = new Map(trainingData.map((item) => [item.date, item]))
+    const formatter = new Intl.DateTimeFormat('en', { month: 'short' })
+    const weekCount = 53
+
+    const pad = (value) => String(value).padStart(2, '0')
+    const toKey = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+    const addDays = (date, days) => {
+      const next = new Date(date)
+      next.setDate(next.getDate() + days)
+      return next
+    }
+    const escapeHtml = (value) =>
+      String(value).replace(
+        /[&<>"']/g,
+        (char) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+          })[char]
+      )
+    const formatBody = (value) =>
+      escapeHtml(value)
+        .split(/\n{2,}/)
+        .map((part) => `<p>${part.replace(/\n/g, '<br>')}</p>`)
+        .join('')
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const renderDetail = (key) => {
+      const record = dataMap.get(key)
+      if (!record) {
+        detail.innerHTML = `
+          <article class="training-entry active">
+            <div class="training-entry-head">
+              <span>${escapeHtml(key)}</span>
+              <strong class="level-text level-0">暂无记录</strong>
+            </div>
+            <h2>这一天还没有训练记录</h2>
+            <p><del>忘了吧，大概？</del></p>
+          </article>
+        `
+        return
+      }
+
+      detail.innerHTML = `
+        <article class="training-entry active">
+          <div class="training-entry-head">
+            <span>${escapeHtml(record.date)}</span>
+            <strong class="level-text level-${record.level}">${record.level} - ${levels[record.level]}</strong>
+          </div>
+          <h2>${escapeHtml(record.title)}</h2>
+          ${record.items.length ? `<ul>${record.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : ''}
+          ${record.rpe ? `<p class="training-rpe">RPE：${escapeHtml(record.rpe)}</p>` : ''}
+          <div class="training-body">${formatBody(record.body)}</div>
+        </article>
+      `
+    }
+
+    const renderChart = (activeKey) => {
+      const dates = []
+      const currentWeekStart = addDays(today, -today.getDay())
+      const gridStart = addDays(currentWeekStart, -(weekCount - 1) * 7)
+
+      for (let index = 0; index < weekCount * 7; index += 1) {
+        dates.push(addDays(gridStart, index))
+      }
+
+      grid.innerHTML = ''
+      months.innerHTML = ''
+      grid.style.setProperty('--training-weeks', weekCount)
+      months.style.setProperty('--training-weeks', weekCount)
+
+      let lastMonth = ''
+      for (let week = 0; week < weekCount; week += 1) {
+        const weekDate = addDays(gridStart, week * 7)
+        const month = formatter.format(weekDate)
+        const label = document.createElement('span')
+        label.style.gridColumn = `${week + 1} / span 1`
+        label.textContent = month !== lastMonth ? month : ''
+        months.appendChild(label)
+        lastMonth = month
+      }
+
+      dates.forEach((date, index) => {
+        const key = toKey(date)
+        const week = Math.floor(index / 7)
+        const day = date.getDay()
+        const isFuture = date > today
+        const record = dataMap.get(key)
+        const button = document.createElement('button')
+        button.className = `training-day level-${record && !isFuture ? record.level : 0}${isFuture ? ' future' : ''}`
+        button.type = 'button'
+        button.dataset.day = key
+        button.style.gridColumn = String(week + 1)
+        button.style.gridRow = String(day + 1)
+        button.disabled = isFuture
+        button.setAttribute('aria-label', `${key} ${isFuture ? '未来日期' : record ? levels[record.level] : '暂无记录'}`)
+        button.title = `${key} ${isFuture ? '未来日期' : record ? levels[record.level] : '暂无记录'}`
+        button.addEventListener('click', () => {
+          if (isFuture) return
+          grid
+            .querySelectorAll('.training-day')
+            .forEach((item) => item.classList.toggle('active', item === button))
+          renderDetail(key)
+        })
+        grid.appendChild(button)
+      })
+
+      const selectedKey = activeKey && dates.some((date) => toKey(date) === activeKey) ? activeKey : toKey(today)
+      const selectedButton = grid.querySelector(`[data-day="${selectedKey}"]`)
+      if (selectedButton) {
+        selectedButton.classList.add('active')
+        renderDetail(selectedKey)
+      }
+    }
+
+    renderChart(toKey(today))
+  })()
+</script>

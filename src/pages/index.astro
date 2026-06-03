@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets'
+
+import { Quote } from 'astro-pure/advanced'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button, Card, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import Section from '@/components/home/Section.astro'
+import avatar from '@/assets/avatar.webp'
+import config from '@/site-config'
+import '@/assets/styles/mem-home.css'
+
+const allPosts = await getBlogCollection()
+const allPostsSorted = sortMDByDate(allPosts)
+
+const dateFormatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+})
+const latestPostDate = allPostsSorted[0]?.data.updatedDate ?? allPostsSorted[0]?.data.publishDate
+const firstPostDate =
+  allPostsSorted[allPostsSorted.length - 1]?.data.publishDate ?? new Date('2026-03-30')
+const daysOnline = Math.max(
+  1,
+  Math.ceil((Date.now() - new Date(firstPostDate).valueOf()) / (1000 * 60 * 60 * 24))
+)
+const totalWords = allPosts.reduce((sum, post) => {
+  const body = 'body' in post && typeof post.body === 'string' ? post.body : ''
+  return sum + body.replace(/---[\s\S]*?---/, '').replace(/\s/g, '').length
+}, 0)
+
+const githubUsername = 'memnotop'
+const githubUrl = `https://github.com/${githubUsername}`
+const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
+---
+
+<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
+  <main class='mem-home flex w-full flex-col items-center'>
+    <section
+      class='mem-hero animate mb-12 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:gap-10'
+      id='content-header'
+    >
+      <Image
+        src={avatar}
+        alt='profile'
+        class='mem-avatar h-28 w-auto rounded-2xl border p-1'
+        loading='eager'
+      />
+
+      <div class='mem-hero-text flex flex-col items-center gap-y-5 md:items-start'>
+        <h1 class='mem-title font-bold'>{config.author}</h1>
+        <div class='mem-labels flex flex-wrap justify-center gap-3 md:justify-start'>
+          <span class='mem-label'>
+            <Icon name='location' class='size-5' slot='icon' />
+            China
+          </span>
+          <a class='mem-label' href='https://github.com/memnotop' target='_blank'>
+            <Icon name='github' class='size-5' slot='icon' />
+            GitHub
+          </a>
+          <a class='mem-label' href='mailto:a3124884661@163.com'>
+            <Icon name='email' class='size-5' slot='icon' />
+            Email
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div id='content' class='mem-content animate flex flex-col gap-y-14 md:w-[88%] lg:w-[86%]'>
+      <Section title='About'>
+        <p class='mem-subtitle text-muted-foreground mt-1'>IC Student / Blogger / Builder</p>
+        <div class='mem-about-copy flex flex-col gap-2 leading-7 text-muted-foreground'>
+          <p>你好，我是 memnotop，一名集成电路专业的本科生，2023 级。</p>
+          <p>这个站点用来记录生活、想法、照片、资源、技术分享与训练。</p>
+          <p>关注方向包括 IC、SoC 设计、Linux 工具、课程学习和个人项目复盘。</p>
+        </div>
+        <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
+      </Section>
+      <Section title='Focus'>
+        <Card
+          heading='技术分享'
+          subheading='Linux、工具使用、网页搭建与项目复盘'
+          date='Technical'
+        />
+        <Card
+          heading='生活记录'
+          subheading='阅读、想法、训练和日常记录'
+          date='Daily Life'
+        />
+      </Section>
+
+      <Section title='Statistics'>
+        <div class='mem-stat-grid'>
+          <div class='mem-stat-card'>
+            <Icon name='time' class='size-6' />
+            <strong>{daysOnline}</strong>
+            <span>Days Online</span>
+          </div>
+          <div class='mem-stat-card'>
+            <Icon name='calendar' class='size-6' />
+            <strong>{latestPostDate ? dateFormatter.format(latestPostDate) : 'Now'}</strong>
+            <span>Last Updated</span>
+          </div>
+          <div class='mem-stat-card'>
+            <Icon name='hashtag' class='size-6' />
+            <strong>{totalWords.toLocaleString('en')}</strong>
+            <span>Total Words</span>
+          </div>
+        </div>
+        <div class='mem-contribution'>
+          <div class='mem-total-posts'>
+            <span>Total Posts</span>
+            <strong>{allPosts.length}</strong>
+          </div>
+          <div class='mem-contribution-head'>
+            <span>GitHub contributions in the last year</span>
+            <a href={githubUrl} target='_blank' rel='noreferrer'>@{githubUsername}</a>
+          </div>
+          <a class='mem-github-chart' href={githubUrl} target='_blank' rel='noreferrer' aria-label='Open GitHub profile'>
+            <img src={githubChartUrl} alt={`${githubUsername} GitHub contribution chart`} loading='lazy' />
+          </a>
+          <div class='mem-github-foot'>
+            <span>Connected to GitHub profile</span>
+            <span class='mem-github-legend'>
+              Less
+              <i data-level='0'></i>
+              <i data-level='1'></i>
+              <i data-level='2'></i>
+              <i data-level='3'></i>
+              <i data-level='4'></i>
+              More
+            </span>
+          </div>
+        </div>
+      </Section>
+    </div>
+    <Quote class='mt-12' />
+  </main>
+</PageLayout>

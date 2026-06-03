@@ -1,0 +1,45 @@
+---
+import links from 'public/links.json'
+
+import { Collapse, Signature, Timeline } from 'astro-pure/user'
+import PageLayout from '@/layouts/CommonPage.astro'
+import FriendList from '@/components/links/FriendList.astro'
+import config from '@/site-config'
+
+const headings = [
+  { depth: 2, slug: 'friends', text: 'Friends' },
+  { depth: 2, slug: 'resources', text: 'Resources' },
+  { depth: 2, slug: 'apply-links', text: 'Apply Links' }
+]
+
+const { friends } = links
+const linksConf = config.integ.links ?? { logbook: [], applyTip: [] }
+---
+
+<PageLayout title='Links' {headings}>
+  <p>这里整理常用资源、朋友站点和有意思的独立博客入口。</p>
+
+  <h2 id='friends'>Friends</h2>
+  <FriendList list={friends[0]} />
+  <Collapse title='Link History Book'>
+    <Timeline events={linksConf.logbook} />
+  </Collapse>
+
+  <h2 id='resources'>Resources</h2>
+  <FriendList list={friends[2]} />
+
+  <h2 id='apply-links'>Apply Links</h2>
+  <p>本站信息：</p>
+  <blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
+    {
+      linksConf.applyTip.map(({ name, val }) => (
+        <>
+          <span class='text-end'>{name}:</span>
+          <samp>{val}</samp>
+        </>
+      ))
+    }
+  </blockquote>
+
+  <Signature />
+</PageLayout>

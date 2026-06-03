@@ -1,0 +1,307 @@
+.mem-home {
+  padding-top: 2rem;
+}
+
+.mem-home .mem-hero {
+  min-height: 17.5rem;
+  max-width: 72rem;
+  padding: 1rem 0 0.75rem;
+}
+
+.mem-home .mem-avatar {
+  width: 12.5rem;
+  height: 12.5rem;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 18px 52px hsl(var(--foreground) / 0.1);
+}
+
+.mem-home .mem-title {
+  font-size: clamp(2.15rem, 3.5vw, 3rem);
+  font-weight: 720;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.mem-home .mem-label {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.8rem;
+  background: hsl(var(--background) / 0.78);
+  padding: 0 1.25rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.05rem;
+  font-weight: 500;
+  box-shadow: 0 10px 28px hsl(var(--foreground) / 0.035);
+}
+
+.mem-home .mem-content {
+  max-width: 76rem;
+}
+
+.mem-home section > div:first-child {
+  min-width: 12.25rem;
+}
+
+.mem-home section > div:first-child h2 {
+  font-size: 1.58rem;
+  font-weight: 720;
+  line-height: 1.25;
+}
+
+.mem-home .mem-subtitle,
+.mem-home .mem-about-copy {
+  font-size: 1.08rem;
+  font-weight: 420;
+  line-height: 1.78;
+}
+
+.mem-home .post-preview {
+  min-height: 4.35rem;
+  border-radius: 1rem;
+  padding: 0.95rem 1.5rem;
+  box-shadow: 0 10px 26px hsl(var(--foreground) / 0.035);
+}
+
+.mem-home .post-preview time {
+  font-size: 1rem;
+}
+
+.mem-home .post-preview a > div {
+  font-size: 1.2rem;
+}
+
+.mem-home section:has(.post-preview) ul {
+  gap: 0.9rem;
+}
+
+.mem-home section:has(.post-preview) li {
+  width: 100%;
+}
+
+.mem-home section:has(.post-preview) .post-preview {
+  width: 100%;
+}
+
+.mem-home section:has(.post-preview) .post-preview > a {
+  align-items: center;
+}
+
+.mem-home section:has(.post-preview) .post-preview span:first-child {
+  min-width: 8.15rem;
+}
+
+.mem-home section:has(.post-preview) + section .relative,
+.mem-home section:has(.post-preview) ~ section .relative {
+  border-radius: 1rem;
+}
+
+.mem-home .group.relative {
+  min-height: 6.85rem;
+  border-radius: 1rem;
+  padding: 1.35rem 1.55rem;
+  box-shadow: 0 10px 26px hsl(var(--foreground) / 0.035);
+}
+
+.mem-home .group.relative h3,
+.mem-home .group.relative .font-semibold,
+.mem-home .group.relative [class*='heading'] {
+  font-size: 1.16rem;
+  font-weight: 650;
+}
+
+.mem-home button,
+.mem-home .rounded-lg {
+  font-size: 1.05rem;
+}
+
+.mem-home .mem-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.35rem;
+}
+
+.mem-home .mem-stat-card {
+  display: flex;
+  min-height: 8.9rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  background: hsl(var(--background) / 0.72);
+  color: hsl(var(--muted-foreground));
+  box-shadow: 0 12px 30px hsl(var(--foreground) / 0.04);
+}
+
+.mem-home .mem-stat-card strong {
+  color: hsl(var(--foreground));
+  font-size: 1.68rem;
+  font-weight: 720;
+  line-height: 1.15;
+}
+
+.mem-home .mem-stat-card span {
+  font-size: 1rem;
+  font-weight: 450;
+}
+
+.mem-home .mem-contribution {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1.3rem;
+}
+
+.mem-home .mem-total-posts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.03rem;
+  font-weight: 450;
+}
+
+.mem-home .mem-total-posts strong {
+  color: hsl(var(--foreground));
+  font-size: 1.06rem;
+  font-weight: 520;
+}
+
+.mem-home .mem-contribution-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.08rem;
+  font-weight: 450;
+}
+
+.mem-home .mem-contribution-head a {
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+}
+
+.mem-home .mem-contribution-head a:hover {
+  color: hsl(var(--primary));
+}
+
+.mem-home .mem-github-chart {
+  display: block;
+  overflow-x: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.55rem 0 0.35rem;
+  box-shadow: none;
+}
+
+.mem-home .mem-github-chart img {
+  display: block;
+  width: min(100%, 58rem);
+  min-width: 50rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.mem-home .mem-github-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.02rem;
+  font-weight: 450;
+}
+
+.mem-home .mem-github-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: hsl(var(--foreground));
+}
+
+.mem-home .mem-github-legend i {
+  display: inline-block;
+  width: 0.78rem;
+  height: 0.78rem;
+  border-radius: 0.18rem;
+}
+
+.mem-home .mem-github-legend i[data-level='0'] {
+  background: #ebedf0;
+}
+
+.mem-home .mem-github-legend i[data-level='1'] {
+  background: #9be9a8;
+}
+
+.mem-home .mem-github-legend i[data-level='2'] {
+  background: #40c463;
+}
+
+.mem-home .mem-github-legend i[data-level='3'] {
+  background: #30a14e;
+}
+
+.mem-home .mem-github-legend i[data-level='4'] {
+  background: #216e39;
+}
+
+.mem-home section:has(.mem-stat-grid) > div:last-child {
+  gap: 1.25rem;
+}
+
+.mem-home section:has(.mem-stat-grid) {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .mem-home {
+    padding-top: 0.5rem;
+  }
+
+  .mem-home .mem-hero {
+    min-height: 15rem;
+  }
+
+  .mem-home .mem-avatar {
+    width: 7.75rem;
+    height: 7.75rem;
+    border-radius: 999px;
+  }
+
+  .mem-home .mem-title {
+    font-size: 2.2rem;
+  }
+
+  .mem-home .mem-label {
+    min-height: 2.55rem;
+    font-size: 0.95rem;
+  }
+
+  .mem-home .mem-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mem-home .mem-stat-card {
+    min-height: 6.8rem;
+  }
+
+  .mem-home .mem-contribution-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mem-home .mem-github-foot {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

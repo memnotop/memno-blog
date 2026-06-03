@@ -1,0 +1,297 @@
+---
+import config from 'virtual:config'
+
+import { Icon } from '../user'
+---
+
+<header-component
+  class='group sticky top-4 z-50 max-md:z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
+>
+  <a
+    class='z-30 text-xl font-semibold group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
+    style='transition:margin-inline 0.3s'
+    href='/'
+    aria-label='Brand'>{config.title}</a
+  >
+
+  <div class='flex items-center gap-x-2'>
+    {/* Menu links */}
+    <div
+      id='headerExpandContent'
+      class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
+    >
+      <div class='flex flex-col items-center justify-center overflow-hidden sm:overflow-visible sm:flex-row'>
+        {
+          config.header.menu.map((item) => (
+            <div class='header-menu-item group/menu relative w-full flex-none grow text-right sm:w-fit'>
+              <a
+                href={item.link}
+                class='block py-2 font-medium transition-none hover:text-primary sm:px-3'
+                aria-label='Nav menu item'
+              >
+                {item.title}
+                {item.children?.length ? <span class='header-chevron ms-1 text-xs'>⌄</span> : null}
+              </a>
+              {item.children?.length ? (
+                <div class='header-submenu sm:absolute sm:left-1/2 sm:top-full sm:min-w-36 sm:-translate-x-1/2 sm:pt-2'>
+                  <div class='header-submenu-panel flex flex-col rounded-xl border bg-background p-1 shadow-lg dark:bg-muted'>
+                    {item.children.map((child) => (
+                      <a
+                        href={child.link}
+                        class='header-submenu-link rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-primary dark:hover:bg-background'
+                        aria-label='Nav submenu item'
+                      >
+                        {child.title}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ))
+        }
+        <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
+          <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
+            <span class='sr-only'>Search</span>
+            <Icon name='search' class='size-5' />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {/* buttons */}
+    <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
+      <button
+        id='toggleDarkMode'
+        class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
+      >
+        <span class='sr-only'>Dark Theme</span>
+        <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
+        <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
+        <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
+      </button>
+      <button
+        id='toggleMenu'
+        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+      >
+        <span class='sr-only'>Menu</span>
+        <Icon class='size-5' name='menu' />
+      </button>
+    </div>
+  </div>
+</header-component>
+
+{/* Use inline to load icon quicker firstly */}
+<script is:inline>
+  const toggleDarkModeElement = document.getElementById('toggleDarkMode')
+  if (toggleDarkModeElement) {
+    toggleDarkModeElement.dataset.theme = localStorage.getItem('theme') || 'system'
+  }
+</script>
+<script>
+  import { setTheme, showToast } from '../../utils'
+
+  class Header extends HTMLElement {
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      // Header
+      let preScrollY = window.scrollY
+      this.classList.toggle('not-top', preScrollY > 20)
+      window.addEventListener('scroll', () => {
+        this.classList.toggle('not-top', window.scrollY > 20)
+        this.dataset.show = (window.scrollY < 350 || window.scrollY < preScrollY).toString()
+        preScrollY = window.scrollY
+      })
+
+      // Dark Mode
+      const darkModeBtn = this.querySelector('#toggleDarkMode') as HTMLElement
+      darkModeBtn.addEventListener('click', () => {
+        // Old way: dispatch event
+        // const toggleDarkModeEvent = new CustomEvent('theme-change', {
+        //   detail: { theme: localStorage.getItem('theme') === 'light' ? 'dark' : 'light' }
+        // })
+        // document.dispatchEvent(toggleDarkModeEvent)
+        const newTheme = setTheme(undefined, true)
+        darkModeBtn.dataset.theme = newTheme
+        showToast({ message: `Set theme to ${newTheme}` })
+      })
+
+      // Menu
+      this.querySelector('#toggleMenu')?.addEventListener('click', () => {
+        this.classList.toggle('expanded')
+      })
+    }
+  }
+
+  customElements.define('header-component', Header)
+</script>
+
+<style>
+  header-component {
+    font-weight: 500;
+    transition:
+      padding 0.3s,
+      transform 0.3s,
+      margin-inline 0.3s,
+      border 0.15s,
+      background-color 0.15s;
+
+    &.not-top {
+      --un-border-opacity: 1;
+      border-color: hsl(var(--border) / var(--un-border-opacity));
+      --un-bg-opacity: 1;
+      background-color: hsl(var(--background) / var(--un-bg-opacity));
+      padding-left: 0.375rem;
+      padding-right: 0.375rem;
+      box-shadow:
+        rgb(255, 255, 255) 0px 0px 0px 0px,
+        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
+        rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
+        rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
+    }
+    &[data-show='false']:not(.expanded) {
+      transform: translateY(-5rem);
+    }
+  }
+  @media (min-width: 800px) {
+    header-component.not-top {
+      margin-inline: 8%;
+    }
+  }
+  :global(.dark) header-component.not-top {
+    background-color: hsl(var(--muted) / var(--un-bg-opacity));
+  }
+
+  /* header menu */
+  header-component > a {
+    font-size: 1.32rem;
+    font-weight: 760;
+    letter-spacing: 0;
+  }
+
+  .header-menu-item > a {
+    font-size: 1.08rem;
+    font-weight: 520;
+    letter-spacing: 0;
+  }
+
+  .header-chevron {
+    transition: transform 0.2s ease;
+  }
+
+  .header-submenu {
+    display: block;
+  }
+
+  @media (min-width: 641px) {
+    .header-submenu {
+      left: 0 !important;
+      min-width: 13.5rem;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      max-height: 0;
+      transform: translateY(-0.55rem) !important;
+      transition:
+        max-height 0.26s ease,
+        opacity 0.18s ease,
+        transform 0.24s ease;
+    }
+
+    .header-submenu-panel {
+      border-radius: 0.95rem;
+      padding: 0.55rem;
+      box-shadow:
+        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
+        rgba(39, 39, 42, 0.1) 0px 18px 32px -10px;
+    }
+
+    .header-submenu-link {
+      padding: 0.72rem 0.85rem;
+      text-align: left;
+      font-size: 1.02rem;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .header-menu-item:hover .header-submenu,
+    .header-menu-item:focus-within .header-submenu {
+      pointer-events: auto;
+      opacity: 1;
+      max-height: 18rem;
+      transform: translateY(0) !important;
+    }
+
+    .header-menu-item:hover .header-chevron,
+    .header-menu-item:focus-within .header-chevron {
+      display: inline-block;
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 640px) {
+    #headerExpandContent {
+      grid-template-rows: 0fr;
+      transition:
+        opacity 0.3s,
+        padding 0.3s,
+        border-color 0.15s,
+        grid-template-rows 0.3s;
+    }
+    .expanded #headerExpandContent {
+      grid-template-rows: 1fr;
+    }
+    .expanded.not-top #headerExpandContent {
+      box-shadow:
+        rgb(255, 255, 255) 0px 0px 0px 0px,
+        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
+        rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
+        rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
+    }
+
+    /* header component after */
+    header-component #headerExpandContent::after {
+      box-sizing: content-box;
+      content: '';
+      position: absolute;
+      inset-inline: calc(-1rem - 1px);
+      bottom: 0;
+      top: -5rem;
+      z-index: -1;
+      transition: 0.3s;
+      visibility: hidden;
+      opacity: 0;
+      border-bottom: 1px solid transparent;
+    }
+    header-component:not(.not-top) #headerExpandContent::after {
+      visibility: visible;
+      bottom: -1rem;
+      opacity: 1;
+      background-color: hsl(var(--muted) / var(--un-bg-opacity, 1));
+      border-bottom-color: hsl(var(--border) / var(--un-border-opacity, 1));
+    }
+  }
+
+  /* dark light mode toggle */
+  #toggleDarkMode {
+    &[data-theme='dark'] {
+      & .system {
+        display: none;
+      }
+      & .dark {
+        display: block;
+      }
+    }
+    &[data-theme='light'] {
+      & .system {
+        display: none;
+      }
+      .light {
+        display: block;
+      }
+    }
+  }
+</style>

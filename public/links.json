@@ -1,0 +1,51 @@
+{
+  "friends": [
+    {
+      "id_name": "friends",
+      "desc": "Friends",
+      "link_list": [
+        {
+          "name": "icodeq",
+          "intro": "一个内容丰富、结构成熟的个人博客，适合参考站点组织方式。",
+          "link": "https://icodeq.com/link/",
+          "avatar": "/img/cat-icon.png"
+        },
+        {
+          "name": "Traveling",
+          "intro": "开往项目。点击后随机访问另一个独立博客。",
+          "link": "https://www.travellings.cn/go",
+          "avatar": "/img/cat-icon.png"
+        }
+      ]
+    },
+    {
+      "id_name": "bad-status",
+      "desc": "Links with Bad Status",
+      "link_list": []
+    },
+    {
+      "id_name": "resources",
+      "desc": "Resources",
+      "link_list": [
+        {
+          "name": "Resource Notes",
+          "intro": "工具、资料、教程和长期会反复使用的链接。",
+          "link": "/blog/536d021c",
+          "avatar": "/img/favicon.png"
+        },
+        {
+          "name": "GitHub",
+          "intro": "代码托管、开源项目和技术资料。",
+          "link": "https://github.com/",
+          "avatar": "/img/favicon.png"
+        },
+        {
+          "name": "MDN Web Docs",
+          "intro": "Web 标准、HTML、CSS 和 JavaScript 文档。",
+          "link": "https://developer.mozilla.org/",
+          "avatar": "/img/favicon.png"
+        }
+      ]
+    }
+  ]
+}

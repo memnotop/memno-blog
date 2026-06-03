@@ -1,0 +1,55 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+
+const headings = [
+  { depth: 2, slug: 'website', text: 'Website' },
+  { depth: 2, slug: 'study', text: 'Study' },
+  { depth: 2, slug: 'tools', text: 'Tools' }
+]
+---
+
+<PageLayout title='Projects' {headings}>
+  <p>这里先放置当前博客和后续会继续整理的项目入口。</p>
+
+  <h2 id='website'>Website</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'memnotop Blog',
+        description: '个人博客，用来记录生活、资源、技术分享和训练。',
+        links: [
+          { type: 'site', href: 'https://memno.top/' },
+          { type: 'github', href: 'https://github.com/memnotop/memno-blog' }
+        ]
+      },
+      {
+        name: 'Arthals-Ink Preview',
+        description: '基于 Arthals-Ink / Astro Theme Pure 的本地预览版本。',
+        links: [{ type: 'github', href: 'https://github.com/zhuozhiyongde/Arthals-Ink' }]
+      }
+    ]}
+  />
+
+  <h2 id='study'>Study</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'SoC Notes',
+        description: '课程学习、SoC 设计和集成电路方向的学习记录。',
+        links: [{ type: 'doc', href: '/blog' }]
+      }
+    ]}
+  />
+
+  <h2 id='tools'>Tools</h2>
+  <ProjectSection
+    projects={[
+      {
+        name: 'Resource Notes',
+        description: '工具、资料、教程和长期会反复使用的链接。',
+        links: [{ type: 'doc', href: '/blog/536d021c' }]
+      }
+    ]}
+  />
+</PageLayout>
