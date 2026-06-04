@@ -59,7 +59,7 @@ interface ArticleDatabase {
   [filename: string]: ArticleMetadata
 }
 
-const BLOG_DIR = path.join(__dirname, '../src/content/blog')
+const CONTENT_DIR = path.join(__dirname, '../src/content')
 const DATABASE_FILE = path.join(__dirname, 'blog-metadata.json')
 
 /**
@@ -201,12 +201,28 @@ async function saveDatabase(database: ArticleDatabase): Promise<void> {
   await fs.writeFile(DATABASE_FILE, JSON.stringify(database, null, 2))
 }
 
+async function collectMarkdownFiles(rootDir: string): Promise<string[]> {
+  const entries = await fs.readdir(rootDir, { withFileTypes: true })
+  const files = await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = path.join(rootDir, entry.name)
+      if (entry.isDirectory()) return await collectMarkdownFiles(fullPath)
+      if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
+        return [fullPath]
+      }
+      return []
+    })
+  )
+
+  return files.flat().sort()
+}
+
 /**
  * 处理单个文章文件
  */
 async function processArticle(
   filePath: string,
-  filename: string,
+  relativePath: string,
   database: ArticleDatabase
 ): Promise<void> {
   const content = await fs.readFile(filePath, 'utf-8')
@@ -216,11 +232,11 @@ async function processArticle(
     const { frontmatter, body, publishDate, updatedDate } = parseFrontmatter(content)
 
     if (!publishDate) {
-      warningLog(`${filename} has no publishDate, skipping...`)
+      warningLog(`${relativePath} has no publishDate, skipping...`)
       return
     }
 
-    const existingEntry = database[filename]
+    const existingEntry = database[relativePath]
     const now = new Date()
     const currentTime = formatDate(now)
 
@@ -228,7 +244,7 @@ async function processArticle(
       // 新文章
       const finalUpdatedDate = updatedDate || publishDate
 
-      database[filename] = {
+      database[relativePath] = {
         hash,
         publishDate,
         updatedDate: finalUpdatedDate
@@ -236,13 +252,13 @@ async function processArticle(
 
       // 对于新文章，只记录到数据库，不修改原文件
       if (!updatedDate) {
-        newLog(`${filename} recorded (will add updatedDate when content changes)`)
+        newLog(`${relativePath} recorded (will add updatedDate when content changes)`)
       } else {
-        newLog(`${filename} added to database`)
+        newLog(`${relativePath} added to database`)
       }
     } else if (existingEntry.hash !== hash) {
       // 内容已更改
-      database[filename] = {
+      database[relativePath] = {
         ...existingEntry,
         hash,
         updatedDate: currentTime
@@ -255,21 +271,21 @@ async function processArticle(
 
       // 重新计算更新后文件的哈希值并更新数据库
       const updatedHash = calculateHash(newContent)
-      database[filename] = {
+      database[relativePath] = {
         ...existingEntry,
         hash: updatedHash,
         updatedDate: currentTime
       }
 
       if (!updatedDate) {
-        updateLog(`${filename} - Added updatedDate`)
+        updateLog(`${relativePath} - Added updatedDate`)
       } else {
-        updateLog(`${filename} - Updated updatedDate`)
+        updateLog(`${relativePath} - Updated updatedDate`)
       }
     }
     // 移除 "No changes" 的输出，不显示无变化的文件
   } catch (error) {
-    errorLog(`Error processing ${filename}: ${error}`)
+    errorLog(`Error processing ${relativePath}: ${error}`)
   }
 }
 
@@ -286,30 +302,29 @@ async function main(): Promise<void> {
     // 读取数据库
     const database = await loadDatabase()
 
-    // 读取博客目录
-    const files = await fs.readdir(BLOG_DIR)
-    const markdownFiles = files.filter((file) => file.endsWith('.md') || file.endsWith('.mdx'))
+    const markdownFiles = await collectMarkdownFiles(CONTENT_DIR)
+    const relativeMarkdownFiles = markdownFiles.map((filePath) => path.relative(CONTENT_DIR, filePath))
 
-    infoLog(`Found ${markdownFiles.length} markdown files`)
+    infoLog(`Found ${relativeMarkdownFiles.length} markdown files`)
 
     let processedCount = 0
     let changedCount = 0
     let newCount = 0
 
     // 处理每个文件
-    for (const filename of markdownFiles) {
-      const filePath = path.join(BLOG_DIR, filename)
-      const existingEntry = database[filename]
+    for (const filePath of markdownFiles) {
+      const relativePath = path.relative(CONTENT_DIR, filePath)
+      const existingEntry = database[relativePath]
 
-      await processArticle(filePath, filename, database)
+      await processArticle(filePath, relativePath, database)
 
       // 统计变化
       if (!existingEntry) {
         newCount++
       } else if (
         existingEntry &&
-        database[filename] &&
-        existingEntry.hash !== database[filename].hash
+        database[relativePath] &&
+        existingEntry.hash !== database[relativePath].hash
       ) {
         changedCount++
       }
@@ -317,12 +332,12 @@ async function main(): Promise<void> {
     }
 
     // 清理数据库中不存在的文件
-    const existingFiles = new Set(markdownFiles)
+    const existingFiles = new Set(relativeMarkdownFiles)
     let deletedCount = 0
-    for (const filename of Object.keys(database)) {
-      if (!existingFiles.has(filename)) {
-        warningLog(`Removing deleted file from database: ${filename}`)
-        delete database[filename]
+    for (const relativePath of Object.keys(database)) {
+      if (!existingFiles.has(relativePath)) {
+        warningLog(`Removing deleted file from database: ${relativePath}`)
+        delete database[relativePath]
         deletedCount++
       }
     }

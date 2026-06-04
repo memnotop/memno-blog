@@ -2,8 +2,12 @@ import type { AstroGlobal, ImageMetadata } from 'astro'
 import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import rss from '@astrojs/rss'
+import path from 'node:path'
 import type { Root } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
+import remarkGfm from 'remark-gfm'
+import { remarkAlert } from 'remark-github-blockquote-alert'
+import remarkMath from 'remark-math'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
@@ -11,20 +15,24 @@ import { visit } from 'unist-util-visit'
 import config from 'virtual:config'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import remarkObsidian from '@/plugins/remark-obsidian'
 
-// Get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp}' // add more image formats if needed
+  '/src/content/**/*.{jpeg,jpg,png,gif,avif,webp}'
 )
+const projectRoot = process.cwd()
 
 const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
   const getLocalImagePath = (url: string) => {
-    const cleanUrl = url.replace(/^\.\//, '')
-    const candidates = [
-      `/src/content/blog/${cleanUrl}`,
-      `/src/content/blog/${post.id}/${cleanUrl}`
-    ]
-    return candidates.find((candidate) => imagesGlob[candidate])
+    if (/^[a-z]+:/i.test(url)) return undefined
+    if (!post.filePath) return undefined
+
+    const resolvedPath = path.resolve(path.dirname(post.filePath), url)
+    const relativePath = path.relative(projectRoot, resolvedPath)
+    if (relativePath.startsWith('..')) return undefined
+
+    const globKey = `/${relativePath.split(path.sep).join('/')}`
+    return imagesGlob[globKey] ? globKey : undefined
   }
 
   // Replace image links with the correct path
@@ -54,10 +62,17 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
 
   const file = await unified()
     .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMath)
+    .use(remarkObsidian)
+    .use(remarkAlert)
     .use(remarkReplaceImageLink)
     .use(remarkRehype)
     .use(rehypeStringify)
-    .process(post.body)
+    .process({
+      value: post.body,
+      path: post.filePath ?? path.join(projectRoot, 'src/content', `${post.id}.md`)
+    })
 
   return String(file)
 }
@@ -77,14 +92,22 @@ const GET = async (context: AstroGlobal) => {
     description: config.description,
     site: import.meta.env.SITE,
     items: await Promise.all(
-      allPostsByDate.map(async (post) => ({
-        pubDate: post.data.publishDate,
-        link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
-        content: await renderContent(post, siteUrl),
-        ...post.data
-      }))
+      allPostsByDate.map(async (post) => {
+        const heroImage =
+          typeof post.data.heroImage?.src === 'string'
+            ? post.data.heroImage.src
+            : post.data.heroImage?.src?.src
+
+        return {
+          pubDate: post.data.publishDate,
+          link: `/blog/${post.id}`,
+          customData: heroImage
+            ? `<h:img src="${heroImage}" /><enclosure url="${heroImage}" />`
+            : undefined,
+          content: await renderContent(post, siteUrl),
+          ...post.data
+        }
+      })
     )
   })
 }

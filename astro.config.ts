@@ -5,9 +5,11 @@ import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import { remarkAlert } from 'remark-github-blockquote-alert'
+import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
+import remarkObsidian from './src/plugins/remark-obsidian.ts'
 import {
   addCopyButton,
   addLanguage,
@@ -34,7 +36,7 @@ export default defineConfig({
     allowedHosts: ['localhost', '127.0.0.1']
   },
   markdown: {
-    remarkPlugins: [remarkMath, remarkAlert],
+    remarkPlugins: [remarkGfm, remarkMath, remarkObsidian, remarkAlert],
     rehypePlugins: [
       [rehypeKatex, { strict: false }],
       rehypeHeadingIds,

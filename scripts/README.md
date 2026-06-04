@@ -28,7 +28,7 @@ npx tsx scripts/updateBlogDates.ts
 
 ## 工作原理
 
-1. **扫描博客目录**: 扫描 `src/content/blog` 目录下的所有 `.md` 和 `.mdx` 文件
+1. **扫描博客目录**: 递归扫描 `src/content` 目录下的所有 `.md` 和 `.mdx` 文件
 
 2. **哈希计算**: 为每个文件计算MD5哈希值
 
@@ -47,7 +47,7 @@ npx tsx scripts/updateBlogDates.ts
 
 ```json
 {
-  "article.md": {
+  "2026/Technical/article/index.md": {
     "hash": "abc123...",
     "publishDate": "2024-04-03 15:26:04",
     "updatedDate": "2024-04-03 15:26:04"

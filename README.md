@@ -1,3 +1,6 @@
+---
+sticker: emoji//2763-fe0f
+---
 # memno-blog
 
 `~/Mycode/web` 是当前实际发布到 `https://memno.top` 的仓库。  
@@ -21,7 +24,7 @@ web/
 │  │  ├─ styles/             页面样式
 │  │  └─ avatar.webp         站点头像
 │  ├─ components/            可复用组件
-│  ├─ content/blog/          博客文章 Markdown
+│  ├─ content/               按年份组织的博客内容
 │  ├─ layouts/               页面布局
 │  ├─ pages/                 各页面入口
 │  ├─ plugins/               Markdown / Shiki 插件
@@ -42,10 +45,11 @@ web/
   - `training.astro` 训练记录
   - `links/index.astro` 友链页
   - `projects/index.astro` 项目页
-- `src/content/blog/`
+- `src/content/`
   - 所有文章内容
-  - 支持 `md` 和 `mdx`
-  - 每篇文章的配图建议放在同名目录里，例如 `post.md` 的图片放 `post/`
+  - 直接按年份组织，例如 `2026/`、`2027/`
+  - 每个年份下固定分为 `daily life/`、`Reading/`、`Technical/`、`Picture/` 和 `Training.md`
+  - 普通文章用 `文章目录/index.md` 组织，配图直接放在文章目录里
 - `src/assets/styles/`
   - 站内页面样式
   - `app.css` 全站基准样式
@@ -72,7 +76,7 @@ npm run dev
 更多命令：
 
 ```bash
-npm run new:post -- "文章标题"   # 一键新建文章
+npm run new:post               # 交互式新建文章 / Training 年度文件
 npm run date                   # 按内容变化更新 updatedDate
 npm run verify                 # 发布前检查，等于 check + build
 npm run build                  # 生成生产构建
@@ -98,17 +102,42 @@ npm run preview                # 预览生产构建
 最快方式：
 
 ```bash
+npm run new:post
+```
+
+也可以直接带标题：
+
+```bash
 npm run new:post -- "文章标题"
 ```
 
-这会自动在 `src/content/blog/` 里生成一个 Markdown 文件模板。
-同时会创建一个同名图片目录，例如标题生成的文件是 `my-post.md`，图片目录就是 `src/content/blog/my-post/`。
+脚本会交互询问：
+
+- 年份，例如 `2026`
+- `repositories`，例如 `technical`、`reading`、`daily-life`、`picture`、`training`
+
+然后自动构建到对应位置：
+
+- 普通文章：`src/content/2026/Technical/my-post/index.md`
+- Training 年度文件：`src/content/2026/Training.md`
 
 然后打开新文件，填写正文。
 
 ### 2. 手动新建文章
 
-也可以直接在 `src/content/blog/` 下新建 `*.md` 或 `*.mdx` 文件。
+也可以直接手动创建内容文件。
+
+普通文章建议放在：
+
+```text
+src/content/2026/Technical/my-post/index.md
+```
+
+Training 记录放在：
+
+```text
+src/content/2026/Training.md
+```
 
 例如：
 
@@ -117,12 +146,11 @@ npm run new:post -- "文章标题"
 title: "文章标题"
 description: "一句话摘要"
 publishDate: "2026-06-03 10:00:00"
-tags:
-  - technical
+tags: []
 repositories:
   - technical
 # heroImage:
-#   src: ./article-slug/cover.webp
+#   src: ./cover.webp
 #   alt: "封面图说明"
 #   color: "#659EB9"
 language: "中文"
@@ -137,8 +165,8 @@ draft: false
 - `title`：文章标题
 - `description`：摘要，列表页和 SEO 会用到
 - `publishDate`：发布时间
-- `tags`：文章标签页会用到，也可以作为专题页筛选来源
-- `repositories`：文章所属内容仓库，适合 `daily life` 这种不想依赖标签的专题页
+- `tags`：普通标签页会用到，可选
+- `repositories`：文章所属内容仓库，也决定默认落盘目录
 - `heroImage`：文章封面图，取消注释后把 `src` 改成实际图片路径
 - `draft: false`：表示允许发布；如果写成 `true`，通常不会出现在正式内容里
 
@@ -147,24 +175,26 @@ draft: false
 推荐结构：
 
 ```text
-src/content/blog/
-├─ my-post.md
-└─ my-post/
-   ├─ cover.webp
-   └─ image-01.webp
+src/content/
+└─ 2026/
+   └─ Technical/
+      └─ my-post/
+         ├─ index.md
+         ├─ cover.webp
+         └─ image-01.webp
 ```
 
 正文图片这样写：
 
 ```md
-![图片说明](./my-post/image-01.webp)
+![图片说明](./image-01.webp)
 ```
 
 封面图在 frontmatter 里这样写：
 
 ```yaml
 heroImage:
-  src: ./my-post/cover.webp
+  src: ./cover.webp
   alt: "封面图说明"
   color: "#659EB9"
 ```
@@ -175,26 +205,17 @@ heroImage:
 
 专题页配置在 [src/site.config.ts](./src/site.config.ts) 的 `blogTopics`。
 
-现在 `daily life` 不按标签筛选，而是按仓库字段筛选：
+现在四个专题页都按 `repositories` 字段筛选：
 
 ```ts
 {
   slug: 'daily-life',
   title: 'daily life',
-  description: '生活记录、想法、训练和日常记录。',
+  description: '生活记录、想法和日常记录。',
   source: {
     field: 'repositories',
     values: ['daily-life']
   }
-}
-```
-
-如果想让它重新按标签筛选，改成：
-
-```ts
-source: {
-  field: 'tags',
-  values: ['daily life', 'training']
 }
 ```
 
@@ -210,10 +231,10 @@ repositories:
 训练内容已经并入博客内容，位置是：
 
 ```text
-src/content/blog/training-log.md
+src/content/2026/Training.md
 ```
 
-直接编辑这个文件即可。
+按年份分别维护对应的 `Training.md` 即可。
 
 ## 如何修改界面内容
 
@@ -304,15 +325,16 @@ git push origin main
 
 ## 便捷命令说明
 
-### `npm run new:post -- "文章标题"`
+### `npm run new:post`
 
-- 自动创建文章模板
-- 自动生成文件名
-- 自动带上当前时间的 `publishDate`
+- 交互询问年份和 `repositories`
+- 普通文章创建到 `src/content/<year>/<分类>/<slug>/index.md`
+- `training` 创建到 `src/content/<year>/Training.md`
+- 自动带上模板 frontmatter
 
 ### `npm run date`
 
-- 检测 `src/content/blog/` 下文章内容是否变化
+- 递归检测 `src/content/` 下文章内容是否变化
 - 如果变了，自动更新 `updatedDate`
 
 ### `npm run verify`
@@ -333,7 +355,7 @@ npm run build
 
 - 以后只维护 `~/Mycode/web`
 - `packages/pure/` 是主题代码，没必要不要改
-- 发内容优先改 `src/content/blog/`
+- 发内容优先改 `src/content/`
 - 改界面优先改 `src/pages/`、`src/assets/styles/`、`src/site.config.ts`
 - 发布前至少跑一次 `npm run verify`
 

@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "4c363fafeca08585",
+            "id": "ce0294967ac24836",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/blog/7a24c421.md",
+                "file": "src/content/2026/Technical/7a24c421/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "7a24c421"
+              "title": "index"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:daily life",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -72,6 +72,16 @@
               "state": {},
               "icon": "lucide-bookmark",
               "title": "书签"
+            }
+          },
+          {
+            "id": "d43e40064676768e",
+            "type": "leaf",
+            "state": {
+              "type": "mk-path-view",
+              "state": {},
+              "icon": "layout-grid",
+              "title": "Navigator"
             }
           }
         ]
@@ -164,6 +174,16 @@
               "icon": "lucide-list",
               "title": "training-log 的大纲"
             }
+          },
+          {
+            "id": "6bd68f80d0cba0d3",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
           }
         ]
       }
@@ -180,36 +200,44 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "4c363fafeca08585",
+  "active": "ce0294967ac24836",
   "lastOpenFiles": [
-    "src/content/blog/第一篇.md",
-    "src/content/blog/7a24c421.md",
-    "src/content/blog/training-log.md",
+    "src/content/2026/daily life/第一篇/index.md",
+    "src/content/2026/daily life/第一篇/Pasted image 20260604084242.png",
+    "src/content/2026/daily life/第一篇/Pasted image 20260604091435.png",
+    "src/content/2025/Training.md",
     "dist/sitemap-0.xml",
     "dist/sitemap-index.xml",
-    "dist/pagefind/pagefind-entry.json",
-    "dist/pagefind/wasm.unknown.pagefind",
-    "dist/pagefind/pagefind-component-ui.js",
-    "dist/pagefind/pagefind-component-ui.css",
-    "dist/pagefind/pagefind-modular-ui.css",
-    "dist/pagefind/pagefind-modular-ui.js",
-    "dist/pagefind/pagefind-ui.css",
-    "dist/pagefind/pagefind-ui.js",
+    "dist/pagefind/fragment/zh-cn_eff9b96.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_ef90c75.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_e54172e.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_dbe86a7.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_db2b2d1.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_d5bbd0b.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_b972d7e.pf_fragment",
+    "dist/pagefind/fragment/zh-cn_b3ec3e4.pf_fragment",
     "dist/_astro/avatar.C1wqNjWy_2jtj11.webp",
+    "dist/_astro/Pasted image 20260604091435.CBn84-l9_2igO7k.webp",
     "dist/_astro/wen-qiao-g_w8I64FiO0-unsplash.DwDGsRMl.jpg",
     "dist/_astro/kseniia-zapiatkina-yATU3rg8tNI-unsplash.Y3hxziJK.jpg",
     "dist/_astro/avatar.C1wqNjWy.webp",
     "dist/_astro/angelica-teran-Bk9hpaXHK4o-unsplash.BMVjK7SX.jpg",
     "dist/_astro/alex-tyson-2BAXJ7ha74s-unsplash.BVGE4ARV.jpg",
-    "dist/img/uploads/11.png",
-    "dist/img/favicon.png",
-    "dist/img/default-cover.webp",
-    "dist/img/default-cover.png",
-    "src/content/blog/__probe__/index.md",
+    "dist/_astro/Pasted image 20260604091435.CBn84-l9.png",
+    "src/content/2027/Training.md",
+    "src/content/2027/Technical/脚手架测试/index.md",
+    "src/content/blog/training-log.md",
+    "src/content/2026/Training.md",
+    "src/content/2026/Technical/7a24c421/index.md",
+    "src/content/blog/7a24c421.md",
+    "src/content/blog/第一篇.md",
     "README.md",
+    "src/src.md",
+    "src/content/blog/__probe__/index.md",
     "src/content/blog/ecf05a39.md",
     "src/content/blog/ba8fd803.md"
   ]

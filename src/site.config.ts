@@ -16,7 +16,7 @@ export const blogTopics = [
   {
     slug: 'daily-life',
     title: 'daily life',
-    description: '生活记录、想法、训练和日常记录。',
+    description: '生活记录、想法和日常记录。',
     source: {
       field: 'repositories',
       values: ['daily-life']
@@ -27,8 +27,8 @@ export const blogTopics = [
     title: 'Reading',
     description: '阅读笔记、书籍、论文和资料整理。',
     source: {
-      field: 'tags',
-      values: ['reading', '收藏', '工具']
+      field: 'repositories',
+      values: ['reading']
     }
   },
   {
@@ -36,7 +36,7 @@ export const blogTopics = [
     title: 'Technical',
     description: '技术分享、工具使用、网页搭建与项目复盘。',
     source: {
-      field: 'tags',
+      field: 'repositories',
       values: ['technical']
     }
   },
@@ -45,8 +45,8 @@ export const blogTopics = [
     title: 'Picture',
     description: '照片、旅行和一些值得保存的画面。',
     source: {
-      field: 'tags',
-      values: ['picture', 'photo', 'photos', '照片']
+      field: 'repositories',
+      values: ['picture']
     }
   }
 ] satisfies BlogTopic[]

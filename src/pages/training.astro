@@ -58,24 +58,39 @@ function parseTrainingYearFile(filePath: string): TrainingRecord[] {
 
 function loadTrainingRecords(): TrainingRecord[] {
   const projectRoot = process.cwd()
+  const contentRoot = path.join(projectRoot, 'src/content')
   const records: TrainingRecord[] = []
-  const sources = [
-    path.join(projectRoot, 'src/content/blog/training-log.md'),
-    path.join(projectRoot, 'src/content/blog/training-log.mdx')
-  ]
+  const sources: string[] = []
   const yearsDir = path.join(projectRoot, 'source/training/years')
 
+  if (fs.existsSync(contentRoot)) {
+    for (const entry of fs.readdirSync(contentRoot, { withFileTypes: true }).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )) {
+      if (!entry.isDirectory() || !/^\d{4}$/.test(entry.name)) continue
+
+      for (const filename of ['Training.md', 'Training.mdx']) {
+        const trainingFile = path.join(contentRoot, entry.name, filename)
+        if (fs.existsSync(trainingFile)) sources.push(trainingFile)
+      }
+    }
+  }
+
   if (fs.existsSync(yearsDir)) {
-    records.push(
+    sources.push(
       ...fs
         .readdirSync(yearsDir)
         .filter((file) => /^\d{4}\.md$/.test(file))
         .sort()
-        .flatMap((file) => parseTrainingYearFile(path.join(yearsDir, file)))
+        .map((file) => path.join(yearsDir, file))
     )
   }
 
-  for (const source of sources) {
+  for (const source of [
+    ...sources,
+    path.join(projectRoot, 'src/content/blog/training-log.md'),
+    path.join(projectRoot, 'src/content/blog/training-log.mdx')
+  ]) {
     if (fs.existsSync(source)) records.push(...parseTrainingYearFile(source))
   }
 

@@ -327,6 +327,131 @@ body::-webkit-scrollbar {
   color: var(--color-danger-fg);
   color: var(--fgColor-danger, var(--color-danger-fg));
 }
+
+#content mark {
+  border-radius: 0.2rem;
+  padding: 0.05rem 0.2rem;
+  background: hsl(48 92% 58% / 0.35);
+  color: inherit;
+}
+
+#content .contains-task-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+#content .task-list-item {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+#content .task-list-item input[type='checkbox'] {
+  margin-inline-end: 0.55rem;
+  vertical-align: -0.1em;
+  accent-color: hsl(var(--primary));
+}
+
+#content .obsidian-wikilink,
+#content .obsidian-tag {
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.28rem;
+  background: hsl(var(--muted));
+  text-decoration: none;
+}
+
+#content .obsidian-wikilink:hover,
+#content .obsidian-tag:hover {
+  background: hsl(var(--accent));
+}
+
+#content .obsidian-embed {
+  margin: 1rem 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--muted) / 0.45);
+}
+
+#content .obsidian-image-embed {
+  padding: 0.75rem;
+}
+
+#content .obsidian-image-embed img,
+#content img.obsidian-image-inline {
+  border-radius: calc(var(--radius) - 2px);
+}
+
+#content .obsidian-note-embed {
+  padding: 0.75rem 1rem;
+  border-left: 0.25rem solid hsl(var(--primary) / 0.6);
+}
+
+.markdown-alert.obsidian-callout {
+  box-shadow: none;
+}
+
+.markdown-alert.obsidian-callout::after {
+  content: none;
+}
+
+.markdown-alert.obsidian-callout-fold-closed > :not(.markdown-alert-title) {
+  display: none;
+}
+
+.markdown-alert.obsidian-callout-fold-closed .markdown-alert-title::after {
+  content: ' +';
+  color: hsl(var(--muted-foreground));
+}
+
+.markdown-alert.obsidian-callout-fold-open .markdown-alert-title::after {
+  content: ' -';
+  color: hsl(var(--muted-foreground));
+}
+
+.markdown-alert.markdown-alert-info,
+.markdown-alert.markdown-alert-help,
+.markdown-alert.markdown-alert-question,
+.markdown-alert.markdown-alert-faq {
+  border-left-color: var(--borderColor-accent-emphasis, var(--color-accent-emphasis));
+}
+
+.markdown-alert.markdown-alert-info .markdown-alert-title,
+.markdown-alert.markdown-alert-help .markdown-alert-title,
+.markdown-alert.markdown-alert-question .markdown-alert-title,
+.markdown-alert.markdown-alert-faq .markdown-alert-title {
+  color: var(--fgColor-accent, var(--color-accent-fg));
+}
+
+.markdown-alert.markdown-alert-success,
+.markdown-alert.markdown-alert-check,
+.markdown-alert.markdown-alert-done,
+.markdown-alert.markdown-alert-hint {
+  border-left-color: var(--borderColor-success-emphasis, var(--color-success-emphasis));
+}
+
+.markdown-alert.markdown-alert-success .markdown-alert-title,
+.markdown-alert.markdown-alert-check .markdown-alert-title,
+.markdown-alert.markdown-alert-done .markdown-alert-title,
+.markdown-alert.markdown-alert-hint .markdown-alert-title {
+  color: var(--fgColor-success, var(--color-success-fg));
+}
+
+.markdown-alert.markdown-alert-danger,
+.markdown-alert.markdown-alert-error,
+.markdown-alert.markdown-alert-bug,
+.markdown-alert.markdown-alert-fail,
+.markdown-alert.markdown-alert-failure,
+.markdown-alert.markdown-alert-missing {
+  border-left-color: var(--borderColor-danger-emphasis, var(--color-danger-emphasis));
+}
+
+.markdown-alert.markdown-alert-danger .markdown-alert-title,
+.markdown-alert.markdown-alert-error .markdown-alert-title,
+.markdown-alert.markdown-alert-bug .markdown-alert-title,
+.markdown-alert.markdown-alert-fail .markdown-alert-title,
+.markdown-alert.markdown-alert-failure .markdown-alert-title,
+.markdown-alert.markdown-alert-missing .markdown-alert-title {
+  color: var(--fgColor-danger, var(--color-danger-fg));
+}
 html,
 body {
   overscroll-behavior-y: none;
