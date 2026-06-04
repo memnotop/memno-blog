@@ -9,10 +9,16 @@ interface Props {
   remarkPluginFrontmatter: Record<string, unknown>
 }
 
-const {
-  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
-  remarkPluginFrontmatter
-} = Astro.props
+const { data, remarkPluginFrontmatter } = Astro.props
+const { title, description, draft, showHeroImage, publishDate, updatedDate, tags, language } = data
+const heroImage = data.heroImageSrc
+  ? {
+      src: data.heroImageSrc,
+      ...(data.heroImageInferSize !== undefined ? { inferSize: data.heroImageInferSize } : {}),
+      ...(data.heroImageWidth !== undefined ? { width: data.heroImageWidth } : {}),
+      ...(data.heroImageHeight !== undefined ? { height: data.heroImageHeight } : {})
+    }
+  : undefined
 
 const dateTimeOptions: Intl.DateTimeFormatOptions = {
   month: 'short'
@@ -20,10 +26,10 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 ---
 
 {
-  heroImage && (
+  heroImage && showHeroImage && (
     <div class='hero-image relative mb-6'>
       <Image
-        alt={heroImage.alt || title}
+        alt={data.heroImageAlt || title}
         class='cover-image relative z-10 h-auto w-full max-w-[65ch] rounded-2xl object-contain'
         fetchpriority='high'
         loading='eager'

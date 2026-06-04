@@ -65,7 +65,7 @@ function parseRepositories(input: string): RepositoryKey[] {
 }
 
 function toYamlList(items: string[]) {
-  if (!items.length) return '[]'
+  if (!items.length) return ' []'
   return `\n${items.map((item) => `  - ${item}`).join('\n')}`
 }
 
@@ -76,10 +76,10 @@ description: "一句话摘要"
 publishDate: "${nowString()}"
 tags:${toYamlList(tags)}
 repositories:${toYamlList(repositories)}
-# heroImage:
-#   src: ./cover.webp
-#   alt: "封面图说明"
-#   color: "#659EB9"
+# heroImageSrc: ./cover.webp
+# heroImageAlt: 封面图说明
+# heroImageColor: "#659EB9"
+# showHeroImage: true
 language: "中文"
 draft: false
 ---
@@ -95,11 +95,12 @@ draft: false
 如果需要封面图，frontmatter 里这样写：
 
 \`\`\`yaml
-heroImage:
-  src: ./cover.webp
-  alt: "封面图说明"
-  color: "#659EB9"
+heroImageSrc: ./cover.webp
+heroImageAlt: 封面图说明
+heroImageColor: "#659EB9"
 \`\`\`
+
+不想在站内显示封面时，把 \`showHeroImage\` 改成 \`false\`。
 
 当前文章目录：
 

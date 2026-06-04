@@ -19,17 +19,13 @@ const blog = defineCollection({
       publishDate: z.coerce.date(),
       // Optional
       updatedDate: z.coerce.date().optional(),
-      heroImage: z
-        .object({
-          src: image(),
-          alt: z.string().optional(),
-          inferSize: z.boolean().optional(),
-          width: z.number().optional(),
-          height: z.number().optional(),
-
-          color: z.string().optional()
-        })
-        .optional(),
+      heroImageSrc: image().optional(),
+      heroImageAlt: z.string().optional(),
+      heroImageColor: z.string().optional(),
+      heroImageInferSize: z.boolean().optional(),
+      heroImageWidth: z.number().optional(),
+      heroImageHeight: z.number().optional(),
+      showHeroImage: z.boolean().default(true),
       tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       repositories: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
       language: z.string().optional(),

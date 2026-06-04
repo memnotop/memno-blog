@@ -29,7 +29,6 @@ const {
 
 const {
   description,
-  heroImage,
   publishDate,
   title,
   updatedDate,
@@ -37,13 +36,10 @@ const {
   comment: enableComment
 } = data
 
-const socialImage = heroImage
-  ? typeof heroImage.src === 'string'
-    ? heroImage.src
-    : heroImage.src.src
-  : '/images/social-card.png'
+const socialImage =
+  typeof data.heroImageSrc === 'string' ? data.heroImageSrc : data.heroImageSrc?.src ?? '/images/social-card.png'
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
-const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
+const primaryColor = data.heroImageColor ?? 'hsl(var(--primary) / var(--un-text-opacity))'
 ---
 
 <PageLayout

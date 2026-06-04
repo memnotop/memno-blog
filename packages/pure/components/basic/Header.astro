@@ -2,6 +2,9 @@
 import config from 'virtual:config'
 
 import { Icon } from '../user'
+
+const externalLinkAttrs = (link: string) =>
+  /^https?:\/\//i.test(link) ? { target: '_blank', rel: 'noreferrer' } : {}
 ---
 
 <header-component
@@ -28,6 +31,7 @@ import { Icon } from '../user'
                 href={item.link}
                 class='block py-2 font-medium transition-none hover:text-primary sm:px-3'
                 aria-label='Nav menu item'
+                {...externalLinkAttrs(item.link)}
               >
                 {item.title}
                 {item.children?.length ? <span class='header-chevron ms-1 text-xs'>⌄</span> : null}
@@ -40,6 +44,7 @@ import { Icon } from '../user'
                         href={child.link}
                         class='header-submenu-link rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-primary dark:hover:bg-background'
                         aria-label='Nav submenu item'
+                        {...externalLinkAttrs(child.link)}
                       >
                         {child.title}
                       </a>

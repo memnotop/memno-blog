@@ -116,6 +116,7 @@ export const theme: ThemeUserConfig = {
       { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },
+      { title: 'Travelling', link: 'https://www.travellings.cn/go' },
 
     ]
   },
@@ -181,9 +182,11 @@ export const integ: IntegrationUserConfig = {
   // Add a random quote to the footer (default on homepage footer)
   // See: https://astro-pure.js.org/docs/integrations/advanced#web-content-render
   quote: {
-    // https://developer.hitokoto.cn/sentence/#%E8%AF%B7%E6%B1%82%E5%9C%B0%E5%9D%80
-    server: 'https://v1.hitokoto.cn/?c=i',
-    target: `(data) => data.hitokoto || 'Error'`
+    server: 'data:application/json,{}',
+    target: `() => {
+      const quotes = ['保持平静，保持向外的爱，活在当下', '挫其锐，解其纷，和其光，同其尘。']
+      return quotes[Math.floor(Math.random() * quotes.length)] || ''
+    }`
     // https://github.com/lukePeavey/quotable
     // server: 'https://api.quotable.io/quotes/random?maxLength=60',
     // target: `(data) => data[0].content || 'Error'`

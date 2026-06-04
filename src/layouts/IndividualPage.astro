@@ -10,7 +10,7 @@ import { integ } from '@/site-config'
 type Props = MarkdownLayoutProps<{
   title: string
   description: string
-  heroImage?: { src: string }
+  heroImageSrc?: string
   language?: string
   back?: string
 }> & {
@@ -18,8 +18,8 @@ type Props = MarkdownLayoutProps<{
 }
 
 const { frontmatter, headings } = Astro.props
-const { title, description, heroImage, language, back } = frontmatter
-const socialImage = heroImage?.src ?? '/images/social-card.png'
+const { title, description, heroImageSrc, language, back } = frontmatter
+const socialImage = heroImageSrc ?? '/images/social-card.png'
 ---
 
 <PageLayout meta={{ title, description, ogImage: socialImage }}>

@@ -94,9 +94,9 @@ const GET = async (context: AstroGlobal) => {
     items: await Promise.all(
       allPostsByDate.map(async (post) => {
         const heroImage =
-          typeof post.data.heroImage?.src === 'string'
-            ? post.data.heroImage.src
-            : post.data.heroImage?.src?.src
+          typeof post.data.heroImageSrc === 'string'
+            ? post.data.heroImageSrc
+            : post.data.heroImageSrc?.src
 
         return {
           pubDate: post.data.publishDate,

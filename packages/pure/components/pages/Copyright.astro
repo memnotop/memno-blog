@@ -11,12 +11,10 @@ interface Props<T extends CollectionKey> {
   class?: string
 }
 
-const {
-  data: { heroImage, title, publishDate },
-  class: className
-} = Astro.props
+const { data, class: className } = Astro.props
+const { title, publishDate } = data
 
-const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
+const image = typeof data.heroImageSrc === 'string' ? data.heroImageSrc : data.heroImageSrc?.src ?? ''
 
 const shares = {
   weibo: {

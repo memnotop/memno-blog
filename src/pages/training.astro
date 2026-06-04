@@ -2,7 +2,16 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import rehypeStringify from 'rehype-stringify'
+import { remarkAlert } from 'remark-github-blockquote-alert'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
+
 import PageLayout from '@/layouts/BaseLayout.astro'
+import remarkObsidian from '@/plugins/remark-obsidian'
 import '@/assets/styles/training.css'
 
 type TrainingRecord = {
@@ -12,9 +21,44 @@ type TrainingRecord = {
   items: string[]
   rpe: string
   body: string
+  htmlBody: string
 }
 
-function parseTrainingYearFile(filePath: string): TrainingRecord[] {
+function normalizeTrainingMarkdown(value: string) {
+  const normalized = value
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.replace(/^ {4}/, ''))
+    .join('\n')
+    .trim()
+
+  return normalized.replace(/(?<!\*)\*(?!\*)/g, (marker, offset, text) => {
+    const before = text.slice(Math.max(0, offset - 12), offset)
+    const after = text.slice(offset + marker.length, offset + marker.length + 12)
+    const looksLikeMultiplier = /\d[^\s*]{0,6}\s*$/.test(before) && /^\s*\d/.test(after)
+
+    return looksLikeMultiplier ? '\\*' : marker
+  })
+}
+
+async function renderTrainingMarkdown(value: string, filePath: string) {
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMath)
+    .use(remarkObsidian)
+    .use(remarkAlert)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process({
+      value: normalizeTrainingMarkdown(value),
+      path: filePath
+    })
+
+  return String(file)
+}
+
+async function parseTrainingYearFile(filePath: string): Promise<TrainingRecord[]> {
   const source = fs.readFileSync(filePath, 'utf8')
   const body = source.replace(/^---[\s\S]*?---\s*/, '')
   const records: TrainingRecord[] = []
@@ -49,14 +93,15 @@ function parseTrainingYearFile(filePath: string): TrainingRecord[] {
       level: Number(match[3]),
       items,
       rpe: rpeLine ? rpeLine.replace(/^RPE[：:]\s*/i, '') : '',
-      body: content
+      body: content,
+      htmlBody: await renderTrainingMarkdown(content, filePath)
     })
   }
 
   return records
 }
 
-function loadTrainingRecords(): TrainingRecord[] {
+async function loadTrainingRecords(): Promise<TrainingRecord[]> {
   const projectRoot = process.cwd()
   const contentRoot = path.join(projectRoot, 'src/content')
   const records: TrainingRecord[] = []
@@ -91,7 +136,7 @@ function loadTrainingRecords(): TrainingRecord[] {
     path.join(projectRoot, 'src/content/blog/training-log.md'),
     path.join(projectRoot, 'src/content/blog/training-log.mdx')
   ]) {
-    if (fs.existsSync(source)) records.push(...parseTrainingYearFile(source))
+    if (fs.existsSync(source)) records.push(...(await parseTrainingYearFile(source)))
   }
 
   return Array.from(new Map(records.map((record) => [record.date, record])).values()).sort((a, b) =>
@@ -99,7 +144,7 @@ function loadTrainingRecords(): TrainingRecord[] {
   )
 }
 
-const trainingRecords = loadTrainingRecords()
+const trainingRecords = await loadTrainingRecords()
 const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
 ---
 
@@ -217,6 +262,7 @@ const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
         return
       }
 
+      const bodyHtml = record.htmlBody || formatBody(record.body)
       detail.innerHTML = `
         <article class="training-entry active">
           <div class="training-entry-head">
@@ -226,7 +272,7 @@ const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
           <h2>${escapeHtml(record.title)}</h2>
           ${record.items.length ? `<ul>${record.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : ''}
           ${record.rpe ? `<p class="training-rpe">RPE：${escapeHtml(record.rpe)}</p>` : ''}
-          <div class="training-body">${formatBody(record.body)}</div>
+          ${bodyHtml ? `<div class="training-body">${bodyHtml}</div>` : ''}
         </article>
       `
     }

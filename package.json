@@ -15,6 +15,7 @@
     "clean": "rm -rf .astro dist node_modules/.astro",
     "new:post": "tsx scripts/new-post.ts",
     "date": "tsx scripts/updateBlogDates.ts",
+    "audit:repo": "tsx scripts/auditRepoHealth.ts",
     "verify": "npm run check && npm run build",
     "cache:avatars": "tsx scripts/cacheAvatars.ts",
     "github": "git add . && git commit -m \"update\" && git push origin main"

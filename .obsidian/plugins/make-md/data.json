@@ -44,7 +44,10 @@
     "/",
     "//src",
     "//src/src/content",
-    "//src/src/content/src/content/blog"
+    "//src/src/content/src/content/blog",
+    "//src/src/content/src/content/2026",
+    "//src/src/content/src/content/2026/src/content/2026/Reading",
+    "//src/src/content/src/content/2026/src/content/2026/Reading/src/content/2026/Reading/百年孤独摘要"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",

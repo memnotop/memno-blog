@@ -78,6 +78,7 @@ npm run dev
 ```bash
 npm run new:post               # 交互式新建文章 / Training 年度文件
 npm run date                   # 按内容变化更新 updatedDate
+npm run audit:repo             # 检查仓库体积、图片大小、本地状态文件
 npm run verify                 # 发布前检查，等于 check + build
 npm run build                  # 生成生产构建
 npm run preview                # 预览生产构建
@@ -149,10 +150,10 @@ publishDate: "2026-06-03 10:00:00"
 tags: []
 repositories:
   - technical
-# heroImage:
-#   src: ./cover.webp
-#   alt: "封面图说明"
-#   color: "#659EB9"
+# heroImageSrc: ./cover.webp
+# heroImageAlt: 封面图说明
+# heroImageColor: "#659EB9"
+# showHeroImage: true
 language: "中文"
 draft: false
 ---
@@ -167,7 +168,10 @@ draft: false
 - `publishDate`：发布时间
 - `tags`：普通标签页会用到，可选
 - `repositories`：文章所属内容仓库，也决定默认落盘目录
-- `heroImage`：文章封面图，取消注释后把 `src` 改成实际图片路径
+- `heroImageSrc`：文章封面图路径
+- `heroImageAlt`：封面图说明
+- `heroImageColor`：文章卡片和正文的高亮色
+- `showHeroImage`：是否在站内页面展示封面，默认 `true`
 - `draft: false`：表示允许发布；如果写成 `true`，通常不会出现在正式内容里
 
 ### 3. 组织文章图片
@@ -193,10 +197,16 @@ src/content/
 封面图在 frontmatter 里这样写：
 
 ```yaml
-heroImage:
-  src: ./cover.webp
-  alt: "封面图说明"
-  color: "#659EB9"
+heroImageSrc: ./cover.webp
+heroImageAlt: 封面图说明
+heroImageColor: "#659EB9"
+showHeroImage: true
+```
+
+如果只想保留封面资源但不在正文和列表里展示，写：
+
+```yaml
+showHeroImage: false
 ```
 
 固定站内公共图片继续放 `public/img/`，正文里用 `/img/xxx.webp` 引用。
@@ -346,6 +356,15 @@ npm run build
 ```
 - 适合发布前最后跑一次
 
+### `npm run audit:repo`
+
+- 检查 Git 体积、`dist/` 体积、超大图片、本地状态文件是否被跟踪
+- 默认阈值：
+  - Git 对象库 `300 MB` 开始预警
+  - `dist/` 超过 `200 MB` 开始预警
+  - 单张图片超过 `500 KB` 开始预警
+- 发布前、批量导入图片后、怀疑仓库变胖时跑一次
+
 ### `npm run cache:avatars`
 
 - 把友链头像缓存到本地
@@ -358,6 +377,42 @@ npm run build
 - 发内容优先改 `src/content/`
 - 改界面优先改 `src/pages/`、`src/assets/styles/`、`src/site.config.ts`
 - 发布前至少跑一次 `npm run verify`
+
+## 图片与仓库体积治理
+
+### 封面图和正文图怎么放
+
+- 封面图直接放在文章目录里
+- frontmatter 用相对路径引用，例如：
+
+```yaml
+heroImageSrc: ./cover.webp
+heroImageAlt: 封面图说明
+heroImageColor: "#659EB9"
+showHeroImage: true
+```
+
+- 不要跨文章目录引用图片，也不要写本机绝对路径
+- 正文图片也优先放在当前文章目录里，用 `./image-01.webp` 这种相对路径
+
+### 什么时候该压图
+
+- 网页展示图片默认尽量控制在 `500 KB` 以内
+- 封面图优先用 `webp`
+- 长期保存的原始大图、附件、资料包不要直接堆进仓库
+
+### 什么时候该开始清理
+
+- `.git/` 明显超过 `300 MB`
+- `dist/` 明显超过 `200 MB`
+- 一次新增很多 PNG / JPG 截图
+- `npm run audit:repo` 出现 `WARN` 或 `FAIL`
+
+### 如果以后内容很多
+
+- 列表页保持分页
+- 大图迁移到外部对象存储
+- 搜索索引太大时，缩小索引范围或调整搜索方案
 
 ## License
 
