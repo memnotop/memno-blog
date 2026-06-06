@@ -9,7 +9,7 @@ repositories:
   - reading
 language: 中文
 draft: false
-heroImageSrc: /home/liumingjian/Mycode/web/public/img/covers/book.webp
+heroImageSrc: ../../../../../public/img/covers/book.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"
 showHeroImage: true
