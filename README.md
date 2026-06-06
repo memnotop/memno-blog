@@ -84,6 +84,63 @@ npm run build                  # 生成生产构建
 npm run preview                # 预览生产构建
 ```
 
+## 启用 Waline 评论
+
+这个仓库已经内置了 Waline 前端组件，真正需要你补的是 `Waline Server` 地址。
+
+### 1. 部署 Waline Server
+
+按 Waline 官方推荐方式，使用 Vercel 部署服务端：
+
+- 文档：<https://waline.js.org/en/guide/deploy/vercel.html>
+- 快速开始：<https://waline.js.org/en/guide/get-started/>
+
+当前官方流程是：
+
+1. 在 Vercel 上用 Waline 模板创建一个项目
+2. 在 Vercel Storage 中创建数据库
+3. 在数据库里执行 Waline 提供的初始化 SQL
+4. 重新部署一次
+5. 得到你的服务地址，例如 `https://your-waline-server.vercel.app`
+
+部署完成后，第一次管理员注册入口是：
+
+```text
+https://your-waline-server.vercel.app/ui/register
+```
+
+### 2. 在博客里填入服务地址
+
+复制一份环境变量文件：
+
+```bash
+cp .env.example .env
+```
+
+然后把 `.env` 里的：
+
+```bash
+PUBLIC_WALINE_SERVER=https://your-waline-server.vercel.app
+```
+
+改成你自己的 Waline 服务地址。
+
+### 3. 本地验证
+
+```bash
+npm run dev
+```
+
+只要 `PUBLIC_WALINE_SERVER` 有值，文章页会自动显示评论区。
+
+### 4. 生产环境
+
+如果你用 GitHub Pages 发布这个站点，记得在构建环境里也注入同一个：
+
+```bash
+PUBLIC_WALINE_SERVER=https://your-waline-server.vercel.app
+```
+
 ## 我之后通常改哪些地方
 
 - 站点基础信息：[src/site.config.ts](./src/site.config.ts)

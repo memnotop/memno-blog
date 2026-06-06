@@ -148,7 +148,7 @@ const trainingRecords = await loadTrainingRecords()
 const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
 ---
 
-<PageLayout meta={{ title: 'Training' }} highlightColor='#8fcf91'>
+<PageLayout meta={{ title: 'Training' }} highlightColor='#8fcf91' comment>
   <main class='training-page animate' id='content'>
     <div class='training-board' id='training-board'>
       <div class='training-summary'>

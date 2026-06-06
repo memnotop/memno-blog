@@ -1,4 +1,5 @@
-import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types';
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import { loadEnv } from 'vite'
 
 export type BlogTopicSourceField = 'tags' | 'repositories'
 
@@ -56,6 +57,9 @@ export function getBlogTopic(slug: string) {
   if (!topic) throw new Error(`Unknown blog topic: ${slug}`)
   return topic
 }
+
+const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), 'PUBLIC_')
+const walineServer = (process.env.PUBLIC_WALINE_SERVER ?? env.PUBLIC_WALINE_SERVER ?? '').trim()
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -157,7 +161,7 @@ export const theme: ThemeUserConfig = {
     /** Blog page size for pagination (optional) */
     blogPageSize: 8,
     // Currently support weibo, x, bluesky
-    share: ['weibo']
+    share: []
   }
 }
 
@@ -165,15 +169,9 @@ export const integ: IntegrationUserConfig = {
   // Links management
   // See: https://astro-pure.js.org/docs/integrations/links
   links: {
-    // Friend logbook
-    logbook: [{ date: '2026-06-02', content: '开始整理资源和友链。' }],
-    // Yourself link info
-    applyTip: [
-      { name: 'Name', val: theme.title },
-      { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://memno.top/' },
-      { name: 'Avatar', val: 'https://memno.top/img/avatar.webp' }
-    ],
+    // Links page content now lives in `src/data/pages/links.mdx`.
+    logbook: [],
+    applyTip: [],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false,
   },
@@ -184,7 +182,7 @@ export const integ: IntegrationUserConfig = {
   quote: {
     server: 'data:application/json,{}',
     target: `() => {
-      const quotes = ['保持平静，保持向外的爱，活在当下', '挫其锐，解其纷，和其光，同其尘。']
+      const quotes = ['保持平静，保持向外的爱，活在当下', '挫其锐，解其纷，和其光，同其尘。','咕咕嘎嘎！','后其身而身先，外其身而身存。','放下生活中的功利心，虚荣心，不必强求，只是经历过程。厚重自己的修养，使自己更健全。']
       return quotes[Math.floor(Math.random() * quotes.length)] || ''
     }`
     // https://github.com/lukePeavey/quotable
@@ -211,9 +209,9 @@ export const integ: IntegrationUserConfig = {
   },
   // Comment system
   waline: {
-    enable: false,
-    // Fill in your own Waline service URL before enabling comments.
-    server: '',
+    enable: Boolean(walineServer),
+    // Set PUBLIC_WALINE_SERVER in your environment after deploying Waline server.
+    server: walineServer,
     // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // Refer https://waline.js.org/en/reference/client/props.html
@@ -221,9 +219,17 @@ export const integ: IntegrationUserConfig = {
       // search: false,
       pageview: true,
       comment: true,
+      lang: 'zh-CN',
+      noRss: true,
+      noCopyright: true,
       locale: {
+        like: '喜欢',
+        cancelLike: '取消喜欢',
         reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
+        placeholder: '欢迎留言。填写邮箱可以接收回复，无需登录。',
+        subPostComment: '订阅本文评论',
+        subSiteComment: '订阅本站评论',
+        subscribeToReplies: '订阅你的评论回复'
       },
       imageUploader: false
     }

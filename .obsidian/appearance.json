@@ -1,3 +1,7 @@
 {
-  "cssTheme": "Things"
+  "cssTheme": "Things",
+  "enabledCssSnippets": [
+    "memno-minimal"
+  ],
+  "baseFontSize": 17
 }

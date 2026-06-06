@@ -1,43 +1,11 @@
 ---
-import { Button, Signature, Timeline } from 'astro-pure/user'
+import { Content, frontmatter, getHeadings } from '../../data/pages/about.mdx'
 import PageLayout from '@/layouts/CommonPage.astro'
 
-const headings = [
-  { depth: 2, slug: 'focus', text: 'Focus' },
-  { depth: 2, slug: 'content', text: 'Content' },
-  { depth: 2, slug: 'contact', text: 'Contact' }
-]
+const headings = getHeadings()
 ---
 
-<PageLayout title='About' {headings}>
-  <p class='text-muted-foreground'>IC Student / Blogger / Builder</p>
-  <p>你好，我是 memnotop，一名集成电路专业的本科生，2023 级。</p>
-  <p>这是我的个人博客，用来记录生活、想法、照片、资源和技术分享。</p>
-
-  <h2 id='focus'>Focus</h2>
-  <Timeline
-    events={[
-      { date: 'Life', content: '阅读思考、生活趣事、训练记录。' },
-      { date: 'Resources', content: '常用工具、网站、教程和资料。' },
-      { date: 'Projects', content: '记录做过的东西、为什么做、最后效果如何。' },
-      { date: 'Study', content: '课程学习、SoC 设计、Linux 和工具使用。' }
-    ]}
-  />
-
-  <h2 id='content'>Content</h2>
-  <ul>
-    <li>生活：阅读、趣事、思考、训练。</li>
-    <li>技术：工具使用、Linux、网页搭建。</li>
-    <li>学习：课程学习、SoC 设计。</li>
-  </ul>
-  <Button title='Read blog' href='/blog' class='w-fit' />
-
-  <h2 id='contact'>Contact</h2>
-  <ul>
-    <li>mail: <a href='mailto:a3124884661@163.com'>a3124884661@163.com</a></li>
-    <li>GitHub: <a href='https://github.com/memnotop'>memnotop</a></li>
-    <li>wechat: memnotop，请你注明来意。</li>
-  </ul>
-
-  <Signature />
+<PageLayout title={frontmatter.title} {headings} comment>
+  {frontmatter.subtitle && <p class='text-muted-foreground'>{frontmatter.subtitle}</p>}
+  <Content />
 </PageLayout>

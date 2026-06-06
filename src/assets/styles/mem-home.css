@@ -346,6 +346,73 @@
   margin-top: 0.25rem;
 }
 
+.mem-home .mem-home-quote {
+  position: relative;
+  display: block;
+  width: min(100%, 48rem);
+  color: hsl(var(--foreground));
+}
+
+.mem-home .mem-home-quote::before,
+.mem-home .mem-home-quote::after {
+  position: absolute;
+  top: 50%;
+  width: 2.5rem;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5));
+}
+
+.mem-home .mem-home-quote::before {
+  right: calc(100% + 0.85rem);
+}
+
+.mem-home .mem-home-quote::after {
+  left: calc(100% + 0.85rem);
+  transform: rotate(180deg);
+}
+
+.mem-home .mem-home-quote > div {
+  position: relative;
+  justify-content: center;
+  gap: 0.85rem;
+  border-radius: 1.15rem;
+  background: hsl(var(--background) / 0.82);
+  padding: 0.85rem 1.25rem;
+  box-shadow: 0 16px 38px hsl(var(--foreground) / 0.07);
+}
+
+.mem-home .mem-home-quote > div::before,
+.mem-home .mem-home-quote > div::after {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  content: '';
+  pointer-events: none;
+}
+
+.mem-home .mem-home-quote > div::before {
+  top: 0.45rem;
+  left: 0.45rem;
+  border-top: 1px solid hsl(var(--primary) / 0.5);
+  border-left: 1px solid hsl(var(--primary) / 0.5);
+  border-top-left-radius: 0.45rem;
+}
+
+.mem-home .mem-home-quote > div::after {
+  right: 0.45rem;
+  bottom: 0.45rem;
+  border-right: 1px solid hsl(var(--primary) / 0.5);
+  border-bottom: 1px solid hsl(var(--primary) / 0.5);
+  border-bottom-right-radius: 0.45rem;
+}
+
+.mem-home .mem-home-quote #quote-sentence {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .mem-home {
     padding-top: 0.5rem;
@@ -386,6 +453,19 @@
   .mem-home .mem-github-foot {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .mem-home .mem-home-quote::before,
+  .mem-home .mem-home-quote::after {
+    display: none;
+  }
+
+  .mem-home .mem-home-quote > div {
+    padding: 0.8rem 1rem;
+  }
+
+  .mem-home .mem-home-quote #quote-sentence {
+    font-size: 1rem;
   }
 }
 

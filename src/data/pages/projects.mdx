@@ -1,0 +1,46 @@
+---
+title: Projects
+---
+
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+
+export const websiteProjects = [
+  {
+    name: 'memnotop Blog',
+    description: '个人博客，用来记录生活、资源、技术分享和训练。',
+    links: [
+      { type: 'site', href: 'https://memno.top/' },
+      { type: 'github', href: 'https://github.com/memnotop/memno-blog' }
+    ]
+  }
+]
+
+export const studyProjects = [
+  {
+    name: 'SoC Notes',
+    description: '课程学习、SoC 设计和集成电路方向的学习记录。',
+    links: [{ type: 'doc', href: '/blog' }]
+  }
+]
+
+export const toolProjects = [
+  {
+    name: 'Resource Notes',
+    description: '工具、资料、教程和长期会反复使用的链接。',
+    links: [{ type: 'doc', href: '/blog/536d021c' }]
+  }
+]
+
+这里先放置当前博客和后续会继续整理的项目入口。
+
+## Website
+
+<ProjectSection projects={websiteProjects} />
+
+## Study
+
+<ProjectSection projects={studyProjects} />
+
+## Tools
+
+<ProjectSection projects={toolProjects} />

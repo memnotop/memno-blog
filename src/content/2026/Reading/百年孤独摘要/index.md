@@ -9,6 +9,10 @@ repositories:
   - reading
 language: 中文
 draft: false
+heroImageSrc: /home/liumingjian/Mycode/web/public/img/covers/book.webp
+heroImageAlt: 封面图说明
+heroImageColor: "#659EB9"
+showHeroImage: true
 ---
 第一次做摘要，尽可能简洁一些。
 
@@ -23,4 +27,3 @@ draft: false
 他在马孔多时怀念远方的冬天、热汤、咖啡和云雀；等他真的到了那个远方，又开始怀念马孔多书店后堂的闷热、烈日、树和汽笛。或许，人怀念的往往不是某个真实地点，而是已经被距离和时间美化过的生活。
 
 我时常想起在绵中的生活，怀念在绵中的一切。在绵中我成长了不少，但现在细细想来，高中的多数日子我是更郁闷、压抑的，之前也在纸上记录了许多文字，多数是对自己的宽慰与鼓励，也有许多宣泄。“回忆没有归路”，我们在回忆的过程中已经将它窜改了千万遍，过去的“假”，并非过去不存在，而是真实的过去已从记忆中消散。
-

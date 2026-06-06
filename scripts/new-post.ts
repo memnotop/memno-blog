@@ -76,13 +76,15 @@ description: "一句话摘要"
 publishDate: "${nowString()}"
 tags:${toYamlList(tags)}
 repositories:${toYamlList(repositories)}
-# heroImageSrc: ./cover.webp
-# heroImageAlt: 封面图说明
-# heroImageColor: "#659EB9"
-# showHeroImage: true
+heroImageSrc: ./cover.webp
+heroImageAlt: 封面图说明
+heroImageColor: "#659EB9"
+showHeroImage: true
 language: "中文"
 draft: false
 ---
+
+<!-- 这里先写一句你想表达的核心观点。 -->
 
 在这里写正文。
 

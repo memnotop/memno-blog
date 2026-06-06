@@ -1,8 +1,6 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import SignatureSVG from '@/assets/signature.svg?raw'
-
 interface Props extends HTMLAttributes<'div'> {
   mode?: 'loop' | 'once-on-view'
   drawDelay?: number
@@ -24,8 +22,8 @@ const {
 } = Astro.props
 ---
 
-<div class:list={['signature-wrapper w-40 float-right mt-4 [&_path]:stroke-black dark:[&_path]:stroke-gray-2 [&_path]:opacity-0', className]} data-mode={mode} {...rest}>
-  <Fragment set:html={SignatureSVG} />
+<div class:list={['signature-wrapper w-40 float-right mt-4', className]} data-mode={mode} {...rest}>
+  <img src='/img/signature-memnotop.png' alt='memnotop signature' class='block w-full h-auto' loading='lazy' />
 </div>
 
 <script

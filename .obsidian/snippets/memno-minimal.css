@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Satoshi";
+  src: url("../../public/fonts/Satoshi-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("../../public/fonts/Satoshi-VariableItalic.ttf") format("truetype");
+  font-style: italic;
+  font-display: swap;
+}
+
+body.minimal-theme {
+  --font-text-override: "Satoshi", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-interface-override: "Satoshi", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-monospace-override: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", "Consolas", monospace;
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 14px;
+  --image-radius: 8px;
+}
+
+body.theme-light.minimal-theme {
+  --background-primary: #ffffff;
+  --background-primary-alt: #f8fafc;
+  --background-secondary: #fcfcfd;
+  --background-secondary-alt: #f4f6f8;
+  --background-modifier-hover: rgba(47, 128, 255, 0.08);
+  --background-modifier-border: #e4e7eb;
+  --background-modifier-border-hover: #d8dee6;
+  --text-normal: #23272f;
+  --text-muted: #5d6572;
+  --text-faint: #818a96;
+  --link-color: #1f6feb;
+  --link-external-color: #1f6feb;
+  --interactive-accent: #2f80ff;
+  --interactive-accent-hover: #1f6feb;
+  --text-selection: rgba(47, 128, 255, 0.16);
+  --hr-color: #e5e7eb;
+  --blockquote-border-color: #d7dde5;
+  --code-normal: #354052;
+  --tag-color: #1d5fd1;
+  --tag-color-hover: #124fb8;
+  --tag-background: rgba(47, 128, 255, 0.1);
+  --tag-background-hover: rgba(47, 128, 255, 0.16);
+}
+
+body.theme-dark.minimal-theme {
+  --background-primary: #0b0f14;
+  --background-primary-alt: #11161d;
+  --background-secondary: #10151c;
+  --background-secondary-alt: #151b23;
+  --background-modifier-hover: rgba(88, 166, 255, 0.1);
+  --background-modifier-border: #222a34;
+  --background-modifier-border-hover: #2d3744;
+  --text-normal: #eef2f7;
+  --text-muted: #b5becb;
+  --text-faint: #8793a3;
+  --link-color: #79b8ff;
+  --link-external-color: #79b8ff;
+  --interactive-accent: #58a6ff;
+  --interactive-accent-hover: #79b8ff;
+  --text-selection: rgba(88, 166, 255, 0.22);
+  --hr-color: #232a33;
+  --blockquote-border-color: #2b3541;
+  --code-normal: #dbe6f3;
+  --tag-color: #9ecbff;
+  --tag-color-hover: #c2ddff;
+  --tag-background: rgba(88, 166, 255, 0.14);
+  --tag-background-hover: rgba(88, 166, 255, 0.2);
+}
+
+body.minimal-theme .inline-title,
+body.minimal-theme .markdown-rendered h1 {
+  font-weight: 620;
+  letter-spacing: -0.02em;
+}
+
+body.minimal-theme .markdown-rendered h2,
+body.minimal-theme .markdown-rendered h3,
+body.minimal-theme .markdown-rendered h4,
+body.minimal-theme .markdown-rendered h5,
+body.minimal-theme .markdown-rendered h6 {
+  font-weight: 580;
+  letter-spacing: -0.01em;
+}
+
+body.minimal-theme .markdown-rendered p,
+body.minimal-theme .markdown-rendered li,
+body.minimal-theme .markdown-source-view.mod-cm6 .cm-line {
+  letter-spacing: 0.01em;
+}
+
+body.minimal-theme .markdown-rendered p,
+body.minimal-theme .markdown-rendered li {
+  line-height: 1.85;
+}
+
+body.minimal-theme .markdown-rendered hr {
+  border-color: var(--hr-color);
+}
+
+body.minimal-theme .markdown-rendered a.external-link {
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.12em;
+}
+
+body.minimal-theme .metadata-container {
+  background: transparent;
+  border-inline: 0;
+  border-top: 0;
+  padding-inline: 0;
+}

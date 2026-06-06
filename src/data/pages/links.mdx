@@ -1,0 +1,86 @@
+---
+title: Links
+---
+
+import { Collapse, Signature, Timeline } from 'astro-pure/user'
+import FriendList from '@/components/links/FriendList.astro'
+import config from '@/site-config'
+
+export const friends = {
+  id_name: 'friends',
+  desc: 'Friends',
+  link_list: [
+    {
+      name: 'icodeq',
+      intro: '一个内容丰富、结构成熟的个人博客，适合参考站点组织方式。',
+      link: 'https://icodeq.com/link/',
+      avatar: '/img/cat-icon.webp'
+    },
+    {
+      name: 'Traveling',
+      intro: '开往项目。点击后随机访问另一个独立博客。',
+      link: 'https://www.travellings.cn/go',
+      avatar: '/img/cat-icon.webp'
+    }
+  ]
+}
+
+export const resources = {
+  id_name: 'resources',
+  desc: 'Resources',
+  link_list: [
+    {
+      name: 'Resource Notes',
+      intro: '工具、资料、教程和长期会反复使用的链接。',
+      link: '/blog/536d021c',
+      avatar: '/img/favicon.webp'
+    },
+    {
+      name: 'GitHub',
+      intro: '代码托管、开源项目和技术资料。',
+      link: 'https://github.com/',
+      avatar: '/img/favicon.webp'
+    },
+    {
+      name: 'MDN Web Docs',
+      intro: 'Web 标准、HTML、CSS 和 JavaScript 文档。',
+      link: 'https://developer.mozilla.org/',
+      avatar: '/img/favicon.webp'
+    }
+  ]
+}
+
+export const linkHistory = [{ date: '2026-06-02', content: '开始整理资源和友链。' }]
+
+# 这个界面还没有搞好。
+
+这里整理常用资源、朋友站点和有意思的独立博客入口。
+
+## Friends
+
+<FriendList list={friends} />
+
+<Collapse title='Link History Book'>
+  <Timeline events={linkHistory} />
+</Collapse>
+
+## Resources
+
+<FriendList list={resources} />
+
+## Apply Links
+
+本站信息：
+
+<blockquote class='not-prose grid grid-cols-[auto_1fr] gap-x-2 break-words border-s-4 ps-4'>
+  <span class='text-end'>Name:</span>
+  <samp>{config.title}</samp>
+  <span class='text-end'>Desc:</span>
+  <samp>{config.description || 'Null'}</samp>
+  <span class='text-end'>Link:</span>
+  <samp>https://memno.top/</samp>
+  <span class='text-end'>Avatar:</span>
+  <samp>https://memno.top/img/avatar.webp</samp>
+</blockquote>
+
+<Signature />

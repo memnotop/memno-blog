@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import path from 'node:path'
 
 import { Quote } from 'astro-pure/advanced'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
@@ -12,6 +13,11 @@ import '@/assets/styles/mem-home.css'
 
 const allPosts = await getBlogCollection()
 const allPostsSorted = sortMDByDate(allPosts)
+const articlePosts = allPosts.filter((post) => {
+  const filename = post.filePath ? path.basename(post.filePath).toLowerCase() : ''
+  if (filename) return filename !== 'training.md' && filename !== 'training.mdx'
+  return !/^training\b/i.test(post.data.title)
+})
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',
@@ -19,11 +25,17 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
   year: 'numeric'
 })
 const latestPostDate = allPostsSorted[0]?.data.updatedDate ?? allPostsSorted[0]?.data.publishDate
-const firstPostDate =
-  allPostsSorted[allPostsSorted.length - 1]?.data.publishDate ?? new Date('2026-03-30')
+const firstArticleDate = articlePosts.reduce<number | null>((earliest, post) => {
+  const publishTime = new Date(post.data.publishDate).valueOf()
+  if (!Number.isFinite(publishTime)) return earliest
+  if (earliest === null || publishTime < earliest) return publishTime
+  return earliest
+}, null)
 const daysOnline = Math.max(
   1,
-  Math.ceil((Date.now() - new Date(firstPostDate).valueOf()) / (1000 * 60 * 60 * 24))
+  Math.ceil(
+    (Date.now() - (firstArticleDate ?? new Date('2026-03-30').valueOf())) / (1000 * 60 * 60 * 24)
+  )
 )
 const totalWords = allPosts.reduce((sum, post) => {
   const body = 'body' in post && typeof post.body === 'string' ? post.body : ''
@@ -35,7 +47,7 @@ const githubUrl = `https://github.com/${githubUsername}`
 const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
+<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9' comment>
   <main class='mem-home flex w-full flex-col items-center'>
     <section
       class='mem-hero animate mb-12 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:gap-10'
@@ -77,6 +89,9 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
         </div>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
+      <div class='flex justify-center'>
+        <Quote class='mem-home-quote' />
+      </div>
       <Section title='Focus'>
         <Card
           as='a'
@@ -141,6 +156,5 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
         </div>
       </Section>
     </div>
-    <Quote class='mt-12' />
   </main>
 </PageLayout>
