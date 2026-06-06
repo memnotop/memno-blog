@@ -1,30 +1,28 @@
 ---
 import { Image } from 'astro:assets'
-import path from 'node:path'
 
 import { Quote } from 'astro-pure/advanced'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import Section from '@/components/home/Section.astro'
+import { getArticlePosts } from '@/utils/blog'
 import avatar from '@/assets/avatar.webp'
 import config from '@/site-config'
+
 import '@/assets/styles/mem-home.css'
 
 const allPosts = await getBlogCollection()
-const allPostsSorted = sortMDByDate(allPosts)
-const articlePosts = allPosts.filter((post) => {
-  const filename = post.filePath ? path.basename(post.filePath).toLowerCase() : ''
-  if (filename) return filename !== 'training.md' && filename !== 'training.mdx'
-  return !/^training\b/i.test(post.data.title)
-})
+const articlePosts = getArticlePosts(allPosts)
+const articlePostsByDate = sortMDByDate(articlePosts)
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',
   day: 'numeric',
   year: 'numeric'
 })
-const latestPostDate = allPostsSorted[0]?.data.updatedDate ?? allPostsSorted[0]?.data.publishDate
+const latestPostDate =
+  articlePostsByDate[0]?.data.updatedDate ?? articlePostsByDate[0]?.data.publishDate
 const firstArticleDate = articlePosts.reduce<number | null>((earliest, post) => {
   const publishTime = new Date(post.data.publishDate).valueOf()
   if (!Number.isFinite(publishTime)) return earliest
@@ -37,7 +35,7 @@ const daysOnline = Math.max(
     (Date.now() - (firstArticleDate ?? new Date('2026-03-30').valueOf())) / (1000 * 60 * 60 * 24)
   )
 )
-const totalWords = allPosts.reduce((sum, post) => {
+const totalWords = articlePosts.reduce((sum, post) => {
   const body = 'body' in post && typeof post.body === 'string' ? post.body : ''
   return sum + body.replace(/---[\s\S]*?---/, '').replace(/\s/g, '').length
 }, 0)
@@ -138,8 +136,18 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
             <span>GitHub contributions in the last year</span>
             <a href={githubUrl} target='_blank' rel='noreferrer'>@{githubUsername}</a>
           </div>
-          <a class='mem-github-chart' href={githubUrl} target='_blank' rel='noreferrer' aria-label='Open GitHub profile'>
-            <img src={githubChartUrl} alt={`${githubUsername} GitHub contribution chart`} loading='lazy' />
+          <a
+            class='mem-github-chart'
+            href={githubUrl}
+            target='_blank'
+            rel='noreferrer'
+            aria-label='Open GitHub profile'
+          >
+            <img
+              src={githubChartUrl}
+              alt={`${githubUsername} GitHub contribution chart`}
+              loading='lazy'
+            />
           </a>
           <div class='mem-github-foot'>
             <span>Connected to GitHub profile</span>

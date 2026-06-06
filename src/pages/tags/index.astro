@@ -3,8 +3,9 @@ import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { getArticlePosts } from '@/utils/blog'
 
-const allPosts = await getBlogCollection()
+const allPosts = getArticlePosts(await getBlogCollection())
 const allTags = getUniqueTagsWithCount(allPosts)
 
 const meta = {

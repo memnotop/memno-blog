@@ -1,8 +1,8 @@
+import path from 'node:path'
 import type { AstroGlobal, ImageMetadata } from 'astro'
 import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import rss from '@astrojs/rss'
-import path from 'node:path'
 import type { Root } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
 import remarkGfm from 'remark-gfm'
@@ -15,6 +15,7 @@ import { visit } from 'unist-util-visit'
 import config from 'virtual:config'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { getArticlePosts } from '@/utils/blog'
 import remarkObsidian from '@/plugins/remark-obsidian'
 
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
@@ -47,12 +48,14 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
           node.url = `${site}${node.url.replace('/', '')}`
         } else {
           const imagePath = getLocalImagePath(node.url)
-          const promise = imagePath && imagesGlob[imagePath]?.().then(async (res) => {
-            const imagePath = res?.default
-            if (imagePath) {
-              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
-            }
-          })
+          const promise =
+            imagePath &&
+            imagesGlob[imagePath]?.().then(async (res) => {
+              const imagePath = res?.default
+              if (imagePath) {
+                node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
+              }
+            })
           if (promise) promises.push(promise)
         }
       })
@@ -78,7 +81,9 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
 }
 
 const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
+  const allPostsByDate = sortMDByDate(
+    getArticlePosts(await getBlogCollection())
+  ) as CollectionEntry<'blog'>[]
   const siteUrl = context.site ?? new URL(import.meta.env.SITE)
 
   return rss({

@@ -7,7 +7,7 @@ tags:
 repositories:
   - daily-life
 language: 中文
-heroImageSrc: ../../../../../public/img/covers/2.webp
+heroImageSrc: ../../../../../public/img/covers/7.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"
 showHeroImage: true

@@ -6,11 +6,13 @@ export const HeaderMenuSchema = () =>
       z.object({
         title: z.string(),
         link: z.string(),
+        description: z.string().optional(),
         children: z
           .array(
             z.object({
               title: z.string(),
-              link: z.string()
+              link: z.string(),
+              description: z.string().optional()
             })
           )
           .optional()

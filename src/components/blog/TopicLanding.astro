@@ -3,7 +3,9 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { getArticlePosts } from '@/utils/blog'
 import { blogTopics, type BlogTopic } from '@/site-config'
+
 import '@/assets/styles/blog-topic.css'
 
 interface Props {
@@ -14,13 +16,13 @@ const { topic } = Astro.props
 const { description, source, title } = topic
 const sourceLabel = source.field === 'tags' ? 'Tags' : 'Repositories'
 const normalizedValues = source.values.map((value) => value.toLowerCase())
-const allPosts = sortMDByDate(await getBlogCollection())
+const allPosts = sortMDByDate(getArticlePosts(await getBlogCollection()))
 const posts = allPosts.filter((post) =>
   post.data[source.field].some((value) => normalizedValues.includes(value.toLowerCase()))
 )
-const sourceValues = [
-  ...new Set(posts.flatMap((post) => post.data[source.field]))
-].sort((a, b) => a.localeCompare(b))
+const sourceValues = [...new Set(posts.flatMap((post) => post.data[source.field]))].sort((a, b) =>
+  a.localeCompare(b)
+)
 
 const meta = {
   description,

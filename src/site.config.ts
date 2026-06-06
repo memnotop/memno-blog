@@ -120,7 +120,11 @@ export const theme: ThemeUserConfig = {
       { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },
-      { title: 'Travelling', link: 'https://www.travellings.cn/go' },
+      {
+        title: 'Travelling',
+        link: 'https://www.travellings.cn/go',
+        description: '随机去往他人博客'
+      },
 
     ]
   },
@@ -182,7 +186,7 @@ export const integ: IntegrationUserConfig = {
   quote: {
     server: 'data:application/json,{}',
     target: `() => {
-      const quotes = ['保持平静，保持向外的爱，活在当下', '挫其锐，解其纷，和其光，同其尘。','咕咕嘎嘎！','后其身而身先，外其身而身存。','放下生活中的功利心，虚荣心，不必强求，只是经历过程。厚重自己的修养，使自己更健全。']
+      const quotes = ['保持平静，保持向外的爱，活在当下。', '挫其锐，解其纷，和其光，同其尘。','咕咕嘎嘎。','后其身而身先，外其身而身存。','温故而知新，敦厚以崇礼。','如切如磋，如琢如磨。','放下生活中的功利心，虚荣心，不必强求，只是经历过程。厚重自己的修养，使自己更健全。']
       return quotes[Math.floor(Math.random() * quotes.length)] || ''
     }`
     // https://github.com/lukePeavey/quotable
