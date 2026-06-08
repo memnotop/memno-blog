@@ -51,12 +51,21 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
       class='mem-hero animate mb-12 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:gap-10'
       id='content-header'
     >
-      <Image
-        src={avatar}
-        alt='profile'
-        class='mem-avatar h-28 w-auto rounded-2xl border p-1'
-        loading='eager'
-      />
+      <a
+        class='mem-avatar-link'
+        href={avatar.src}
+        target='_blank'
+        rel='noreferrer'
+        aria-label='Open profile avatar image'
+        data-avatar-src={avatar.src}
+      >
+        <Image
+          src={avatar}
+          alt='profile'
+          class='mem-avatar h-28 w-auto rounded-2xl border p-1'
+          loading='eager'
+        />
+      </a>
 
       <div class='mem-hero-text flex flex-col items-center gap-y-5 md:items-start'>
         <h1 class='mem-title font-bold'>{config.author}</h1>
