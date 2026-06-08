@@ -120,7 +120,11 @@ export const theme: ThemeUserConfig = {
       { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },
-      { title: 'Travelling', link: 'https://www.travellings.cn/go' },
+      {
+        title: 'Travelling',
+        link: 'https://www.travellings.cn/go',
+        description: '随机去往他人博客'
+      },
 
     ]
   },
