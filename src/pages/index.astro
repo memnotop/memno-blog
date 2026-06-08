@@ -88,37 +88,54 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
 
     <div id='content' class='mem-content animate flex flex-col gap-y-14 md:w-[88%] lg:w-[86%]'>
       <Section title='About'>
-        <p class='mem-subtitle text-muted-foreground mt-1'>IC Student / Blogger / Builder</p>
+        <p class='mem-subtitle text-muted-foreground mt-1'>IC Student</p>
         <div class='mem-about-copy flex flex-col gap-2 leading-7 text-muted-foreground'>
           <p>你好，我是 memnotop，一名集成电路专业的本科生，2023 级。</p>
           <p>这个站点用来记录生活、想法、照片、资源、技术分享与训练。</p>
-          <p>关注方向包括 IC、SoC 设计、Linux 工具、课程学习和个人项目复盘。</p>
+          <p>主要记录生活琐事及想法。</p>
+          <p>技术上关注IC、SoC 设计、Linux 工具、课程学习和个人项目复盘。</p>
         </div>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
       <div class='flex justify-center'>
         <Quote class='mem-home-quote' />
       </div>
-      <Section title='Focus'>
-        <Card
-          as='a'
-          href='/blog/technical'
-          class='mem-focus-card'
-          heading='技术分享'
-          subheading='Linux、工具使用、网页搭建与项目复盘'
-          date='Technical'
-        />
+      <Section title='Focus' class='mem-centered-section'>
         <Card
           as='a'
           href='/blog/daily-life'
           class='mem-focus-card'
-          heading='生活记录'
-          subheading='阅读、想法、训练和日常记录'
+          heading='Daily life'
+          subheading='生活记录、想法和日常记录'
           date='Daily Life'
+        />
+        <Card
+          as='a'
+          href='/blog/reading'
+          class='mem-focus-card'
+          heading='Reading'
+          subheading='阅读笔记、书籍、论文和资料整理'
+          date='Reading'
+        />
+        <Card
+          as='a'
+          href='/training'
+          class='mem-focus-card'
+          heading='Training'
+          subheading='训练记录、计划和阶段复盘'
+          date='Training'
+        />
+        <Card
+          as='a'
+          href='/blog/picture'
+          class='mem-focus-card'
+          heading='Picture'
+          subheading='照片、旅行和一些值得保存的画面'
+          date='Picture'
         />
       </Section>
 
-      <Section title='Statistics'>
+      <Section title='Statistics' class='mem-centered-section'>
         <div class='mem-stat-grid'>
           <div class='mem-stat-card'>
             <Icon name='time' class='size-6' />

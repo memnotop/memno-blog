@@ -100,6 +100,22 @@
   line-height: 1.25;
 }
 
+.mem-home .mem-centered-section {
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1.5rem;
+}
+
+.mem-home .mem-centered-section > div:first-child {
+  align-self: stretch;
+  min-width: 12.25rem;
+  text-align: left;
+}
+
+.mem-home .mem-centered-section > div:last-child {
+  width: min(100%, 58rem);
+}
+
 .mem-home .mem-subtitle,
 .mem-home .mem-about-copy {
   font-size: 1.08rem;
