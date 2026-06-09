@@ -141,6 +141,21 @@ npm run dev
 PUBLIC_WALINE_SERVER=https://your-waline-server.vercel.app
 ```
 
+### 5. 评论头像
+
+评论头像由 Waline Server 根据评论邮箱生成。本站使用 Cravatar 作为头像源时，需要在
+Waline Server 的部署平台里添加服务端环境变量：
+
+```bash
+GRAVATAR_STR=https://cn.cravatar.com/avatar/{{mail|md5}}
+```
+
+如果 Waline Server 部署在腾讯云 CloudBase，需要在 CloudBase 控制台进入对应环境，找到
+Waline 的云函数或 HTTP 服务，在函数配置里添加上面的环境变量并重新部署/重启服务。
+
+添加后重新部署 Waline Server。评论时填写与 Cravatar 绑定的邮箱，例如
+`a3124884661@163.com`，头像就会显示 Cravatar 里配置的图片。
+
 ## 我之后通常改哪些地方
 
 - 站点基础信息：[src/site.config.ts](./src/site.config.ts)
