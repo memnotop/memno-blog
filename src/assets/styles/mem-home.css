@@ -1,8 +1,12 @@
 .mem-home {
+  width: 100%;
+  min-width: 0;
   padding-top: 2rem;
 }
 
 .mem-home .mem-hero {
+  width: 100%;
+  min-width: 0;
   min-height: 17.5rem;
   max-width: 72rem;
   padding: 1rem 0 0.75rem;
@@ -87,7 +91,15 @@
 }
 
 .mem-home .mem-content {
+  width: min(100%, 76rem);
+  min-width: 0;
   max-width: 76rem;
+}
+
+.mem-home section,
+.mem-home section > div {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .mem-home section > div:first-child {
@@ -121,6 +133,7 @@
   font-size: 1.08rem;
   font-weight: 420;
   line-height: 1.78;
+  overflow-wrap: anywhere;
 }
 
 .mem-home .post-preview {
@@ -210,6 +223,7 @@
 }
 
 .mem-home .mem-focus-card :where(h2, h3, p) {
+  overflow-wrap: anywhere;
   transition:
     color 0.2s ease,
     transform 0.2s ease;
@@ -271,6 +285,7 @@
 
 .mem-home .mem-contribution {
   display: flex;
+  min-width: 0;
   flex-direction: column;
   gap: 1.25rem;
   border-top: 1px solid hsl(var(--border));
@@ -314,7 +329,9 @@
 
 .mem-home .mem-github-chart {
   display: block;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -456,6 +473,12 @@
 
   .mem-home .mem-hero {
     min-height: 15rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .mem-home .mem-content {
+    width: 100%;
+    gap: 2.75rem;
   }
 
   .mem-home .mem-avatar {
@@ -470,15 +493,44 @@
 
   .mem-home .mem-label {
     min-height: 2.55rem;
+    padding: 0 0.95rem;
     font-size: 0.95rem;
+  }
+
+  .mem-home section > div:first-child,
+  .mem-home .mem-centered-section > div:first-child {
+    min-width: 0;
+  }
+
+  .mem-home section > div:first-child h2 {
+    font-size: 1.42rem;
+  }
+
+  .mem-home .mem-subtitle,
+  .mem-home .mem-about-copy {
+    font-size: 1rem;
+    line-height: 1.72;
+  }
+
+  .mem-home .mem-focus-card {
+    min-height: 0;
+    padding: 1.1rem 1.2rem;
   }
 
   .mem-home .mem-stat-grid {
     grid-template-columns: 1fr;
+    gap: 0.9rem;
   }
 
   .mem-home .mem-stat-card {
     min-height: 6.8rem;
+  }
+
+  .mem-home .mem-github-chart img {
+    width: 38rem;
+    min-width: 38rem;
+    max-width: none;
+    margin: 0;
   }
 
   .mem-home .mem-contribution-head {
