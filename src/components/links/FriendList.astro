@@ -43,7 +43,13 @@ const getAvatarSrc = (friend: friend) =>
   {
     friendList.link_list.length > 0 ? (
       shuffle(friendList.link_list).map((frd: friend) => (
-        <a href={frd.link} target='_blank' class='no-underline'>
+        <a
+          href={frd.link}
+          target='_blank'
+          rel='noreferrer'
+          class='friend-link no-underline'
+          aria-label={`${frd.name}: ${frd.intro}`}
+        >
           <div class='group relative h-full overflow-hidden rounded-2xl border bg-background px-2.5 py-1.5 transition-colors hover:bg-muted sm:px-4 sm:py-2'>
             <div class='relative z-10 flex h-full items-center gap-3'>
               {/* avatar */}
@@ -107,6 +113,7 @@ const getAvatarSrc = (friend: friend) =>
               }}
             />
           </div>
+          <span class='friend-tooltip' role='tooltip'>{frd.intro}</span>
         </a>
       ))
     ) : (
@@ -114,3 +121,53 @@ const getAvatarSrc = (friend: friend) =>
     )
   }
 </div>
+
+<style>
+  .friend-link {
+    position: relative;
+    display: block;
+  }
+
+  .friend-link:hover,
+  .friend-link:focus-visible {
+    z-index: 30;
+  }
+
+  .friend-tooltip {
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0.75rem;
+    top: calc(100% + 0.5rem);
+    z-index: 40;
+    display: block;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    background: hsl(var(--background) / 0.98);
+    box-shadow:
+      rgba(24, 24, 27, 0.08) 0 0 0 1px,
+      rgba(39, 39, 42, 0.12) 0 16px 32px -12px;
+    color: hsl(var(--foreground));
+    font-size: 0.82rem;
+    line-height: 1.55;
+    opacity: 0;
+    padding: 0.55rem 0.7rem;
+    transform: translateY(-0.25rem);
+    transition:
+      opacity 0.16s ease,
+      transform 0.16s ease,
+      visibility 0.16s ease;
+    visibility: hidden;
+    white-space: normal;
+  }
+
+  .friend-link:hover .friend-tooltip,
+  .friend-link:focus-visible .friend-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  :global(.dark) .friend-tooltip {
+    background: hsl(var(--muted) / 0.98);
+  }
+</style>
