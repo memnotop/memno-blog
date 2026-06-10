@@ -183,62 +183,6 @@
   box-shadow: 0 10px 26px hsl(var(--foreground) / 0.035);
 }
 
-.mem-home .mem-focus-card {
-  overflow: hidden;
-  min-height: 6.85rem;
-  border-radius: 1rem;
-  padding: 1.35rem 1.55rem;
-  text-decoration: none;
-  box-shadow: 0 10px 26px hsl(var(--foreground) / 0.035);
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.mem-home .mem-focus-card::before {
-  position: absolute;
-  inset-block: 0;
-  left: 0;
-  width: 0.25rem;
-  content: '';
-  background: hsl(var(--primary) / 0.68);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.2s ease;
-}
-
-.mem-home .mem-focus-card:hover,
-.mem-home .mem-focus-card:focus-visible {
-  transform: translateY(-4px);
-  border-color: hsl(var(--primary) / 0.42);
-  background: hsl(var(--background) / 0.92);
-  box-shadow: 0 18px 38px hsl(var(--foreground) / 0.1);
-}
-
-.mem-home .mem-focus-card:hover::before,
-.mem-home .mem-focus-card:focus-visible::before {
-  transform: scaleY(1);
-}
-
-.mem-home .mem-focus-card :where(h2, h3, p) {
-  overflow-wrap: anywhere;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.mem-home .mem-focus-card:hover :where(h2, h3),
-.mem-home .mem-focus-card:focus-visible :where(h2, h3) {
-  color: hsl(var(--primary));
-}
-
-.mem-home .mem-focus-card:hover :where(h2, h3, p),
-.mem-home .mem-focus-card:focus-visible :where(h2, h3, p) {
-  transform: translateX(0.2rem);
-}
-
 .mem-home .group.relative h3,
 .mem-home .group.relative .font-semibold,
 .mem-home .group.relative [class*='heading'] {
@@ -281,6 +225,475 @@
 .mem-home .mem-stat-card span {
   font-size: 1rem;
   font-weight: 450;
+}
+
+.mem-home .mem-life-section {
+  margin-top: -0.15rem;
+}
+
+.mem-home .mem-life-count {
+  --life-fill: 26%;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.56fr);
+  width: min(100%, 58rem);
+  min-width: 0;
+  overflow: hidden;
+  align-items: start;
+  gap: 1rem 1.25rem;
+  margin: 0 auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  background: hsl(var(--background) / 0.74);
+  padding: 1.05rem 1.2rem 1.1rem;
+  color: hsl(var(--muted-foreground));
+  font-family: inherit;
+  letter-spacing: 0;
+  box-shadow: 0 12px 30px hsl(var(--foreground) / 0.045);
+}
+
+.mem-home .mem-life-count :where(input, button) {
+  font-family: inherit;
+  letter-spacing: 0;
+}
+
+.mem-home .mem-life-overview {
+  display: flex;
+  grid-column: 1 / -1;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.72);
+  padding-bottom: 0.8rem;
+}
+
+.mem-home .mem-life-overview-main {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 1rem;
+}
+
+.mem-home .mem-life-kicker {
+  color: hsl(var(--foreground));
+  font-size: 1.02rem;
+  font-weight: 650;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.mem-home .mem-life-birthday {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.45rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.96rem;
+  font-weight: 450;
+  line-height: 1.2;
+}
+
+.mem-home .mem-life-birthday input {
+  min-width: 8.4rem;
+  height: 2.05rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--background) / 0.72);
+  padding: 0 0.55rem;
+  color: hsl(var(--foreground));
+  font-size: 0.98rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  box-shadow: 0 8px 20px hsl(var(--foreground) / 0.035);
+}
+
+.mem-home .mem-life-birthday input:focus-visible {
+  border-color: hsl(var(--primary) / 0.58);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.14);
+}
+
+.mem-home .mem-life-birthday input[aria-invalid='true'] {
+  border-color: hsl(0 70% 58% / 0.72);
+}
+
+.mem-home .mem-life-overview p {
+  max-width: 31rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.98rem;
+  font-weight: 420;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.mem-home .mem-life-main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mem-home .mem-life-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.mem-home .mem-life-copy h3 {
+  color: hsl(var(--foreground));
+  font-size: 1.12rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.mem-home .mem-life-copy p {
+  max-width: 32rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.95rem;
+  font-weight: 420;
+  line-height: 1.58;
+}
+
+.mem-home .mem-life-grid {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  width: min(100%, 20rem);
+  gap: 0.17rem;
+  line-height: 0;
+}
+
+.mem-home .mem-life-grid span {
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 0.11rem;
+  background: hsl(210 12% 84%);
+  box-shadow: inset 0 0 0 1px hsl(var(--background) / 0.28);
+}
+
+.mem-home .mem-life-grid span.is-left {
+  background: hsl(210 12% 84%);
+}
+
+.mem-home .mem-life-grid span.is-lived {
+  background: hsl(154 58% 64%);
+}
+
+.mem-home .mem-life-grid span.is-sleep {
+  background: hsl(209 78% 74%);
+}
+
+.mem-home .mem-life-grid span.is-work {
+  background: hsl(0 0% 78%);
+}
+
+.mem-home .mem-life-grid span.is-child {
+  background: hsl(348 84% 78%);
+}
+
+.mem-home .mem-life-grid span.is-parent {
+  background: hsl(215 22% 64%);
+}
+
+.mem-home .mem-life-grid span.is-retire {
+  background: hsl(30 90% 70%);
+}
+
+.mem-home .mem-life-foot {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0.8rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.95rem;
+  font-weight: 420;
+  line-height: 1.4;
+}
+
+.mem-home .mem-life-foot strong {
+  color: hsl(var(--foreground));
+  font-weight: 560;
+}
+
+.mem-home .mem-life-liquid {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  align-self: stretch;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  border-left: 1px solid hsl(var(--border));
+  padding-left: 1.2rem;
+  text-align: center;
+}
+
+.mem-home .mem-life-liquid-head {
+  display: flex;
+  width: min(100%, 17rem);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.mem-home .mem-life-liquid-head h3 {
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.mem-home .mem-life-liquid-head strong {
+  color: hsl(var(--foreground));
+  font-size: 1.08rem;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.mem-home .mem-life-liquid-panel {
+  position: relative;
+  display: flex;
+  width: min(100%, 17rem);
+  min-height: 12.7rem;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.85rem;
+  background: hsl(var(--background) / 0.68);
+  padding: 1rem;
+  box-shadow: 0 10px 24px hsl(var(--foreground) / 0.04);
+}
+
+.mem-home .mem-life-liquid-panel::after {
+  display: none;
+}
+
+.mem-home .mem-life-liquid-face {
+  position: relative;
+  z-index: 4;
+  top: auto;
+  right: auto;
+  left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  color: hsl(var(--muted-foreground));
+  text-shadow: none;
+}
+
+.mem-home .mem-life-liquid-face span {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.88rem;
+  font-weight: 450;
+}
+
+.mem-home .mem-life-liquid-face strong {
+  color: hsl(var(--foreground));
+  font-size: 2.05rem;
+  font-weight: 650;
+  line-height: 1;
+  text-shadow: none;
+}
+
+.mem-home .mem-life-liquid-water {
+  position: relative;
+  z-index: 1;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+  height: 0.5rem;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: hsl(var(--muted) / 0.68);
+}
+
+.mem-home .mem-life-liquid-water::before {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--life-fill);
+  content: '';
+  border-radius: inherit;
+  background: hsl(154 52% 58%);
+  transition: width 0.5s ease;
+}
+
+.mem-home .mem-life-liquid-wave {
+  display: none;
+}
+
+.mem-home .mem-life-liquid-wave-back {
+  fill: hsl(143 62% 65% / 0.58);
+}
+
+.mem-home .mem-life-liquid-wave-front {
+  fill: hsl(146 66% 58%);
+}
+
+.mem-home .mem-life-liquid-stats {
+  position: relative;
+  z-index: 4;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  gap: 0.38rem 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  backdrop-filter: none;
+}
+
+.mem-home .mem-life-liquid-stats span {
+  display: inline-flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.18rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.94rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.mem-home .mem-life-liquid-stats strong {
+  min-width: 0;
+  overflow: visible;
+  color: hsl(var(--foreground));
+  font-size: 0.92rem;
+  font-weight: 560;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  text-overflow: clip;
+}
+
+.mem-home .mem-life-liquid-stats small {
+  flex: none;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.78rem;
+  font-weight: 420;
+}
+
+.mem-home .mem-life-liquid p {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.12rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+  font-weight: 420;
+  line-height: 1.45;
+}
+
+.mem-home .mem-life-liquid p span:first-child {
+  color: hsl(var(--foreground));
+  font-weight: 560;
+}
+
+.mem-home .mem-life-note {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border-top: 1px solid hsl(var(--border) / 0.72);
+  padding-top: 0.8rem;
+}
+
+.mem-home .mem-life-note-kicker {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.mem-home .mem-life-note h4 {
+  margin-top: 0.18rem;
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.mem-home .mem-life-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.32rem 0.9rem;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mem-home .mem-life-legend li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.42rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.95rem;
+  font-weight: 420;
+  line-height: 1.45;
+}
+
+.mem-home .mem-life-legend span {
+  display: inline-block;
+  flex: none;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 0.17rem;
+}
+
+.mem-home .mem-life-legend span.is-lived {
+  background: hsl(154 58% 64%);
+}
+
+.mem-home .mem-life-legend span.is-sleep {
+  background: hsl(209 78% 74%);
+}
+
+.mem-home .mem-life-legend span.is-work {
+  background: hsl(0 0% 78%);
+}
+
+.mem-home .mem-life-legend span.is-child {
+  background: hsl(348 84% 78%);
+}
+
+.mem-home .mem-life-legend span.is-parent {
+  background: hsl(215 22% 64%);
+}
+
+.mem-home .mem-life-legend span.is-retire {
+  background: hsl(30 90% 70%);
+}
+
+.mem-home .mem-life-legend span.is-left {
+  background: hsl(210 12% 84%);
+  box-shadow: inset 0 0 0 1px hsl(210 12% 68% / 0.78);
+}
+
+.mem-home .mem-life-note-foot {
+  margin-top: 0.55rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+  font-weight: 420;
+  line-height: 1.45;
 }
 
 .mem-home .mem-contribution {
@@ -512,11 +925,6 @@
     line-height: 1.72;
   }
 
-  .mem-home .mem-focus-card {
-    min-height: 0;
-    padding: 1.1rem 1.2rem;
-  }
-
   .mem-home .mem-stat-grid {
     grid-template-columns: 1fr;
     gap: 0.9rem;
@@ -524,6 +932,76 @@
 
   .mem-home .mem-stat-card {
     min-height: 6.8rem;
+  }
+
+  .mem-home .mem-life-count {
+    grid-template-columns: 1fr;
+    width: min(100%, 30rem);
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .mem-home .mem-life-overview {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .mem-home .mem-life-kicker {
+    white-space: normal;
+  }
+
+  .mem-home .mem-life-overview p {
+    text-align: left;
+  }
+
+  .mem-home .mem-life-copy h3 {
+    font-size: 1.12rem;
+  }
+
+  .mem-home .mem-life-grid {
+    width: min(100%, 19rem);
+    gap: 0.14rem;
+  }
+
+  .mem-home .mem-life-grid span {
+    border-radius: 0.08rem;
+  }
+
+  .mem-home .mem-life-main,
+  .mem-home .mem-life-liquid {
+    min-height: 0;
+  }
+
+  .mem-home .mem-life-liquid {
+    width: 100%;
+    border-top: 1px solid hsl(var(--border));
+    border-left: 0;
+    padding-top: 1rem;
+    padding-left: 0;
+  }
+
+  .mem-home .mem-life-liquid-panel {
+    width: min(100%, 18rem);
+    min-height: 12.5rem;
+    padding: 0.9rem;
+  }
+
+  .mem-home .mem-life-liquid-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.32rem 0.55rem;
+  }
+
+  .mem-home .mem-life-liquid-stats strong {
+    font-size: 0.84rem;
+  }
+
+  .mem-home .mem-life-liquid-stats small {
+    font-size: 0.7rem;
+  }
+
+  .mem-home .mem-life-legend {
+    grid-template-columns: 1fr;
   }
 
   .mem-home .mem-github-chart img {
@@ -560,20 +1038,18 @@
 @media (prefers-reduced-motion: reduce) {
   .mem-home .mem-label,
   .mem-home .mem-label :where(svg),
-  .mem-home .mem-focus-card,
-  .mem-home .mem-focus-card::before,
-  .mem-home .mem-focus-card :where(h2, h3, p) {
+  .mem-home .mem-life-liquid-water {
     transition: none;
   }
 
   .mem-home .mem-label:hover,
   .mem-home .mem-label:focus-visible,
   .mem-home .mem-label:hover :where(svg),
-  .mem-home .mem-label:focus-visible :where(svg),
-  .mem-home .mem-focus-card:hover,
-  .mem-home .mem-focus-card:focus-visible,
-  .mem-home .mem-focus-card:hover :where(h2, h3, p),
-  .mem-home .mem-focus-card:focus-visible :where(h2, h3, p) {
+  .mem-home .mem-label:focus-visible :where(svg) {
     transform: none;
+  }
+
+  .mem-home .mem-life-liquid-water::before {
+    transition: none;
   }
 }

@@ -42,5 +42,6 @@ bunfig.toml
 
 backup/
 .trash/
+.tmp-preview/
 .makemd/
 .obsidian/workspace.json
