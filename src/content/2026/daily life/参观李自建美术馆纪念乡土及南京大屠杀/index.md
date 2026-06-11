@@ -1,6 +1,6 @@
 ---
 title: 参观：李自建美术馆，纪念乡土及南京大屠杀
-description: 一句话摘要
+description: 一些拍的画作的照片，以及一些想法。
 publishDate: 2026-06-05 23:12:46
 tags: []
 repositories:
