@@ -95,7 +95,6 @@ const lifeTotalDays = Math.round(lifeExpectancyYears * 365.2425)
 const lifeRatio = Math.min(Math.max(lifeElapsedMs / (lifeTotalDays * lifeDayMs), 0), 1)
 const lifeFilledCells = Math.min(Math.floor(lifeRatio * lifeGridTotal), lifeGridTotal)
 const lifePercent = lifeRatio * 100
-const lifeVisualPercent = Math.min(100, Math.max(lifePercent + 12, 36))
 const lifeCellsPerYear = lifeGridTotal / lifeExpectancyYears
 const lifeAgeYears = Math.min(lifeElapsedMs / (lifeDayMs * 365.2425), lifeExpectancyYears)
 const lifeRemainingYears = Math.max(0, lifeExpectancyYears - lifeAgeYears)
@@ -251,20 +250,19 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
           data-birthday={lifeBirthday}
           data-total-years={lifeExpectancyYears}
           data-total-cells={lifeGridTotal}
-          style={`--life-fill: ${lifeVisualPercent.toFixed(2)}%`}
+          style={`--life-fill: ${lifePercent.toFixed(2)}%`}
         >
           <div class='mem-life-overview'>
             <div class='mem-life-overview-main'>
-              <span class='mem-life-kicker'>你的人生进度</span>
+              <span class='mem-life-kicker'>请填写你的生日</span>
               <label class='mem-life-birthday'>
-                <span>生日</span>
                 <input
                   type='date'
                   value={lifeBirthday}
                   min='1900-01-01'
                   max={lifeTodayValue}
                   data-life-birthday-input
-                  aria-label='输入生日'
+                  aria-label='请填写你的生日'
                 />
               </label>
             </div>
@@ -598,7 +596,7 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
         const dayText = numberFormatter.format(Math.min(elapsedDays, totalDays))
         const parts = getElapsedParts(birthDate, now)
         const percentText = `${(ratio * 100).toFixed(2)}%`
-        const displayFill = `${Math.min(100, Math.max(ratio * 100 + 12, 36)).toFixed(2)}%`
+        const displayFill = percentText
         const totalMonths = parts.years * 12 + parts.months
 
         if (squares) squares.textContent = String(filledCells)
