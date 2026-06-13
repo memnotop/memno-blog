@@ -1,6 +1,6 @@
 ---
-title: 回忆没有归路：百年孤独01
-description: 百年孤独中的一些深刻的句子
+title: 百年孤独：回忆没有归路
+description: 百年孤独中的句子
 publishDate: 2026-06-04 21:17:18
 tags:
   - reading

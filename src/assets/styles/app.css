@@ -87,3 +87,109 @@ a {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));
   }
 }
+
+/* Poem / lyrics blocks in article content */
+.prose .poem-block {
+  position: relative;
+  margin: 3.5rem auto;
+  max-width: 46rem;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border) / 0.72);
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.08), transparent 32%),
+    hsl(var(--card) / 0.96);
+  box-shadow: 0 18px 45px hsl(var(--foreground) / 0.08);
+  padding: 2.25rem 1.35rem;
+}
+
+.prose .poem-block::before {
+  content: '';
+  position: absolute;
+  inset: 1rem;
+  border: 1px solid hsl(var(--primary) / 0.16);
+  border-radius: 0.35rem;
+  pointer-events: none;
+}
+
+.prose .poem-block::after {
+  content: '\201C';
+  position: absolute;
+  top: -1.4rem;
+  right: 1.15rem;
+  color: hsl(var(--primary) / 0.12);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 8rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.prose .poem-block figcaption,
+.prose .poem-block .poem-lines {
+  position: relative;
+  z-index: 1;
+}
+
+.prose .poem-block figcaption {
+  margin: 0 0 2rem;
+  color: hsl(var(--primary) / 1);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.prose .poem-block .poem-lines {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.prose .poem-block .poem-lines p {
+  margin: 0;
+  color: hsl(var(--foreground) / 0.92);
+  font-family:
+    'STKaiti',
+    'KaiTi',
+    'Kaiti SC',
+    'Songti SC',
+    'Noto Serif CJK SC',
+    serif;
+  font-size: 1.55rem;
+  font-weight: 400;
+  line-height: 2.05;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.dark .prose .poem-block {
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.11), transparent 34%),
+    hsl(var(--card) / 0.94);
+  box-shadow: 0 18px 45px hsl(0 0% 0% / 0.24);
+}
+
+@media (min-width: 768px) {
+  .prose .poem-block {
+    padding: 3rem 3.5rem;
+  }
+
+  .prose .poem-block .poem-lines p {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .prose .poem-block {
+    margin: 2.5rem -0.25rem;
+    padding: 2rem 1.1rem;
+  }
+
+  .prose .poem-block::before {
+    inset: 0.75rem;
+  }
+
+  .prose .poem-block .poem-lines p {
+    font-size: 1.35rem;
+    line-height: 1.95;
+  }
+}

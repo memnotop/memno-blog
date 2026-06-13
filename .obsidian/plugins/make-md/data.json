@@ -50,13 +50,13 @@
     "//src/src/content",
     "//src/src/content/src/content/2026",
     "//src/src/content/src/content/2026/src/content/2026/daily life",
-    "//src/src/content/src/content/2026/src/content/2026/daily life/src/content/2026/daily life/参观李自建美术馆纪念乡土及南京大屠杀",
     "//src/src/content/src/content/2026/src/content/2026/daily life/src/content/2026/daily life/test",
     "//src/src/content/src/content/2026/src/content/2026/Reading/src/content/2026/Reading/test",
     "//src/src/content/src/content/2026/src/content/2026/Technical",
     "//src/src/content/src/content/2026/src/content/2026/Technical/src/content/2026/Technical/7a24c421",
     "//src/src/data",
-    "//src/src/data/src/data/pages"
+    "//src/src/data/src/data/pages",
+    "//src/src/content/src/content/2026/src/content/2026/Reading/src/content/2026/Reading/红楼梦曲乐中悲"
   ],
   "expandFolderOnClick": true,
   "spacesFolder": "Tags",
