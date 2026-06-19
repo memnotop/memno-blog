@@ -1,0 +1,404 @@
+.notes-page {
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.notes-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: end;
+  margin: 1.75rem 0 1.7rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.notes-eyebrow {
+  margin: 0 0 0.45rem;
+  color: hsl(var(--primary));
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notes-hero h1 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 560;
+  line-height: 1.06;
+}
+
+.notes-hero p {
+  max-width: 39rem;
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 1.06rem;
+  line-height: 1.7;
+}
+
+.notes-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(5.8rem, auto));
+  gap: 0.75rem;
+}
+
+.notes-stat {
+  min-width: 5.8rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  padding: 0.72rem 0.85rem;
+  background: hsl(var(--background) / 0.75);
+  text-align: right;
+}
+
+.notes-stat strong {
+  display: block;
+  color: hsl(var(--foreground));
+  font-size: 1.35rem;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.notes-stat span {
+  display: block;
+  margin-top: 0.28rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+.notes-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+}
+
+.notes-search {
+  position: relative;
+  min-width: min(100%, 22rem);
+}
+
+.notes-search::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: translateY(-50%);
+  border: 2px solid hsl(var(--muted-foreground) / 0.7);
+  border-radius: 999px;
+}
+
+.notes-search::after {
+  content: '';
+  position: absolute;
+  top: calc(50% + 0.35rem);
+  left: 1.55rem;
+  width: 0.45rem;
+  height: 2px;
+  transform: rotate(45deg);
+  border-radius: 999px;
+  background: hsl(var(--muted-foreground) / 0.7);
+}
+
+.notes-search input {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--background) / 0.78);
+  color: hsl(var(--foreground));
+  padding: 0.72rem 0.9rem 0.72rem 2.65rem;
+  font: inherit;
+  outline: none;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.notes-search input:focus {
+  border-color: hsl(var(--primary) / 0.72);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
+}
+
+.notes-search input::placeholder {
+  color: hsl(var(--muted-foreground) / 0.72);
+}
+
+.notes-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.notes-actions button {
+  min-height: 2.55rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--muted) / 0.5);
+  color: hsl(var(--foreground));
+  padding: 0.55rem 0.82rem;
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.notes-actions button:hover,
+.notes-actions button:focus-visible {
+  border-color: hsl(var(--primary) / 0.55);
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.notes-timeline {
+  display: grid;
+  gap: 1rem;
+}
+
+.notes-month {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--background) / 0.78);
+  box-shadow: 0 12px 28px hsl(var(--foreground) / 0.035);
+  overflow: hidden;
+}
+
+.notes-month[hidden],
+.notes-entry[hidden] {
+  display: none;
+}
+
+.notes-month summary {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 4.2rem;
+  padding: 0.95rem 1.1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.notes-month summary::-webkit-details-marker {
+  display: none;
+}
+
+.notes-month summary::after {
+  content: '+';
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  color: hsl(var(--muted-foreground));
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.notes-month[open] summary::after {
+  content: '-';
+}
+
+.notes-month-title {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.notes-month-title strong {
+  color: hsl(var(--foreground));
+  font-size: 1.12rem;
+  font-weight: 630;
+  line-height: 1.2;
+}
+
+.notes-month-title span {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+}
+
+.notes-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 1.1rem 1.1rem;
+}
+
+.notes-entry {
+  display: grid;
+  grid-template-columns: 4.7rem minmax(0, 1fr);
+  gap: 1.1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.07), transparent 22%),
+    hsl(var(--muted) / 0.38);
+  padding: 1rem;
+}
+
+.notes-entry-date {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.notes-entry-date strong {
+  display: block;
+  color: hsl(var(--foreground));
+  font-size: 1.65rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.notes-entry-date span {
+  display: block;
+  margin-top: 0.3rem;
+}
+
+.notes-entry-body h2 {
+  margin: 0 0 0.55rem;
+  color: hsl(var(--foreground));
+  font-size: 1.18rem;
+  font-weight: 620;
+  line-height: 1.35;
+}
+
+.notes-markdown {
+  color: hsl(var(--muted-foreground));
+  line-height: 1.78;
+}
+
+.notes-markdown :where(p, ul, ol, blockquote, pre, table) {
+  margin: 0 0 0.8rem;
+}
+
+.notes-markdown :where(ul, ol) {
+  padding-left: 1.25rem;
+}
+
+.notes-markdown :where(ul) {
+  list-style: disc;
+}
+
+.notes-markdown :where(ol) {
+  list-style: decimal;
+}
+
+.notes-markdown :where(li) {
+  margin: 0.18rem 0;
+}
+
+.notes-markdown :where(strong) {
+  color: hsl(var(--foreground));
+  font-weight: 700;
+}
+
+.notes-markdown :where(a) {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.notes-markdown :where(blockquote) {
+  border-left: 3px solid hsl(var(--primary) / 0.45);
+  padding-left: 0.85rem;
+  color: hsl(var(--foreground) / 0.78);
+}
+
+.notes-markdown :where(code) {
+  border-radius: 0.35rem;
+  background: hsl(var(--background) / 0.8);
+  color: hsl(var(--foreground));
+  padding: 0.12rem 0.32rem;
+  font-size: 0.9em;
+}
+
+.notes-markdown :where(pre) {
+  overflow-x: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--background) / 0.78);
+  padding: 0.85rem 1rem;
+}
+
+.notes-markdown :where(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+.notes-markdown > :last-child,
+.notes-markdown > :last-child :last-child {
+  margin-bottom: 0;
+}
+
+.notes-empty {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  background: hsl(var(--muted) / 0.44);
+  padding: 1.1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+:global(.dark) .notes-stat,
+:global(.dark) .notes-month {
+  background: hsl(var(--muted) / 0.52);
+  box-shadow: 0 14px 34px hsl(0 0% 0% / 0.2);
+}
+
+:global(.dark) .notes-entry {
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.09), transparent 26%),
+    hsl(var(--muted) / 0.42);
+}
+
+@media (max-width: 760px) {
+  .notes-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .notes-stats {
+    width: 100%;
+  }
+
+  .notes-stat {
+    text-align: left;
+  }
+
+  .notes-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .notes-search {
+    width: 100%;
+  }
+
+  .notes-actions {
+    justify-content: flex-start;
+  }
+
+  .notes-entry {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .notes-entry-date {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .notes-entry-date span {
+    margin-top: 0;
+  }
+}

@@ -3,13 +3,21 @@ title: About
 subtitle: IC Student
 ---
 
-import { Button, Signature, Timeline } from 'astro-pure/user'
+import { Button, Collapse, Signature, Timeline } from 'astro-pure/user'
 
 export const focusItems = [
   { date: 'Blog', content: '阅读思考、生活趣事、训练记录。' },
   { date: '', content: '常用工具、网站、教程和资料。' },
   { date: 'Projects', content: '记录做过的东西、为什么做、最后效果如何。' },
   { date: 'Study', content: '课程学习、SoC 设计、Linux 和工具使用。' }
+]
+
+export const siteHistory = [
+  // 新增记录时放在最上方，并保持 `{ date: 'YYYY-MM-DD', content: '更新内容。' }` 的格式。
+  { date: '2026-06-17', content: '在 About 页面新增网站历史记录。新增“note”，记录每天的想法。' },
+  { date: '2026-06-08', content: '补充友链和常用资源入口。' },
+  { date: '2026-06-02', content: '开始整理站点资源和友情链接。' },
+  { date: '2026-05-29', content: '网站建立。' }
 ]
 
 你好，朋友！欢迎来到我的博客。
@@ -31,6 +39,12 @@ export const focusItems = [
 
 - 6月：picture内容完善
 - 7月：movies补全
+
+## Site History
+
+<Collapse title='Website History Book'>
+  <Timeline events={siteHistory} />
+</Collapse>
 
 ## Contact
 

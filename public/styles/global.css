@@ -351,6 +351,72 @@ body::-webkit-scrollbar {
   accent-color: hsl(var(--primary));
 }
 
+#content > .heading-foldable {
+  position: relative;
+  cursor: pointer;
+}
+
+#content > .heading-fold-hidden {
+  display: none !important;
+}
+
+#content > .heading-foldable .heading-fold-toggle {
+  appearance: none;
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.2rem 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: hsl(var(--muted-foreground) / 0.68);
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    opacity 0.18s ease;
+  vertical-align: 0.08em;
+}
+
+#content > .heading-foldable .heading-fold-toggle::before {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: currentColor transparent transparent;
+  border-style: solid;
+  border-width: 0.34rem 0.24rem 0;
+  transform: translateY(0.06rem);
+  transition: transform 0.18s ease;
+}
+
+#content > .heading-foldable:hover .heading-fold-toggle,
+#content > .heading-foldable:focus-within .heading-fold-toggle,
+#content > .heading-foldable.heading-fold-collapsed .heading-fold-toggle {
+  opacity: 1;
+}
+
+#content > .heading-foldable.heading-fold-collapsed .heading-fold-toggle::before {
+  transform: rotate(-90deg) translateX(0.04rem);
+}
+
+#content > .heading-foldable:hover .heading-fold-toggle,
+#content > .heading-foldable .heading-fold-toggle:focus-visible,
+#content > .heading-foldable.heading-fold-collapsed .heading-fold-toggle {
+  color: hsl(var(--primary));
+}
+
+#content > .heading-foldable .heading-fold-toggle:focus-visible {
+  background: hsl(var(--muted));
+  outline: 2px solid hsl(var(--primary) / 0.35);
+  outline-offset: 2px;
+}
+
 #content .obsidian-wikilink,
 #content .obsidian-tag {
   border-radius: 0.25rem;

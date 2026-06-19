@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { dirname, join, normalize } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 import { slug } from 'github-slugger'
 import type {
   Blockquote,
@@ -492,24 +492,53 @@ function wikiTargetToUrl({
 
 function resolveObsidianAssetUrl(value: string, markdownFilePath?: string) {
   if (/^(https?:|\/|\.\.\/|\.\/)/i.test(value)) return value
-  if (!markdownFilePath) return `/attachments/${encodeURI(value)}`
+
+  const fallbackUrl = `/attachments/${encodePublicAssetPath(value)}`
+  if (!markdownFilePath) return fallbackUrl
 
   const currentDir = dirname(markdownFilePath)
   const noteAssetDir = fileBasename(markdownFilePath)
-  const candidatePaths = [value, join(noteAssetDir, value)]
+  const projectRoot = process.cwd()
+  const importCandidatePaths = [
+    join(currentDir, value),
+    join(currentDir, noteAssetDir, value)
+  ]
 
-  for (const candidatePath of candidatePaths) {
-    const normalizedPath = normalize(candidatePath)
-    if (!existsSync(join(currentDir, normalizedPath))) continue
-    return toRelativeImportPath(normalizedPath)
+  for (const candidatePath of importCandidatePaths) {
+    if (!existsSync(candidatePath)) continue
+    return toRelativeImportPath(relative(currentDir, candidatePath))
   }
 
-  return `/attachments/${encodeURI(value)}`
+  const publicCandidatePaths = [
+    {
+      path: join(projectRoot, 'public', value),
+      url: `/${encodePublicAssetPath(value)}`
+    },
+    {
+      path: join(projectRoot, 'public', 'attachments', value),
+      url: fallbackUrl
+    }
+  ]
+
+  for (const candidatePath of publicCandidatePaths) {
+    if (!existsSync(candidatePath.path)) continue
+    return candidatePath.url
+  }
+
+  return fallbackUrl
 }
 
 function toRelativeImportPath(value: string) {
   const normalizedValue = value.replace(/\\/g, '/')
   return normalizedValue.startsWith('.') ? normalizedValue : `./${normalizedValue}`
+}
+
+function encodePublicAssetPath(value: string) {
+  return value
+    .replace(/\\/g, '/')
+    .split('/')
+    .map((part) => encodeURIComponent(part))
+    .join('/')
 }
 
 function isLikelyImage(value: string) {

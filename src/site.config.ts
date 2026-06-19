@@ -117,6 +117,7 @@ export const theme: ThemeUserConfig = {
           { title: 'Training', link: '/training' },
         ]
       },
+      { title: 'Notes', link: '/notes', description: 'Short dated thoughts' },
       { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },

@@ -1,0 +1,263 @@
+---
+import fs from 'node:fs'
+import path from 'node:path'
+
+import rehypeStringify from 'rehype-stringify'
+import { remarkAlert } from 'remark-github-blockquote-alert'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
+
+import PageLayout from '@/layouts/BaseLayout.astro'
+import remarkObsidian from '@/plugins/remark-obsidian'
+
+import '@/assets/styles/notes.css'
+
+export const prerender = true
+
+type NoteEntry = {
+  id: string
+  date: string
+  day: string
+  month: string
+  monthKey: string
+  monthLabel: string
+  title: string
+  body: string
+  htmlBody: string
+  searchableText: string
+}
+
+type NoteMonth = {
+  key: string
+  label: string
+  entries: NoteEntry[]
+}
+
+const notesPath = path.join(process.cwd(), 'src/data/notes.md')
+const dateFormatter = new Intl.DateTimeFormat('en-US', { day: '2-digit', month: 'short' })
+const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
+
+function parseLocalDate(value: string) {
+  const [year, month, day] = value.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
+function stripFrontmatter(value: string) {
+  return value.replace(/^---[\s\S]*?---\s*/, '')
+}
+
+function normalizeNoteMarkdown(value: string) {
+  return value.replace(/\r\n/g, '\n').trim()
+}
+
+async function renderNoteMarkdown(value: string, filePath: string) {
+  if (!value.trim()) return ''
+
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMath)
+    .use(remarkObsidian)
+    .use(remarkAlert)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process({
+      value: normalizeNoteMarkdown(value),
+      path: filePath
+    })
+
+  return String(file)
+}
+
+async function parseNotesFile(filePath: string): Promise<NoteEntry[]> {
+  if (!fs.existsSync(filePath)) return []
+
+  const source = stripFrontmatter(fs.readFileSync(filePath, 'utf8'))
+  const entryPattern = /^##\s+(\d{4}-\d{2}-\d{2})(?:\s*[|｜]\s*(.*?))?\s*$/gm
+  const matches = [...source.matchAll(entryPattern)]
+  const entries: NoteEntry[] = []
+
+  for (let index = 0; index < matches.length; index += 1) {
+    const match = matches[index]
+    const next = matches[index + 1]
+    const date = match[1]
+    const title = (match[2] ?? '').trim()
+    const contentStart = (match.index ?? 0) + match[0].length
+    const contentEnd = next?.index ?? source.length
+    const body = source.slice(contentStart, contentEnd).trim()
+    const localDate = parseLocalDate(date)
+    const [month, day] = dateFormatter.format(localDate).split(' ')
+    const monthKey = date.slice(0, 7)
+
+    entries.push({
+      id: `${date}-${index}`,
+      date,
+      day,
+      month,
+      monthKey,
+      monthLabel: monthFormatter.format(localDate),
+      title,
+      body,
+      htmlBody: await renderNoteMarkdown(body, filePath),
+      searchableText: `${date} ${title} ${body}`.toLowerCase()
+    })
+  }
+
+  return entries.sort((a, b) => b.date.localeCompare(a.date))
+}
+
+function groupNotesByMonth(entries: NoteEntry[]): NoteMonth[] {
+  const groups = new Map<string, NoteMonth>()
+
+  for (const entry of entries) {
+    if (!groups.has(entry.monthKey)) {
+      groups.set(entry.monthKey, {
+        key: entry.monthKey,
+        label: entry.monthLabel,
+        entries: []
+      })
+    }
+
+    groups.get(entry.monthKey)?.entries.push(entry)
+  }
+
+  return [...groups.values()].sort((a, b) => b.key.localeCompare(a.key))
+}
+
+const notes = await parseNotesFile(notesPath)
+const noteMonths = groupNotesByMonth(notes)
+
+const meta = {
+  title: 'Notes',
+  description: 'Short thoughts, dated fragments, and working notes.'
+}
+---
+
+<PageLayout {meta} highlightColor='#6fa7b0' comment>
+  <main class='notes-page animate' id='content'>
+    <section class='notes-hero' aria-labelledby='notes-title'>
+      <div>
+        <p class='notes-eyebrow'>Notes</p>
+        <h1 id='notes-title'>Short Notes</h1>
+        <p>Short thoughts, dated fragments, and working notes.</p>
+      </div>
+
+      <div class='notes-stats' aria-label='Notes summary'>
+        <div class='notes-stat'>
+          <strong>{notes.length}</strong>
+          <span>{notes.length === 1 ? 'note' : 'notes'}</span>
+        </div>
+        <div class='notes-stat'>
+          <strong>{noteMonths.length}</strong>
+          <span>{noteMonths.length === 1 ? 'month' : 'months'}</span>
+        </div>
+      </div>
+    </section>
+
+    <div class='notes-toolbar' aria-label='Notes controls'>
+      <label class='notes-search'>
+        <span class='sr-only'>Search notes</span>
+        <input id='notes-search' type='search' placeholder='Search notes' autocomplete='off' />
+      </label>
+
+      <div class='notes-actions'>
+        <button id='notes-expand-all' type='button'>Expand all</button>
+        <button id='notes-collapse-all' type='button'>Collapse all</button>
+      </div>
+    </div>
+
+    {
+      noteMonths.length === 0 ? (
+        <p class='notes-empty'>No notes yet.</p>
+      ) : (
+        <section class='notes-timeline' aria-label='Notes timeline'>
+          {noteMonths.map((group, index) => (
+            <details class='notes-month' data-notes-month open={index === 0}>
+              <summary>
+                <span class='notes-month-title'>
+                  <strong>{group.label}</strong>
+                  <span>
+                    {group.entries.length} {group.entries.length === 1 ? 'note' : 'notes'}
+                  </span>
+                </span>
+              </summary>
+
+              <div class='notes-list'>
+                {group.entries.map((entry) => (
+                  <article
+                    class='notes-entry'
+                    data-note-entry
+                    data-note-content={entry.searchableText}
+                    id={entry.id}
+                  >
+                    <time class='notes-entry-date' datetime={entry.date}>
+                      <strong>{entry.day}</strong>
+                      <span>{entry.month}</span>
+                    </time>
+
+                    <div class='notes-entry-body'>
+                      {entry.title && <h2>{entry.title}</h2>}
+                      <div class='notes-markdown' set:html={entry.htmlBody} />
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </details>
+          ))}
+        </section>
+      )
+    }
+
+    <p class='notes-empty' id='notes-empty' hidden>No matching notes.</p>
+  </main>
+</PageLayout>
+
+<script is:inline>
+  ;(() => {
+    const input = document.getElementById('notes-search')
+    const empty = document.getElementById('notes-empty')
+    const expandAll = document.getElementById('notes-expand-all')
+    const collapseAll = document.getElementById('notes-collapse-all')
+    const months = Array.from(document.querySelectorAll('[data-notes-month]'))
+
+    if (!(input instanceof HTMLInputElement) || !empty || months.length === 0) return
+
+    const filterNotes = () => {
+      const query = input.value.trim().toLowerCase()
+      let hasVisibleEntry = false
+
+      months.forEach((month) => {
+        const entries = Array.from(month.querySelectorAll('[data-note-entry]'))
+        let hasVisibleMonthEntry = false
+
+        entries.forEach((entry) => {
+          const text = entry.getAttribute('data-note-content') || ''
+          const isVisible = !query || text.includes(query)
+          entry.hidden = !isVisible
+          hasVisibleMonthEntry ||= isVisible
+        })
+
+        month.hidden = !hasVisibleMonthEntry
+        if (query && hasVisibleMonthEntry) month.open = true
+        hasVisibleEntry ||= hasVisibleMonthEntry
+      })
+
+      empty.hidden = hasVisibleEntry
+    }
+
+    input.addEventListener('input', filterNotes)
+    expandAll?.addEventListener('click', () => {
+      months.forEach((month) => {
+        if (!month.hidden) month.open = true
+      })
+    })
+    collapseAll?.addEventListener('click', () => {
+      months.forEach((month) => {
+        month.open = false
+      })
+    })
+  })()
+</script>

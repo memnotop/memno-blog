@@ -3,5 +3,12 @@
   "readableLineLength": true,
   "showLineNumber": false,
   "foldHeading": true,
-  "showInlineTitle": true
+  "showInlineTitle": true,
+  "attachmentFolderPath": "./",
+  "userIgnoreFilters": [
+    "node_modules/",
+    "dist/",
+    ".astro/",
+    ".git/"
+  ]
 }

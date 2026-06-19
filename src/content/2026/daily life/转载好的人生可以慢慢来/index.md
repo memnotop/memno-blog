@@ -1,15 +1,17 @@
 ---
-title: "转载：【夜读】好的人生，可以慢慢来"
-description: "慢慢来不是拖延，而是在自己的节奏里从容前进。"
-publishDate: "2026-06-11 23:00:14"
-tags: []
+title: 转载：【夜读】好的人生，可以慢慢来
+description: 慢慢来不是拖延，而是在自己的节奏里从容前进。
+publishDate: 2026-06-11 23:00:14
+tags:
+  - 转载
+  - 个人成长
 repositories:
   - daily-life
 heroImageSrc: ./cover.jpg
 heroImageAlt: 【夜读】好的人生，可以慢慢来文章封面
 heroImageColor: "#659EB9"
 showHeroImage: true
-language: "中文"
+language: 中文
 draft: false
 ---
 
