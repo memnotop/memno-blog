@@ -1,8 +1,6 @@
 ---
 import config from '@/site-config'
 
-import '@waline/client/style'
-
 import { cn } from 'astro-pure/utils'
 
 const { class: className } = Astro.props
@@ -19,17 +17,65 @@ const { class: className } = Astro.props
 }
 
 <script>
-  import { init as walineInit } from '@waline/client'
   import type { WalineEmojiPresets, WalineInstance } from '@waline/client'
+  import walineStyleUrl from '@waline/client/style?url'
   import config from 'virtual:config'
 
   const walineConfig = config.integ.waline
+  const walineStyleAttribute = 'data-waline-style'
+
+  const loadStylesheet = (href: string) =>
+    new Promise<void>((resolve) => {
+      const selector = `link[${walineStyleAttribute}="${href}"]`
+      if (document.querySelector(selector)) {
+        resolve()
+        return
+      }
+
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = href
+      link.setAttribute(walineStyleAttribute, href)
+      link.addEventListener('load', () => resolve(), { once: true })
+      link.addEventListener('error', () => resolve(), { once: true })
+      document.head.append(link)
+    })
 
   class Comment extends HTMLElement {
+    loading = false
+    observer: IntersectionObserver | null = null
     waline: WalineInstance | null = null
 
     connectedCallback() {
-      if (this.waline) return
+      if (this.waline || this.loading || this.observer) return
+
+      const Observer = (
+        window as Window & {
+          IntersectionObserver?: typeof IntersectionObserver
+        }
+      ).IntersectionObserver
+
+      if (Observer) {
+        this.observer = new Observer(
+          (entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return
+
+            this.observer?.disconnect()
+            this.observer = null
+            void this.loadWaline()
+          },
+          { rootMargin: '600px 0px' }
+        )
+        this.observer.observe(this)
+        return
+      }
+
+      window.setTimeout(() => void this.loadWaline(), 0)
+    }
+
+    async loadWaline() {
+      if (this.waline || this.loading) return
+      this.loading = true
 
       // Prevent Vue log errors
       ;(globalThis as unknown as { __VUE_OPTIONS_API__: boolean }).__VUE_OPTIONS_API__ = true
@@ -39,24 +85,41 @@ const { class: className } = Astro.props
       ).__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
 
       const container = this.querySelector<HTMLElement>('#waline')
-      if (!container) return
+      if (!container) {
+        this.loading = false
+        return
+      }
 
       const emoji = walineConfig.emoji?.map(
         (preset) => `${config.npmCDN}/@waline/emojis@1.2.0/${preset}` as WalineEmojiPresets
       )
 
-      this.waline = walineInit({
-        el: container,
-        serverURL: walineConfig.server || '',
-        emoji,
-        reaction: ['/icons/heart-item.svg'],
-        ...walineConfig.additionalConfigs
-      })
+      try {
+        const [{ init: walineInit }] = await Promise.all([
+          import('@waline/client'),
+          loadStylesheet(walineStyleUrl)
+        ])
+
+        this.waline = walineInit({
+          el: container,
+          serverURL: walineConfig.server || '',
+          emoji,
+          reaction: ['/icons/heart-item.svg'],
+          ...walineConfig.additionalConfigs
+        })
+      } catch {
+        container.textContent = '评论加载失败，请稍后刷新页面。'
+      } finally {
+        this.loading = false
+      }
     }
 
     disconnectedCallback() {
+      this.observer?.disconnect()
+      this.observer = null
       this.waline?.destroy()
       this.waline = null
+      this.loading = false
     }
   }
 

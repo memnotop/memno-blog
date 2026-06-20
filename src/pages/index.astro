@@ -42,7 +42,6 @@ const totalWords = articlePosts.reduce((sum, post) => {
 
 const lifeExpectancyYears = 80
 const lifeGridTotal = 400
-const lifeGridCells = Array.from({ length: lifeGridTotal }, (_, index) => index)
 const lifeBirthday = '2005-06-05'
 const lifeToday = new Date()
 const lifeTodayValue = [
@@ -95,37 +94,10 @@ const lifeTotalDays = Math.round(lifeExpectancyYears * 365.2425)
 const lifeRatio = Math.min(Math.max(lifeElapsedMs / (lifeTotalDays * lifeDayMs), 0), 1)
 const lifeFilledCells = Math.min(Math.floor(lifeRatio * lifeGridTotal), lifeGridTotal)
 const lifePercent = lifeRatio * 100
-const lifeCellsPerYear = lifeGridTotal / lifeExpectancyYears
-const lifeAgeYears = Math.min(lifeElapsedMs / (lifeDayMs * 365.2425), lifeExpectancyYears)
-const lifeRemainingYears = Math.max(0, lifeExpectancyYears - lifeAgeYears)
-const lifeRetireAge = 65
-const lifeSleepCells = Math.round((lifeRemainingYears / 3) * lifeCellsPerYear)
-const lifeWorkCells = Math.round((Math.max(0, lifeRetireAge - lifeAgeYears) / 3) * lifeCellsPerYear)
-const lifeChildCells = Math.round(18 * (5 / 24) * lifeCellsPerYear)
-const lifeParentCells = Math.round((lifeRemainingYears / 12) * lifeCellsPerYear)
-const lifeRetireCell = Math.min(
-  lifeGridTotal - 1,
-  Math.round((lifeRetireAge / lifeExpectancyYears) * lifeGridTotal)
-)
 const lifeTotalMonths = lifeElapsedParts.years * 12 + lifeElapsedParts.months
 const lifeTotalHours = Math.floor(lifeElapsedMs / lifeHourMs)
 const lifeTotalMinutes = Math.floor(lifeElapsedMs / lifeMinuteMs)
 const lifeTotalSeconds = Math.floor(lifeElapsedMs / 1000)
-const lifeCellClass = (index: number) => {
-  if (index < lifeFilledCells) return 'is-lived'
-  if (index === lifeRetireCell) return 'is-retire'
-
-  let cursor = lifeFilledCells
-  if (index < cursor + lifeSleepCells) return 'is-sleep'
-  cursor += lifeSleepCells
-  if (index < cursor + lifeWorkCells) return 'is-work'
-  cursor += lifeWorkCells
-  if (index < cursor + lifeChildCells) return 'is-child'
-  cursor += lifeChildCells
-  if (index < cursor + lifeParentCells) return 'is-parent'
-
-  return 'is-left'
-}
 
 const githubUsername = 'memnotop'
 const githubUrl = `https://github.com/${githubUsername}`
@@ -281,18 +253,7 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
               data-life-grid
               role='img'
               aria-label={`${lifeElapsedDays.toLocaleString('en')} days lived, ${lifeFilledCells} of ${lifeGridTotal} squares filled`}
-            >
-              {
-                lifeGridCells.map((index) => (
-                  <span
-                    class={lifeCellClass(index)}
-                    data-life-cell
-                    data-index={index}
-                    aria-hidden='true'
-                  />
-                ))
-              }
-            </div>
+            ></div>
             <p class='mem-life-foot' aria-live='polite'>
               <span>
                 <strong data-life-squares>{lifeFilledCells}</strong> / {lifeGridTotal} 方块
@@ -508,9 +469,29 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
       const age = root.querySelector('[data-life-age]')
       const liquid = root.querySelector('.mem-life-liquid')
       const birthdayInput = root.querySelector('[data-life-birthday-input]')
-      const cells = Array.from(root.querySelectorAll('[data-life-cell]'))
-      const totalCells = Number(root.dataset.totalCells) || cells.length || 400
+      const totalCells = Number(root.dataset.totalCells) || 400
       const defaultYears = Number(root.dataset.totalYears) || 80
+      let cells = []
+
+      if (grid) {
+        cells = Array.from(grid.querySelectorAll('[data-life-cell]'))
+
+        if (!cells.length) {
+          const fragment = document.createDocumentFragment()
+
+          for (let index = 0; index < totalCells; index += 1) {
+            const cell = document.createElement('span')
+            cell.dataset.lifeCell = ''
+            cell.dataset.index = String(index)
+            cell.setAttribute('aria-hidden', 'true')
+            fragment.append(cell)
+          }
+
+          grid.append(fragment)
+          cells = Array.from(grid.querySelectorAll('[data-life-cell]'))
+        }
+      }
+
       const savedBirthday = getSavedBirthday()
       let birthDate = toLocalDate(savedBirthday || '') || toLocalDate(root.dataset.birthday || '')
 

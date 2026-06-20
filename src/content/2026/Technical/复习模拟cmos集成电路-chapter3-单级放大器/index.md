@@ -192,5 +192,105 @@ $V_{in}$ 增加会产生两个变化：
 
 故 $A_{v}=-(g_{m1}+g_{m2})(r_{o1}||r_{o2})$
 
+### 带源极负反馈
+
+![[Pasted image 20260620155113.png]]
+
+等效跨导：
+
+$G_{m}=\frac{g_{m}}{1+g_{m}R_{s}}$
+
+$A_{v}=-G_{m}R_{D}$
+
+**小信号分析**
+
+![[Pasted image 20260620155317.png]]
+
+此时的电流
+
+$I_{out}=g_{m}V_{1}-g_{mb}V_{X}-\frac{I_{out}R_{s}}{r_{o}}=g_{m}(V_{in}-I_{out}R_{s})+g_{mb}(-I_{out}R_{s})-\frac{I_{out}R_{s}}{r_{o}}$
+
+故 $G_{m}=\frac{I_{out}}{V_{in}}=\frac{g_{m}r_{o}}{R_{s}+[1+(g_{m}+g_{mb})R_{s}]r_{o}}$
+
+**源极负反馈的线性性**
+
+![[Pasted image 20260620160708.png]]
+
+图 a 中，可以看到不带源极负反馈的 $g_{m}$ 变化情况。当 $\frac{1}{g_{m}}<<R_{s}$ 时，$G_{m}\approx \frac{1}{R_{s}}$，此时近视线性。
+
+**二极管做负反馈电阻**
+
+![[Pasted image 20260620161831.png]]
+
+为什么这里是 $\frac{1}{g_{m2}}$？实际上是 $r_{o2}||\frac{1}{g_{m2}}$，其中，$r_{o2}>>\frac{1}{g_{m2}}$，故而近似于 $\frac{1}{g_{m2}}$ 。
+
+在栅固定，从漏极看输出电阻时，电阻为 $r_{o}$，本质原因是 $v_{gs}=0$。
+
+**输出电阻**
+
+![[Pasted image 20260620163113.png]]
+
+$V_{1}=-I_{x}R_{s}$
+
+$流过r_{o}的电流是I_{x}-(g_{m}+g_{mb})V_{1}=I_{x}+(g_{m}+g_{mb})R_{s}I_{x}$
+
+$V_{x}=r_{o}[I_{x}+(g_{m}+g_{mb})R_{s}I_{x}]+I_{x}R_{s}$
+
+$\Rightarrow R_{out}=[1+(g_{m}+g_{mb})R_{s}]r_{o}+R_{s}$
+
+相当于是 $r_{o}$ 变为了 $1+(g_{m}+g_{mb})$ 倍。
+
+### 辅助定理
+
+![[Pasted image 20260620164428.png]]
+
+$A_{v}=-G_{m}R_{out}$
+
+其中，$G_{m}=I_{out}V_{in}$
 
 
+## 源随器
+
+### 电阻偏置
+
+![[Pasted image 20260620204254.png]]
+
+**增益求解**
+
+由输入输出特性：
+
+$V_{out}=\frac{1}{2}\mu_{n}C_{ox}\frac{W}{L}(V_{in}-V_{TH}-V_{out})^{2}R_{s}$
+
+对 $V_{in}$ 求偏导
+
+$\frac{1}{2}\mu_{n}C_{ox}\frac{W}{L}2(V_{in}-V_{TH}-V_{out})(1-\frac{\partial V_{TH}}{\partial V_{in}}-\frac{\partial V_{out}}{\partial V_{in}})R_{s}=\frac{\partial V_{out}}{\partial V_{in}}$
+
+由于 $\partial V_{TH}/\partial V_{SB}=(\partial V_{TH}/\partial V_{SB})(\partial V_{SB}/\partial V_{in})=\eta \partial V_{out}/\partial V_{in}$
+
+故：$\frac{\partial V_{out}}{\partial V_{in}}=\frac{\mu_{n}C_{ox}\frac{W}{L}(V_{in}-V_{TH}-V_{out})R_{S}}{1+\mu_{n}C_{ox}\frac{W}{L}(V_{in}-V_{TH}-V_{out})R_{S}(1+\eta)}$
+
+故而，$A_{v}=\frac{g_{m}R_{s}}{1+(g_{m}+g_{mb})R_{s}}$
+
+**小信号求解**
+
+![[Pasted image 20260620205653.png]]
+
+$V_{in}-V_{1}=V_{out}，V_{bs}=-V_{out}$
+
+故：$g_{m}V_{1}-g_{mb}V_{out}=V_{out}/R_{S}$
+
+可以得到：$V_{out}/V_{in}=g_{m}R_{S}/[1+(g_{m}+g_{mb}R_{S})]$
+
+![[Pasted image 20260620210357.png]]
+
+$\eta = \partial V_{TH} /\partial V_{SB}$
+
+其随 $V_{out}$ 增大，变化越来越小，最终接近 1。
+
+### 电流源偏置
+
+输出阻抗计算
+
+![[Pasted image 20260620211224.png]]
+
+由图所示，从下向上看，$R_{out}=\frac{1}{g_{m}+g_{mb}}$

@@ -161,6 +161,74 @@ a {
   text-wrap: pretty;
 }
 
+/* Article headings */
+#content.prose > :is(h2, h3, h4, h5, h6) {
+  position: relative;
+  margin-block: 2.2em 1em;
+  padding: 0.85rem 1rem 0.85rem 1.15rem;
+  border: 1px solid hsl(var(--border) / 0.88);
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.09), transparent 42%),
+    hsl(var(--card) / 0.96);
+  box-shadow: 0 10px 26px hsl(var(--foreground) / 0.05);
+  text-wrap: balance;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6)::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 0;
+  width: 0.28rem;
+  border-radius: inherit;
+  background: hsl(var(--primary) / 0.9);
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6) > .anchor {
+  margin-inline-start: 0.45rem;
+  color: hsl(var(--primary) / 0.55);
+  font-size: 0.85em;
+  text-decoration: none;
+  opacity: 0;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6):hover > .anchor,
+#content.prose > :is(h2, h3, h4, h5, h6):focus-within > .anchor {
+  opacity: 1;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6) > .heading-fold-toggle {
+  margin-inline-start: -0.05rem;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6).heading-foldable {
+  padding-inline-start: 0.85rem;
+  cursor: pointer;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6).heading-foldable .heading-fold-toggle {
+  flex: 0 0 auto;
+}
+
+#content.prose > :is(h2, h3, h4, h5, h6).heading-fold-collapsed {
+  box-shadow: 0 6px 16px hsl(var(--foreground) / 0.04);
+}
+
+.dark #content.prose > :is(h2, h3, h4, h5, h6) {
+  background:
+    linear-gradient(90deg, hsl(var(--primary) / 0.13), transparent 46%),
+    hsl(var(--card) / 0.96);
+  box-shadow: 0 12px 30px hsl(0 0% 0% / 0.18);
+}
+
+@media (max-width: 640px) {
+  #content.prose > :is(h2, h3, h4, h5, h6) {
+    margin-block: 1.9em 0.9em;
+    padding: 0.75rem 0.9rem 0.75rem 1rem;
+  }
+}
+
 .dark .prose .poem-block {
   background:
     linear-gradient(90deg, hsl(var(--primary) / 0.11), transparent 34%),
