@@ -279,7 +279,7 @@ $V_{in}-V_{1}=V_{out}，V_{bs}=-V_{out}$
 
 故：$g_{m}V_{1}-g_{mb}V_{out}=V_{out}/R_{S}$
 
-可以得到：$V_{out}/V_{in}=g_{m}R_{S}/[1+(g_{m}+g_{mb}R_{S})]$
+可以得到：$V_{out}/V_{in}=g_{m}R_{S}/[1+(g_{m}+g_{mb})R_{S}]$
 
 ![[Pasted image 20260620210357.png]]
 
@@ -294,3 +294,23 @@ $\eta = \partial V_{TH} /\partial V_{SB}$
 ![[Pasted image 20260620211224.png]]
 
 由图所示，从下向上看，$R_{out}=\frac{1}{g_{m}+g_{mb}}$
+
+**戴维南等效电路（不解）**
+
+当 $R_{S}=\infty$ 时，增益为：
+
+$A_{v}=\frac{\frac{1}{g_{mb}}}{\frac{1}{g_{m}}+\frac{1}{g_{mb}}}$
+
+![[Pasted image 20260621194037.png]]
+
+驱动源随器的往往是有限负载
+
+![[Pasted image 20260621194237.png]]
+
+$A_{v}=\frac{R_{eq}}{R_{eq}+\frac{1}{g_{m}}}$
+
+其中 $R_{eq}=(1/g_{mb})||r_{O1}||r_{O2}||R_{L}$
+
+## 共栅级
+
+
