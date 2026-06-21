@@ -311,6 +311,26 @@ $A_{v}=\frac{R_{eq}}{R_{eq}+\frac{1}{g_{m}}}$
 
 其中 $R_{eq}=(1/g_{mb})||r_{O1}||r_{O2}||R_{L}$
 
+**例题**
+
+![[Pasted image 20260621205220.png]]
 ## 共栅级
 
+![[Pasted image 20260621205909.png]]
+
+**小信号增益公式求解**
+
+$I_{D}=\frac{1}{2}\mu_{n}C_{ox}\frac{W}{L}(V_{b}-V_{in}-V_{TH})^2$
+
+$V_{out}=V_{DD}-\frac{1}{2}\mu_{n}C_{ox}\frac{W}{L}(V_{b}-V_{in}-V_{TH})^{2}R_{D}$
+
+$A_{v}=\frac{\partial V_{out}}{\partial V_{in}}=-\mu_{n}C_{ox}\frac{W}{L}(V_{b}-V_{in}-V_{TH})(-1-\frac{\partial V_{TH}}{\partial V_{in}})R_{D}$
+
+其中，$\partial V_{TH}/\partial V_{in}=\partial V_{TH}/\partial V_{SB}=\eta$
+
+故：$A_{v}=g_{m}(1+\eta)R_{D}$
+
+
+
+## 共源共栅级
 
