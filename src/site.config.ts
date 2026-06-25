@@ -203,7 +203,8 @@ export const integ: IntegrationUserConfig = {
       '如切如磋，如琢如磨。',
       '放下生活中的功利心，虚荣心，不必强求，只是经历过程。',
       '唯之与阿，相去几何？美之与恶，相去若何？',
-      '虚其心，实其腹；弱其志，强其骨。'
+      '虚其心，实其腹；弱其志，强其骨。',
+      '曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。'
       ]
       return quotes[Math.floor(Math.random() * quotes.length)] || ''
     }`

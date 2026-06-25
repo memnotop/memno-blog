@@ -330,7 +330,48 @@ $A_{v}=\frac{\partial V_{out}}{\partial V_{in}}=-\mu_{n}C_{ox}\frac{W}{L}(V_{b}-
 
 故：$A_{v}=g_{m}(1+\eta)R_{D}$
 
+![[Pasted image 20260622114355.png]]
 
+**小信号电路分析（考虑体效应）**
 
+![[Pasted image 20260622115111.png|500]]
+
+流过 $R_{s}$ 的电流是 $-V_{out}/R_{D}$
+
+所以 $V_{1}-\frac{V_{out}}{R_{D}}R_{s}+V_{in}=0$
+
+此外，根据电路图，流过 $r_{o}$ 的电流等于 $-V_{out}/R_{D}-g_{m}V_{1}-g_{mb}V_{1}$
+
+所以 $r_{o}(\frac{-V_{out}}{R_{D}}-g_{m}V_{1}-g_{mb}V_{1})-\frac{V_{out}}{R_{D}}R_{S}+V_{in}=V_{out}$
+
+将 $V_{1}=\frac{V_{out}}{R_{D}}R_{s}-V_{in}$ 带入该公式可得：
+
+$r_{o}[\frac{-V_{out}}{R_{D}}-(g_{m}+g_{mb})(V_{out}\frac{R_{S}}{R_{D}}-V_{in})]-\frac{V_{out}R_{S}}{R_{D}}+V_{in}=V_{out}$
+
+$\Rightarrow \frac{V_{out}}{V_{in}}=\frac{(g_{m}+g_{mb})r_{O}+1}{r_{O}+(g_{m}+g_{mb})r_{O}R_{S}+R_{S}+R_{D}}R_{D}$
+
+**输入输出电阻**
+
+![[Pasted image 20260622165247.png]]
+
+$V_{1}=-V_{X}$
+
+流过 $r_{O}$ 的电流等于 $I_{X}+g_{m}V_{1}+g_{mb}V_{1}=I_{X}-(g_{m}+g_{mb})V_{X}$
+
+于是有 $R_{D}I_{X}+r_{O}[I_{X}-(g_{m}+g_{mb})V_{X}]=V_{X}$
+
+因此：$\frac{V_{X}}{I_{X}}=\frac{R_{D}+r_{O}}{1+(g_{m}+g_{mb})r_{O}}$
+
+若 $(g_{m}+g_{mb})>>1$
+
+则 $\frac{V_{X}}{I_{X}}\approx \frac{R_{D}}{(g_{m}+g_{mb})r_{O}}+\frac{1}{g_{m}+g_{mb}}$
+
+表明，源端看输入阻抗时，漏端的阻抗(R_D)要除以 $(g_{m}+g_{mb})r_{O}$
+
+![[Pasted image 20260622171852.png|400]]
+
+计算输出电阻，与源极负反馈的共源极相似
+
+输出电阻为：$R_{out}=\{[1+(g_{m}+g_{mb})R_{S}+r_{O}]\}||R_{D}$
 ## 共源共栅级
-
+共源极可以将电压转化为电流，共栅级由电流驱动。故可以组合形成共源共栅级（cascode）结构

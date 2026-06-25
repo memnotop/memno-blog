@@ -36,3 +36,15 @@ addi.w r 3, r 2, 1
 ```
 这类连续依赖非常常见。没有前递，IPC 会很差。
 
+测试
+
+<figure class="bilibili-video">
+  <iframe
+    src="https://player.bilibili.com/player.html?bvid=BV1n57w6pEiu&p=1&autoplay=0&danmaku=0&poster=1"
+    title="Bilibili video player"
+    scrolling="no"
+    frameborder="0"
+    allowfullscreen
+  ></iframe>
+  <figcaption>视频说明。</figcaption>
+</figure>

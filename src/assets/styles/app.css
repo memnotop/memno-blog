@@ -88,6 +88,30 @@ a {
   }
 }
 
+/* Article media embeds */
+#content.prose :where(.article-video, .bilibili-video) {
+  margin: 2rem 0;
+}
+
+#content.prose :where(.article-video, .bilibili-video) :where(video, iframe) {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #000;
+}
+
+#content.prose :where(.article-video, .bilibili-video) figcaption {
+  margin-top: 0.65rem;
+  color: hsl(var(--muted-foreground) / 1);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 /* Poem / lyrics blocks in article content */
 .prose .poem-block {
   position: relative;
