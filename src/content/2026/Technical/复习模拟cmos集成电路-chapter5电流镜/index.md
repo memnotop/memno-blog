@@ -122,4 +122,5 @@ $I_{out}=(g_{m1}\cdot(\frac{v_{in}}{2}))-g_{m1}\cdot \frac{-v_{in}}{2}$（电流
 
 所以 $G_{m}=(I_{out})/V_{in}=g_{m1}$
 
-$R_{out}\approx r_{o2}||r_{o4}$
+$R_{out}\approx r_{o2}||r_{o4}$，故而 $A_{v}=G_{m}R_{out}=g_{m1}\cdot(r_{o2}||r_{o4})$
+
