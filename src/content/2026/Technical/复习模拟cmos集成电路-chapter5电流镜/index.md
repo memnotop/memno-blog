@@ -6,7 +6,7 @@ tags:
   - technical
 repositories:
   - technical
-heroImageSrc: 
+heroImageSrc: ../../../../../public/img/covers/cmos.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"
 showHeroImage: true
@@ -123,4 +123,3 @@ $I_{out}=(g_{m1}\cdot(\frac{v_{in}}{2}))-g_{m1}\cdot \frac{-v_{in}}{2}$（电流
 所以 $G_{m}=(I_{out})/V_{in}=g_{m1}$
 
 $R_{out}\approx r_{o2}||r_{o4}$
-
