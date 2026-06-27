@@ -6,7 +6,7 @@ tags:
   - technical
 repositories:
   - technical
-heroImageSrc: 
+heroImageSrc: ../../../../../public/img/covers/cmos.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"
 showHeroImage: true
