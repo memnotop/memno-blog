@@ -124,3 +124,12 @@ $I_{out}=(g_{m1}\cdot(\frac{v_{in}}{2}))-g_{m1}\cdot \frac{-v_{in}}{2}$（电流
 
 $R_{out}\approx r_{o2}||r_{o4}$，故而 $A_{v}=G_{m}R_{out}=g_{m1}\cdot(r_{o2}||r_{o4})$
 
+**共模分析**
+
+因为恒有 $V_{out}=V_{F}$，因此信号负载都可以看作二极管型连接，尾电流源等效到一边负载为 $2R_{SS}$，看作源极负反馈共源极：
+
+$A_{V,CM}=\frac{\Delta V_{out}}{\Delta V_{in,CM}}=-\frac{(\frac{1}{g_{m3}}||r_{o3})}{(\frac{1}{g_{m3}}+2R_{SS})}\approx -\frac{1}{1+2g_{m}R_{SS}}\frac{g_{m1}}{g_{m3}}$
+
+$CMRR = |\frac{A_{V,DM}}{A_{V,CM}}|=(1+2g_{m1,2}R_{SS})g_{m3,4}(r_{o1,2}||r_{o3,4})$
+
+
