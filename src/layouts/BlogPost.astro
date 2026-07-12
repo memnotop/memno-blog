@@ -9,8 +9,8 @@ import 'katex/dist/katex.min.css'
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Hero, TOC } from 'astro-pure/components/pages'
 import { Signature } from 'astro-pure/user'
-import ArticleShare from '@/components/blog/ArticleShare.astro'
 import PageLayout from '@/layouts/ContentLayout.astro'
+import ArticleShare from '@/components/blog/ArticleShare.astro'
 import { Comment, PageInfo } from '@/components/waline'
 import { integ } from '@/site-config'
 
@@ -38,13 +38,16 @@ const {
 } = data
 
 const socialImage =
-  typeof data.heroImageSrc === 'string' ? data.heroImageSrc : data.heroImageSrc?.src ?? '/images/social-card.png'
-const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
+  typeof data.heroImageSrc === 'string'
+    ? data.heroImageSrc
+    : (data.heroImageSrc?.src ?? '/images/social-card.png')
+const publishedDate = publishDate.toISOString()
+const modifiedDate = updatedDate?.toISOString()
 const primaryColor = data.heroImageColor ?? 'hsl(var(--primary) / var(--un-text-opacity))'
 ---
 
 <PageLayout
-  meta={{ articleDate, description, ogImage: socialImage, title }}
+  meta={{ description, modifiedDate, ogImage: socialImage, publishedDate, title }}
   highlightColor={primaryColor}
   back='/blog'
 >

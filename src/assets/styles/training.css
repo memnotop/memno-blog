@@ -310,13 +310,13 @@
   font-size: 0.88rem;
 }
 
-:global(.dark) .training-summary,
-:global(.dark) .training-entry {
+.dark .training-summary,
+.dark .training-entry {
   background: hsl(var(--muted) / 0.72);
   box-shadow: 0 14px 34px hsl(0 0% 0% / 0.2);
 }
 
-:global(.dark) .training-heatmap {
+.dark .training-heatmap {
   background: hsl(var(--muted) / 0.45);
   box-shadow: 0 14px 34px hsl(0 0% 0% / 0.2);
 }

@@ -21,7 +21,7 @@ This repository is the active source for `https://memno.top`.
 - `src/pages/index.astro`: homepage
 - `src/pages/about/index.astro`: About page
 - `src/pages/training.astro`: training page
-- `public/links.json`: friend links
+- `src/data/pages/links.mdx`: sole source for friend links, resources, history, and Links page copy
 - `public/favicon/`: favicon and site icons
 - `public/img/`: shared static images
 - `src/assets/styles/app.css`: global typography and base styling

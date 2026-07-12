@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
-import { Interface, createInterface } from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
+import { createInterface, type Interface } from 'node:readline/promises'
 import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -41,7 +41,10 @@ function nowString() {
 }
 
 function normalizeRepository(input: string) {
-  return input.trim().toLowerCase().replace(/[\s_]+/g, '-')
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
 }
 
 function parseRepositories(input: string): RepositoryKey[] {
@@ -51,7 +54,9 @@ function parseRepositories(input: string): RepositoryKey[] {
     .filter(Boolean)
 
   if (!repositories.length) {
-    throw new Error('repositories 不能为空。可选值：daily-life, reading, technical, picture, training。')
+    throw new Error(
+      'repositories 不能为空。可选值：daily-life, reading, technical, picture, training。'
+    )
   }
 
   const unsupported = repositories.filter(
@@ -69,17 +74,21 @@ function toYamlList(items: string[]) {
   return `\n${items.map((item) => `  - ${item}`).join('\n')}`
 }
 
-function buildPostTemplate(title: string, repositories: RepositoryKey[], tags: string[], slug: string) {
+function toYamlString(value: string) {
+  return JSON.stringify(value)
+}
+
+function buildPostTemplate(title: string, repositories: RepositoryKey[], tags: string[]) {
   return `---
-title: "${title}"
+title: ${toYamlString(title)}
 description: "一句话摘要"
 publishDate: "${nowString()}"
 tags:${toYamlList(tags)}
 repositories:${toYamlList(repositories)}
-heroImageSrc: 
-heroImageAlt: 封面图说明
-heroImageColor: "#659EB9"
-showHeroImage: true
+# heroImageSrc: ./cover.webp
+# heroImageAlt: 封面图说明
+# heroImageColor: "#659EB9"
+# showHeroImage: true
 language: "中文"
 draft: false
 ---
@@ -213,7 +222,7 @@ async function main() {
       process.exit(1)
     } catch {
       await fs.mkdir(articleDir, { recursive: true })
-      await fs.writeFile(filePath, buildPostTemplate(title, repositories, tags, slug), 'utf8')
+      await fs.writeFile(filePath, buildPostTemplate(title, repositories, tags), 'utf8')
       console.log(`Created: ${filePath}`)
       console.log(`Assets: ${articleDir}`)
     }

@@ -1,6 +1,7 @@
 ---
 sticker: emoji//2763-fe0f
 ---
+
 # memno-blog
 
 `~/Mycode/web` 是当前实际发布到 `https://memno.top` 的仓库。  
@@ -11,12 +12,13 @@ sticker: emoji//2763-fe0f
 ```text
 web/
 ├─ .github/workflows/        GitHub Pages 自动部署配置
+├─ .obsidian/                Obsidian 仓库配置与插件
 ├─ public/                   直接原样发布的静态资源
+│  ├─ attachments/           兼容旧文章的 Obsidian 公共附件
 │  ├─ favicon/               标签栏图标、PWA 图标
 │  ├─ fonts/                 字体文件
 │  ├─ img/                   站内通用图片
 │  ├─ images/                站点分享图等
-│  ├─ links.json             友链数据
 │  └─ styles/global.css      全站公共样式
 ├─ scripts/                  维护脚本
 ├─ src/
@@ -25,11 +27,15 @@ web/
 │  │  └─ avatar.webp         站点头像
 │  ├─ components/            可复用组件
 │  ├─ content/               按年份组织的博客内容
+│  ├─ data/pages/            About、Projects、Links 页面内容与数据
 │  ├─ layouts/               页面布局
 │  ├─ pages/                 各页面入口
 │  ├─ plugins/               Markdown / Shiki 插件
+│  ├─ scripts/               浏览器端交互模块
+│  ├─ utils/                 内容解析与共享纯函数
 │  ├─ content.config.ts      内容集合定义
 │  └─ site.config.ts         站点配置中心
+├─ tests/                     纯逻辑测试
 ├─ package.json              常用命令入口
 └─ astro.config.ts           Astro 构建配置
 ```
@@ -57,14 +63,21 @@ web/
   - `training.css` 训练页
 - `public/`
   - 不经处理直接发布的文件
-  - 改 favicon、友链数据、固定图片时主要看这里
+  - 改 favicon、固定图片时主要看这里
 - `scripts/`
   - 维护脚本，例如自动补 `updatedDate`、新建文章
+- `src/scripts/` 与 `src/utils/`
+  - 页面交互放在 `src/scripts/`
+  - 日期、Markdown、Notes、Training 等共享逻辑放在 `src/utils/`
+- `tests/`
+  - 使用 `tsx --test` 验证共享解析与日期逻辑
 - `packages/pure/`
   - 主题本体
   - 能不动尽量别动，除非你明确要改主题行为
 
 ## 常用命令
+
+建议使用 Node.js 22.12+ 与 npm 11；版本下限记录在 `package.json` 的 `engines` 中。
 
 ```bash
 npm install
@@ -79,7 +92,11 @@ npm run dev
 npm run new:post               # 交互式新建文章 / Training 年度文件
 npm run date                   # 按内容变化更新 updatedDate
 npm run audit:repo             # 检查仓库体积、图片大小、本地状态文件
-npm run verify                 # 发布前检查，等于 check + build
+npm run images:webp            # 转换图片并同步更新 Markdown / Obsidian 引用
+npm run lint:check             # 只读代码规范检查
+npm run format:check           # 只读格式检查
+npm test                       # 运行纯逻辑测试
+npm run verify                 # 发布前完整检查
 npm run build                  # 生成生产构建
 npm run preview                # 预览生产构建
 ```
@@ -163,7 +180,7 @@ Waline 的云函数或 HTTP 服务，在函数配置里添加上面的环境变�
 - 首页内容：[src/pages/index.astro](./src/pages/index.astro)
 - About 页面：[src/pages/about/index.astro](./src/pages/about/index.astro)
 - Training 页面：[src/pages/training.astro](./src/pages/training.astro)
-- 友链数据：[public/links.json](./public/links.json)
+- 友链内容与数据：[src/data/pages/links.mdx](./src/data/pages/links.mdx)
 - favicon 和站点图标：`public/favicon/`
 - 公共图片：`public/img/`
 - 全站字体和基准字号：[src/assets/styles/app.css](./src/assets/styles/app.css)
@@ -216,9 +233,9 @@ src/content/2026/Training.md
 
 ```md
 ---
-title: "文章标题"
-description: "一句话摘要"
-publishDate: "2026-06-03 10:00:00"
+title: '文章标题'
+description: '一句话摘要'
+publishDate: '2026-06-03 10:00:00'
 tags: []
 repositories:
   - technical
@@ -226,7 +243,7 @@ repositories:
 # heroImageAlt: 封面图说明
 # heroImageColor: "#659EB9"
 # showHeroImage: true
-language: "中文"
+language: '中文'
 draft: false
 ---
 
@@ -271,7 +288,7 @@ src/content/
 ```yaml
 heroImageSrc: ./cover.webp
 heroImageAlt: 封面图说明
-heroImageColor: "#659EB9"
+heroImageColor: '#659EB9'
 showHeroImage: true
 ```
 
@@ -282,6 +299,28 @@ showHeroImage: false
 ```
 
 固定站内公共图片继续放 `public/img/`，正文里用 `/img/xxx.webp` 引用。
+
+### Obsidian 兼容方式
+
+这个仓库可以继续直接作为 Obsidian Vault 打开，`.obsidian/` 配置会保留。文章仍可使用
+Obsidian Wiki Link，例如：
+
+```md
+![[image-01.webp]]
+![[image-01.webp|500]]
+```
+
+新文章优先把附件放在当前文章目录。`public/attachments/` 用于兼容已有的公共附件引用，暂不迁移目录。
+Obsidian 可以直接显示 WebP，因此图片扩展名改为 `.webp` 后不会破坏编辑体验。
+
+批量导入 PNG/JPG 后，可以运行：
+
+```bash
+npm run images:webp
+```
+
+脚本会转换文章图片和 Obsidian 公共附件、更新 Markdown/Wiki Link 引用并删除对应原图。执行前建议先用
+`git status` 确认工作区状态。favicon 与社交分享图会继续保留 PNG，以兼容浏览器图标和分享协议。
 
 ### 4. 修改专题页来源
 
@@ -346,7 +385,9 @@ src/content/2026/Training.md
 - About：`src/pages/about/index.astro`
 - Projects：`src/pages/projects/index.astro`
 - Links：`src/pages/links/index.astro`
-- 友链数据：`public/links.json`
+- 友链内容与数据：`src/data/pages/links.mdx`
+
+友链条目、资源链接和变更历史只维护 `src/data/pages/links.mdx`，不再另建公开 JSON 数据源。
 
 ### 改头像、图标、图片
 
@@ -421,12 +462,18 @@ git push origin main
 
 ### `npm run verify`
 
-- 等于：
+- 依次执行：
+
 ```bash
+npm run lint:check
+npm run format:check
 npm run check
+npm test
 npm run build
+npm run audit:repo
 ```
-- 适合发布前最后跑一次
+
+- CI 和本地发布前都使用同一套验证流程
 
 ### `npm run audit:repo`
 
@@ -436,11 +483,6 @@ npm run build
   - `dist/` 超过 `200 MB` 开始预警
   - 单张图片超过 `500 KB` 开始预警
 - 发布前、批量导入图片后、怀疑仓库变胖时跑一次
-
-### `npm run cache:avatars`
-
-- 把友链头像缓存到本地
-- 只有在你调整友链头像策略时才需要
 
 ## 维护原则
 
@@ -460,7 +502,7 @@ npm run build
 ```yaml
 heroImageSrc: ./cover.webp
 heroImageAlt: 封面图说明
-heroImageColor: "#659EB9"
+heroImageColor: '#659EB9'
 showHeroImage: true
 ```
 

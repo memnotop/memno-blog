@@ -14,8 +14,7 @@ export const FriendLinksSchema = () =>
           name: z.string(),
           val: z.string()
         })
-      ),
-      cacheAvatar: z.boolean().optional().default(false)
+      )
     })
     .default({
       logbook: [],
@@ -24,7 +23,6 @@ export const FriendLinksSchema = () =>
         { name: 'Desc', val: 'Null' },
         { name: 'Link', val: 'https://astro-pure.js.org/' },
         { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
-      ],
-      cacheAvatar: false
+      ]
     })
     .describe('Friend links for your website.')

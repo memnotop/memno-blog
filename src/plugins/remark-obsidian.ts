@@ -70,16 +70,7 @@ const OBSIDIAN_CALLOUT_TYPE_MAP: Record<string, string> = {
   warn: 'warning'
 }
 
-const IMAGE_EXTENSIONS = new Set([
-  'apng',
-  'avif',
-  'gif',
-  'jpeg',
-  'jpg',
-  'png',
-  'svg',
-  'webp'
-])
+const IMAGE_EXTENSIONS = new Set(['apng', 'avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp'])
 
 export default function remarkObsidian() {
   return (tree: Root, file: MarkdownFile) => {
@@ -267,7 +258,8 @@ function findWikiToken(value: string, start: number) {
 }
 
 function findTagToken(value: string, start: number) {
-  const tagPattern = /(^|[\s([{"'，。；：！？、])#([A-Za-z0-9_\-\u4E00-\u9FFF]+(?:\/[A-Za-z0-9_\-\u4E00-\u9FFF]+)*)(?=$|[\s)\].,;:!?，。；：！？、])/g
+  const tagPattern =
+    /(^|[\s([{"'，。；：！？、])#([A-Za-z0-9_\-\u4E00-\u9FFF]+(?:\/[A-Za-z0-9_\-\u4E00-\u9FFF]+)*)(?=$|[\s)\].,;:!?，。；：！？、])/g
   tagPattern.lastIndex = start
   const match = tagPattern.exec(value)
   if (!match || match.index === undefined) return null
@@ -436,7 +428,9 @@ function transformObsidianCallouts(tree: Root) {
   })
 }
 
-function hasPhrasingChildren(node: unknown): node is ParentWithChildren & { children: PhrasingContent[] } {
+function hasPhrasingChildren(
+  node: unknown
+): node is ParentWithChildren & { children: PhrasingContent[] } {
   if (!node || typeof node !== 'object' || !('children' in node)) return false
   const children = (node as ParentWithChildren).children
   if (!Array.isArray(children)) return false
@@ -470,7 +464,6 @@ function parseWikiTarget(value: string) {
 }
 
 function wikiTargetToUrl({
-  alias: _alias,
   block,
   heading,
   target
@@ -499,10 +492,7 @@ function resolveObsidianAssetUrl(value: string, markdownFilePath?: string) {
   const currentDir = dirname(markdownFilePath)
   const noteAssetDir = fileBasename(markdownFilePath)
   const projectRoot = process.cwd()
-  const importCandidatePaths = [
-    join(currentDir, value),
-    join(currentDir, noteAssetDir, value)
-  ]
+  const importCandidatePaths = [join(currentDir, value), join(currentDir, noteAssetDir, value)]
 
   for (const candidatePath of importCandidatePaths) {
     if (!existsSync(candidatePath)) continue

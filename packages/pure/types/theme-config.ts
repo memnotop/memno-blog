@@ -22,7 +22,9 @@ export const ThemeConfigSchema = () =>
     since: z
       .number()
       .optional()
-      .describe('The year the site was established. If specified, the copyright year will be displayed as a range.'),
+      .describe(
+        'The year the site was established. If specified, the copyright year will be displayed as a range.'
+      ),
 
     /** Description metadata for your website. Can be used in page metadata. */
     description: z
@@ -136,7 +138,7 @@ export const ThemeConfigSchema = () =>
             /** Link URL */
             link: z.string().describe('Link URL'),
             /** Link style */
-            style: z.string().optional().describe('Link style'),
+            style: z.string().optional().describe('Link style')
           })
         )
         .optional()
@@ -168,14 +170,10 @@ export const ThemeConfigSchema = () =>
     content: z.object({
       externalLinks: z.object({
         /** Content to show for external links */
-        content: z
-          .string()
-          .optional()
-          .default(' ↗')
-          .describe('Content to show for external links'),
+        content: z.string().optional().default(' ↗').describe('Content to show for external links'),
         /** Properties for the external links element */
         properties: z
-          .record(z.string())
+          .record(z.string(), z.string())
           .optional()
           .describe('Properties for the external links element')
       }),

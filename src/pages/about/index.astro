@@ -1,11 +1,12 @@
 ---
-import { Content, frontmatter, getHeadings } from '../../data/pages/about.mdx'
 import PageLayout from '@/layouts/CommonPage.astro'
+
+import { Content, frontmatter, getHeadings } from '../../data/pages/about.mdx'
 
 const headings = getHeadings()
 ---
 
-<PageLayout title={frontmatter.title} {headings} comment>
+<PageLayout title={frontmatter.title} {headings}>
   {frontmatter.subtitle && <p class='text-muted-foreground'>{frontmatter.subtitle}</p>}
   <Content />
 </PageLayout>

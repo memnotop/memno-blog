@@ -8,10 +8,25 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const repoRoot = path.resolve(__dirname, '..')
 
-const candidateRoots = ['public/img', 'src/assets/projects', 'src/assets/tools', 'src/content']
-const extensionlessImageRoots = new Set(['public/img/covers'])
+const candidateRoots = [
+  'public/attachments',
+  'public/img',
+  'src/assets/projects',
+  'src/assets/tools',
+  'src/content'
+]
+const extensionlessImageRoots = new Set(['public/img/covers', 'public/img/photos'])
 const pngOptimizationPaths = ['public/images/social-card.png']
-const ignoredDirectories = new Set(['.astro', '.git', '.trash', 'dist', 'node_modules'])
+const ignoredDirectories = new Set([
+  '.astro',
+  '.git',
+  '.makemd',
+  '.obsidian',
+  '.trash',
+  '.vscode',
+  'dist',
+  'node_modules'
+])
 const rasterExtensions = new Set(['.png', '.jpg', '.jpeg'])
 const textExtensions = new Set([
   '.astro',
@@ -250,6 +265,15 @@ function buildReplacementPairs(textFileAbsolutePath: string, mapping: ImageMappi
     replacementPairs.set(sourcePublicPath, targetPublicPath)
   }
 
+  // Obsidian resolves attachment embeds by filename even when the file lives in
+  // public/attachments. Preserve that workflow when changing the extension.
+  if (mapping.sourceRelativePath.startsWith('public/attachments/')) {
+    replacementPairs.set(
+      path.basename(mapping.sourceRelativePath),
+      path.basename(mapping.targetRelativePath)
+    )
+  }
+
   replacementPairs.set(`/${mapping.sourceRelativePath}`, `/${mapping.targetRelativePath}`)
 
   const assetAliasPair = buildAliasPair(
@@ -272,6 +296,33 @@ async function collectTextFiles() {
   })
 }
 
+function replaceReference(
+  content: string,
+  sourceValue: string,
+  targetValue: string,
+  sourceIsExtensionless: boolean
+) {
+  if (!sourceIsExtensionless) return content.split(sourceValue).join(targetValue)
+
+  let cursor = 0
+  let nextContent = ''
+
+  while (cursor < content.length) {
+    const matchIndex = content.indexOf(sourceValue, cursor)
+    if (matchIndex === -1) return nextContent + content.slice(cursor)
+
+    nextContent += content.slice(cursor, matchIndex)
+    if (content.startsWith(targetValue, matchIndex)) {
+      nextContent += sourceValue
+    } else {
+      nextContent += targetValue
+    }
+    cursor = matchIndex + sourceValue.length
+  }
+
+  return nextContent
+}
+
 async function rewriteReferences(mappings: ImageMapping[]) {
   const textFiles = await collectTextFiles()
   let updatedFileCount = 0
@@ -281,11 +332,12 @@ async function rewriteReferences(mappings: ImageMapping[]) {
     let nextContent = originalContent
 
     for (const mapping of mappings) {
+      const sourceIsExtensionless = !path.extname(mapping.sourceRelativePath)
       const replacementPairs = buildReplacementPairs(textFileAbsolutePath, mapping)
       for (const [sourceValue, targetValue] of replacementPairs.entries()) {
         if (!sourceValue || sourceValue === targetValue) continue
         if (!nextContent.includes(sourceValue)) continue
-        nextContent = nextContent.split(sourceValue).join(targetValue)
+        nextContent = replaceReference(nextContent, sourceValue, targetValue, sourceIsExtensionless)
       }
     }
 

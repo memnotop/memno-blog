@@ -2,7 +2,6 @@
 import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
-import { Comment } from '@/components/waline'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -12,20 +11,18 @@ import '@/assets/styles/app.css'
 interface Props {
   meta: SiteMeta
   highlightColor?: string
-  comment?: boolean
 }
 
 const {
-  meta: { articleDate, description = config.description, ogImage, title },
+  meta: { description = config.description, modifiedDate, ogImage, publishedDate, title },
   highlightColor,
-  comment: enableComment = false,
   ...props
 } = Astro.props
 ---
 
 <html lang={config.locale.lang}>
   <head>
-    <BaseHead {articleDate} {description} {ogImage} {title} />
+    <BaseHead {description} {modifiedDate} {ogImage} {publishedDate} {title} />
     <ThemeProvider />
   </head>
 
@@ -39,13 +36,14 @@ const {
         />
       )
     }
-    <div class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'>
+    <div
+      class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
+    >
       <Header />
-      <div class="flex-1 w-full">
+      <div class='flex-1 w-full'>
         <slot />
-        {enableComment && <Comment class='mt-10 sm:mt-12' />}
       </div>
-      <Footer/>
+      <Footer />
     </div>
 
     {/* Set highlight color */}

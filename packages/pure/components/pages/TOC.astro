@@ -42,6 +42,8 @@ const toc = generateToc(headings)
     headings: HTMLElement[] = []
     tocLinks: TOCLink[] = []
     headingProgress: Record<string, HeadingProgress> = {}
+    animationFrameId: number | null = null
+    resizeObserver: ResizeObserver | null = null
 
     constructor() {
       super()
@@ -55,6 +57,15 @@ const toc = generateToc(headings)
         progressBar: link.previousElementSibling as HTMLElement,
         slug: (link.getAttribute('href') || '').substring(1)
       }))
+    }
+
+    scheduleUpdate = () => {
+      if (this.animationFrameId !== null) return
+
+      this.animationFrameId = window.requestAnimationFrame(() => {
+        this.animationFrameId = null
+        if (this.isConnected) this.updatePositionAndStyle()
+      })
     }
 
     updatePositionAndStyle = () => {
@@ -97,30 +108,55 @@ const toc = generateToc(headings)
       })
     }
 
+    handleLinkClick = (event: MouseEvent) => {
+      event.preventDefault()
+
+      const element = event.currentTarget as HTMLAnchorElement
+      const link = this.tocLinks.find(({ element: tocLink }) => tocLink === element)
+      if (!link) return
+
+      const directHeading = this.headings.find((heading) => heading.id === link.slug)
+      if (directHeading) {
+        history.pushState(null, directHeading.textContent || '', element.getAttribute('href'))
+        directHeading.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        console.warn(`No heading found for slug: ${link.slug}`)
+      }
+    }
+
     connectedCallback() {
       // Smooth scroll
       this.tocLinks.forEach((link) => {
-        link.element.addEventListener('click', (e) => {
-          e.preventDefault()
-          // Push the history to add the hash at the end of the URL
-          const directHeading = this.headings.find((heading) => heading.id === link.slug)
-          if (directHeading) {
-            // Push the history to add the hash at the end of the URL
-            history.pushState(
-              null,
-              directHeading.textContent || '',
-              link.element.getAttribute('href')
-            )
-            directHeading.scrollIntoView({ behavior: 'smooth' })
-          } else {
-            console.warn(`No heading found for slug: ${link.slug}`)
-          }
-        })
+        link.element.addEventListener('click', this.handleLinkClick)
       })
 
-      // Initial first and listen to scroll event
-      setInterval(this.updatePositionAndStyle, 100)
-      window.addEventListener('scroll', this.updatePositionAndStyle)
+      window.addEventListener('scroll', this.scheduleUpdate, { passive: true })
+      window.addEventListener('resize', this.scheduleUpdate)
+
+      const content = document.querySelector('#content')
+      if (content) {
+        this.resizeObserver = new ResizeObserver(this.scheduleUpdate)
+        this.resizeObserver.observe(content)
+        if (content.parentElement) this.resizeObserver.observe(content.parentElement)
+      }
+
+      this.scheduleUpdate()
+    }
+
+    disconnectedCallback() {
+      this.tocLinks.forEach((link) => {
+        link.element.removeEventListener('click', this.handleLinkClick)
+      })
+
+      window.removeEventListener('scroll', this.scheduleUpdate)
+      window.removeEventListener('resize', this.scheduleUpdate)
+      this.resizeObserver?.disconnect()
+      this.resizeObserver = null
+
+      if (this.animationFrameId !== null) {
+        window.cancelAnimationFrame(this.animationFrameId)
+        this.animationFrameId = null
+      }
     }
   }
 

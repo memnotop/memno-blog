@@ -2,27 +2,24 @@
 import { Image } from 'astro:assets'
 
 import { Quote } from 'astro-pure/advanced'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import LifeTable from '@/components/home/LifeTable.astro'
 import Section from '@/components/home/Section.astro'
-import { getArticlePosts } from '@/utils/blog'
+import { getSortedArticlePosts } from '@/utils/blog'
 import avatar from '@/assets/avatar.webp'
 import config from '@/site-config'
 
 import '@/assets/styles/mem-home.css'
 
-const allPosts = await getBlogCollection()
-const articlePosts = getArticlePosts(allPosts)
-const articlePostsByDate = sortMDByDate(articlePosts)
+const articlePosts = await getSortedArticlePosts()
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',
   day: 'numeric',
   year: 'numeric'
 })
-const latestPostDate =
-  articlePostsByDate[0]?.data.updatedDate ?? articlePostsByDate[0]?.data.publishDate
+const latestPostDate = articlePosts[0]?.data.updatedDate ?? articlePosts[0]?.data.publishDate
 const firstArticleDate = articlePosts.reduce<number | null>((earliest, post) => {
   const publishTime = new Date(post.data.publishDate).valueOf()
   if (!Number.isFinite(publishTime)) return earliest
@@ -40,71 +37,12 @@ const totalWords = articlePosts.reduce((sum, post) => {
   return sum + body.replace(/---[\s\S]*?---/, '').replace(/\s/g, '').length
 }, 0)
 
-const lifeExpectancyYears = 80
-const lifeGridTotal = 400
-const lifeBirthday = '2005-06-05'
-const lifeToday = new Date()
-const lifeTodayValue = [
-  lifeToday.getFullYear(),
-  String(lifeToday.getMonth() + 1).padStart(2, '0'),
-  String(lifeToday.getDate()).padStart(2, '0')
-].join('-')
-const lifeDayMs = 24 * 60 * 60 * 1000
-const lifeHourMs = 60 * 60 * 1000
-const lifeMinuteMs = 60 * 1000
-const lifeBirthdayParts = lifeBirthday.split('-').map(Number)
-const lifeBirthdayDate = new Date(
-  lifeBirthdayParts[0],
-  lifeBirthdayParts[1] - 1,
-  lifeBirthdayParts[2]
-)
-const getElapsedParts = (birthDate: Date, nowDate = new Date()) => {
-  const endDate = new Date(Math.max(nowDate.valueOf(), birthDate.valueOf()))
-  let years = endDate.getFullYear() - birthDate.getFullYear()
-  let cursor = new Date(birthDate)
-  cursor.setFullYear(birthDate.getFullYear() + years)
-
-  if (cursor > endDate) {
-    years -= 1
-    cursor = new Date(birthDate)
-    cursor.setFullYear(birthDate.getFullYear() + years)
-  }
-
-  let months = 0
-  while (true) {
-    const next = new Date(cursor)
-    next.setMonth(next.getMonth() + 1)
-    if (next > endDate) break
-    months += 1
-    cursor = next
-  }
-
-  const remaining = endDate.valueOf() - cursor.valueOf()
-  const days = Math.floor(remaining / lifeDayMs)
-  const hours = Math.floor((remaining % lifeDayMs) / lifeHourMs)
-  const minutes = Math.floor((remaining % lifeHourMs) / lifeMinuteMs)
-  const seconds = Math.floor((remaining % lifeMinuteMs) / 1000)
-
-  return { years, months, days, hours, minutes, seconds }
-}
-const lifeElapsedParts = getElapsedParts(lifeBirthdayDate)
-const lifeElapsedMs = Math.max(0, Date.now() - lifeBirthdayDate.valueOf())
-const lifeElapsedDays = Math.floor(lifeElapsedMs / lifeDayMs)
-const lifeTotalDays = Math.round(lifeExpectancyYears * 365.2425)
-const lifeRatio = Math.min(Math.max(lifeElapsedMs / (lifeTotalDays * lifeDayMs), 0), 1)
-const lifeFilledCells = Math.min(Math.floor(lifeRatio * lifeGridTotal), lifeGridTotal)
-const lifePercent = lifeRatio * 100
-const lifeTotalMonths = lifeElapsedParts.years * 12 + lifeElapsedParts.months
-const lifeTotalHours = Math.floor(lifeElapsedMs / lifeHourMs)
-const lifeTotalMinutes = Math.floor(lifeElapsedMs / lifeMinuteMs)
-const lifeTotalSeconds = Math.floor(lifeElapsedMs / 1000)
-
 const githubUsername = 'memnotop'
 const githubUrl = `https://github.com/${githubUsername}`
 const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9' comment>
+<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='mem-home flex w-full flex-col items-center'>
     <section
       class='mem-hero animate mb-12 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:gap-10'
@@ -181,7 +119,7 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
         <div class='mem-contribution'>
           <div class='mem-total-posts'>
             <span>Total Posts</span>
-            <strong>{allPosts.length}</strong>
+            <strong>{articlePosts.length}</strong>
           </div>
           <div class='mem-contribution-head'>
             <span>GitHub contributions in the last year</span>
@@ -215,410 +153,7 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
         </div>
       </Section>
 
-      <Section title='Life Table' class='mem-centered-section mem-life-section'>
-        <div
-          class='mem-life-count'
-          data-life-count
-          data-birthday={lifeBirthday}
-          data-total-years={lifeExpectancyYears}
-          data-total-cells={lifeGridTotal}
-          style={`--life-fill: ${lifePercent.toFixed(2)}%`}
-        >
-          <div class='mem-life-overview'>
-            <div class='mem-life-overview-main'>
-              <span class='mem-life-kicker'>请填写你的生日</span>
-              <label class='mem-life-birthday'>
-                <input
-                  type='date'
-                  value={lifeBirthday}
-                  min='1900-01-01'
-                  max={lifeTodayValue}
-                  data-life-birthday-input
-                  aria-label='请填写你的生日'
-                />
-              </label>
-            </div>
-            <p>
-              以 {lifeExpectancyYears} 岁为尺度，把时间拆成 {lifeGridTotal} 个方块。
-            </p>
-          </div>
-
-          <div class='mem-life-main'>
-            <div class='mem-life-copy'>
-              <h3>你的人生小格</h3>
-              <p>绿色为已经走过的时间，其他颜色是对余下时间的粗略估算。</p>
-            </div>
-            <div
-              class='mem-life-grid'
-              data-life-grid
-              role='img'
-              aria-label={`${lifeElapsedDays.toLocaleString('en')} days lived, ${lifeFilledCells} of ${lifeGridTotal} squares filled`}
-            ></div>
-            <p class='mem-life-foot' aria-live='polite'>
-              <span>
-                <strong data-life-squares>{lifeFilledCells}</strong> / {lifeGridTotal} 方块
-              </span>
-              <span>
-                <strong data-life-days>{lifeElapsedDays.toLocaleString('en')}</strong> 天
-              </span>
-            </p>
-          </div>
-
-          <div
-            class='mem-life-liquid'
-            role='img'
-            aria-label={`${lifePercent.toFixed(2)} percent of the ${lifeExpectancyYears}-year scale has passed`}
-          >
-            <div class='mem-life-liquid-head'>
-              <h3>你的人生已经过去了</h3>
-              <strong data-life-percent>{lifePercent.toFixed(2)}%</strong>
-            </div>
-            <div class='mem-life-liquid-panel'>
-              <div class='mem-life-liquid-face'>
-                <span>人生已经过去</span>
-                <strong data-life-percent-face>{lifePercent.toFixed(0)}%</strong>
-              </div>
-              <div class='mem-life-liquid-water' aria-hidden='true'>
-                <svg
-                  class='mem-life-liquid-wave'
-                  viewBox='0 0 240 72'
-                  preserveAspectRatio='none'
-                  focusable='false'
-                  aria-hidden='true'
-                >
-                  <path
-                    class='mem-life-liquid-wave-back'
-                    d='M-60 42 C-20 30 20 54 60 42 S140 30 180 42 S260 54 300 42 V120 H-60 Z'
-                  ></path>
-                  <path
-                    class='mem-life-liquid-wave-front'
-                    d='M-60 36 C-20 24 20 48 60 36 S140 24 180 36 S260 48 300 36 V120 H-60 Z'
-                  ></path>
-                </svg>
-              </div>
-              <div class='mem-life-liquid-stats'>
-                <span>
-                  <strong data-life-years-total>{lifeElapsedParts.years}</strong>
-                  <small>年</small>
-                </span>
-                <span>
-                  <strong data-life-months-total>{lifeTotalMonths}</strong>
-                  <small>月</small>
-                </span>
-                <span>
-                  <strong data-life-days-total>{lifeElapsedDays}</strong>
-                  <small>天</small>
-                </span>
-                <span>
-                  <strong data-life-hours-total>{lifeTotalHours}</strong>
-                  <small>小时</small>
-                </span>
-                <span>
-                  <strong data-life-minutes-total>{lifeTotalMinutes}</strong>
-                  <small>分钟</small>
-                </span>
-                <span>
-                  <strong data-life-seconds-total>{lifeTotalSeconds}</strong>
-                  <small>秒</small>
-                </span>
-              </div>
-            </div>
-            <p>
-              <span data-life-age>
-                {lifeElapsedParts.years} 年 {lifeElapsedParts.months} 月 {lifeElapsedParts.days} 天
-              </span>
-              <span>{lifeExpectancyYears} 岁人生尺度</span>
-            </p>
-          </div>
-
-          <div class='mem-life-note'>
-            <p class='mem-life-note-kicker'>参考说明</p>
-            <h4>假设我们的寿命是 {lifeExpectancyYears} 岁，分为 {lifeGridTotal} 个方块。</h4>
-            <ul class='mem-life-legend'>
-              <li>
-                <span class='is-lived'></span>
-                你已经走过的生命
-              </li>
-              <li>
-                <span class='is-sleep'></span>
-                余下生命里睡眠占用的时间
-              </li>
-              <li>
-                <span class='is-work'></span>
-                退休前每天工作 8 小时占用的时间
-              </li>
-              <li>
-                <span class='is-retire'></span>
-                65 岁，退休节点
-              </li>
-              <li>
-                <span class='is-child'></span>
-                如果 28 岁生孩子，孩子 18 岁前每天陪伴 5 小时
-              </li>
-              <li>
-                <span class='is-parent'></span>
-                如果每年陪父母一个月，这是你剩余生命里的陪伴时间
-              </li>
-              <li>
-                <span class='is-left'></span>
-                除了以上之外，剩下的所有日子
-              </li>
-            </ul>
-            <p class='mem-life-note-foot'>数据只做视觉估算，重点是把时间看见。</p>
-          </div>
-        </div>
-      </Section>
+      <LifeTable />
     </div>
   </main>
 </PageLayout>
-
-<script is:inline>
-  ;(() => {
-    const roots = document.querySelectorAll('[data-life-count]')
-    if (!roots.length) return
-
-    const toLocalDate = (value) => {
-      const parts = value.split('-').map(Number)
-      if (parts.length !== 3 || parts.some((part) => !Number.isFinite(part))) return null
-
-      const date = new Date(parts[0], parts[1] - 1, parts[2])
-      if (
-        date.getFullYear() !== parts[0] ||
-        date.getMonth() !== parts[1] - 1 ||
-        date.getDate() !== parts[2]
-      ) {
-        return null
-      }
-
-      date.setHours(0, 0, 0, 0)
-      return date
-    }
-    const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
-    const day = 24 * 60 * 60 * 1000
-    const hour = 60 * 60 * 1000
-    const minute = 60 * 1000
-    const year = 365.2425 * day
-    const numberFormatter = new Intl.NumberFormat('en')
-    const storageKey = 'memno-life-birthday'
-
-    const getSavedBirthday = () => {
-      try {
-        return window.localStorage.getItem(storageKey)
-      } catch {
-        return null
-      }
-    }
-
-    const saveBirthday = (value) => {
-      try {
-        window.localStorage.setItem(storageKey, value)
-      } catch {
-        // Ignore storage errors; the input still works for this page view.
-      }
-    }
-
-    const toDateInputValue = (date) =>
-      [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, '0'),
-        String(date.getDate()).padStart(2, '0')
-      ].join('-')
-
-    const getElapsedParts = (from, to) => {
-      const cursor = new Date(from)
-      let years = to.getFullYear() - from.getFullYear()
-      cursor.setFullYear(from.getFullYear() + years)
-
-      if (cursor > to) {
-        years -= 1
-        cursor.setFullYear(from.getFullYear() + years)
-      }
-
-      let months = 0
-      while (months < 12) {
-        const next = new Date(cursor)
-        next.setMonth(cursor.getMonth() + 1)
-        if (next > to) break
-        cursor.setTime(next.getTime())
-        months += 1
-      }
-
-      const days = Math.floor(Math.max(0, to.getTime() - cursor.getTime()) / day)
-      cursor.setDate(cursor.getDate() + days)
-      const hours = Math.floor(Math.max(0, to.getTime() - cursor.getTime()) / (60 * 60 * 1000))
-      cursor.setHours(cursor.getHours() + hours)
-      const minutes = Math.floor(Math.max(0, to.getTime() - cursor.getTime()) / (60 * 1000))
-      cursor.setMinutes(cursor.getMinutes() + minutes)
-      const seconds = Math.floor(Math.max(0, to.getTime() - cursor.getTime()) / 1000)
-
-      return { years, months, days, hours, minutes, seconds }
-    }
-
-    roots.forEach((root) => {
-      const days = root.querySelector('[data-life-days]')
-      const squares = root.querySelector('[data-life-squares]')
-      const yearsTotal = root.querySelector('[data-life-years-total]')
-      const monthsTotal = root.querySelector('[data-life-months-total]')
-      const daysTotal = root.querySelector('[data-life-days-total]')
-      const hoursTotal = root.querySelector('[data-life-hours-total]')
-      const minutesTotal = root.querySelector('[data-life-minutes-total]')
-      const secondsTotal = root.querySelector('[data-life-seconds-total]')
-      const grid = root.querySelector('[data-life-grid]')
-      const percent = root.querySelector('[data-life-percent]')
-      const percentFace = root.querySelector('[data-life-percent-face]')
-      const age = root.querySelector('[data-life-age]')
-      const liquid = root.querySelector('.mem-life-liquid')
-      const birthdayInput = root.querySelector('[data-life-birthday-input]')
-      const totalCells = Number(root.dataset.totalCells) || 400
-      const defaultYears = Number(root.dataset.totalYears) || 80
-      let cells = []
-
-      if (grid) {
-        cells = Array.from(grid.querySelectorAll('[data-life-cell]'))
-
-        if (!cells.length) {
-          const fragment = document.createDocumentFragment()
-
-          for (let index = 0; index < totalCells; index += 1) {
-            const cell = document.createElement('span')
-            cell.dataset.lifeCell = ''
-            cell.dataset.index = String(index)
-            cell.setAttribute('aria-hidden', 'true')
-            fragment.append(cell)
-          }
-
-          grid.append(fragment)
-          cells = Array.from(grid.querySelectorAll('[data-life-cell]'))
-        }
-      }
-
-      const savedBirthday = getSavedBirthday()
-      let birthDate = toLocalDate(savedBirthday || '') || toLocalDate(root.dataset.birthday || '')
-
-      if (birthdayInput && birthDate) {
-        birthdayInput.value = toDateInputValue(birthDate)
-      }
-
-      const cellStateClasses = [
-        'is-lived',
-        'is-sleep',
-        'is-work',
-        'is-child',
-        'is-parent',
-        'is-retire',
-        'is-left'
-      ]
-      const clearCellState = (cell) => {
-        cell.classList.remove(...cellStateClasses)
-      }
-
-      const setBirthday = (value, persist = true) => {
-        const nextBirthDate = toLocalDate(value)
-        if (!nextBirthDate || nextBirthDate > new Date()) {
-          if (birthdayInput) birthdayInput.setAttribute('aria-invalid', 'true')
-          return
-        }
-
-        const nextValue = toDateInputValue(nextBirthDate)
-        birthDate = nextBirthDate
-        root.dataset.birthday = nextValue
-        if (birthdayInput) {
-          birthdayInput.value = nextValue
-          birthdayInput.removeAttribute('aria-invalid')
-        }
-        if (persist) saveBirthday(nextValue)
-        render()
-      }
-
-      const render = () => {
-        if (!birthDate || !days || !grid) return
-
-        const now = new Date()
-        const elapsedMs = Math.max(0, now.getTime() - birthDate.getTime())
-        const elapsedDays = Math.floor(elapsedMs / day)
-        const totalYears = clamp(defaultYears, 1, 120)
-        const totalDays = Math.round(totalYears * 365.2425)
-        const ratio = clamp(elapsedMs / (totalDays * day), 0, 1)
-        const livedCells = Math.min(Math.floor(ratio * totalCells), totalCells)
-        const cellsPerYear = totalCells / totalYears
-        const ageYears = Math.min(elapsedMs / year, totalYears)
-        const remainingYears = Math.max(0, totalYears - ageYears)
-        const retireAge = 65
-        const retireCell = Math.min(
-          totalCells - 1,
-          Math.round((retireAge / totalYears) * totalCells)
-        )
-        const sleepCells = Math.round((remainingYears / 3) * cellsPerYear)
-        const workCells = Math.round((Math.max(0, retireAge - ageYears) / 3) * cellsPerYear)
-        const childCells = Math.round(18 * (5 / 24) * cellsPerYear)
-        const parentCells = Math.round((remainingYears / 12) * cellsPerYear)
-
-        const getCellClass = (index) => {
-          if (index < livedCells) return 'is-lived'
-          if (index === retireCell) return 'is-retire'
-
-          let cursor = livedCells
-          if (index < cursor + sleepCells) return 'is-sleep'
-          cursor += sleepCells
-          if (index < cursor + workCells) return 'is-work'
-          cursor += workCells
-          if (index < cursor + childCells) return 'is-child'
-          cursor += childCells
-          if (index < cursor + parentCells) return 'is-parent'
-          return 'is-left'
-        }
-
-        cells.forEach((cell, index) => {
-          clearCellState(cell)
-          cell.classList.add(getCellClass(index))
-        })
-
-        const filledCells = Math.min(livedCells, totalCells)
-        const dayText = numberFormatter.format(Math.min(elapsedDays, totalDays))
-        const parts = getElapsedParts(birthDate, now)
-        const percentText = `${(ratio * 100).toFixed(2)}%`
-        const displayFill = percentText
-        const totalMonths = parts.years * 12 + parts.months
-
-        if (squares) squares.textContent = String(filledCells)
-        if (yearsTotal) yearsTotal.textContent = numberFormatter.format(parts.years)
-        if (monthsTotal) monthsTotal.textContent = String(totalMonths)
-        if (daysTotal) daysTotal.textContent = String(Math.min(elapsedDays, totalDays))
-        if (hoursTotal) hoursTotal.textContent = String(Math.floor(elapsedMs / hour))
-        if (minutesTotal) {
-          minutesTotal.textContent = String(Math.floor(elapsedMs / minute))
-        }
-        if (secondsTotal) {
-          secondsTotal.textContent = String(Math.floor(elapsedMs / 1000))
-        }
-        if (percent) percent.textContent = percentText
-        if (percentFace) percentFace.textContent = `${Math.round(ratio * 100)}%`
-        if (age) {
-          age.textContent = `${parts.years} 年 ${parts.months} 月 ${parts.days} 天`
-        }
-
-        days.textContent = dayText
-        root.style.setProperty('--life-fill', displayFill)
-        grid.setAttribute(
-          'aria-label',
-          `${dayText} 天已经过去，${filledCells} / ${totalCells} 个方块已填充`
-        )
-        if (liquid) {
-          liquid.setAttribute('aria-label', `${totalYears} 岁人生尺度中已经过去 ${percentText}`)
-        }
-      }
-
-      if (birthdayInput) {
-        birthdayInput.addEventListener('input', () => {
-          if (birthdayInput.value.length === 10) setBirthday(birthdayInput.value)
-        })
-        birthdayInput.addEventListener('change', () => {
-          setBirthday(birthdayInput.value)
-        })
-      }
-
-      render()
-      window.setInterval(render, 1000)
-    })
-  })()
-</script>

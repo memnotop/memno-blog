@@ -1,3 +1,9 @@
 node_modules/**
-src/icons/**
+.astro/**
+dist/**
+.obsidian/**
+packages/pure/**
 public/scripts/*
+source/**
+src/content/**
+src/data/**

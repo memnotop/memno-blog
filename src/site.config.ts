@@ -1,5 +1,6 @@
-import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 import { loadEnv } from 'vite'
+
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 export type BlogTopicSourceField = 'tags' | 'repositories'
 
@@ -60,6 +61,32 @@ export function getBlogTopic(slug: string) {
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), 'PUBLIC_')
 const walineServer = (process.env.PUBLIC_WALINE_SERVER ?? env.PUBLIC_WALINE_SERVER ?? '').trim()
+const footerQuotes = [
+  '保持平静，保持向外的爱，活在当下。',
+  '好好活就是有意义，有意义就是好好活。',
+  '非淡薄无以明志，非宁静无以致远。',
+  '自尊而不自大。',
+  '持而盈之，不如其已；揣而锐之，不可长保。',
+  '自强不息。',
+  '挫其锐，解其纷，和其光，同其尘。',
+  '咕咕嘎嘎。',
+  '后其身而身先，外其身而身存。',
+  '温故而知新，敦厚以崇礼。 ',
+  '如切如磋，如琢如磨。',
+  '放下生活中的功利心，虚荣心，不必强求，只是经历过程。',
+  '唯之与阿，相去几何？美之与恶，相去若何？',
+  '虚其心，实其腹；弱其志，强其骨。',
+  '上士闻道，勤而行之。',
+  '曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。',
+  '甚爱必大废，多藏必厚亡。'
+]
+
+function createRandomQuoteTarget(quotes: string[]) {
+  return `() => {
+    const quotes = ${JSON.stringify(quotes)}
+    return quotes[Math.floor(Math.random() * quotes.length)] || ''
+  }`
+}
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -114,7 +141,7 @@ export const theme: ThemeUserConfig = {
         link: '/blog',
         children: [
           ...blogTopics.map(({ slug, title }) => ({ title, link: `/blog/${slug}` })),
-          { title: 'Training', link: '/training' },
+          { title: 'Training', link: '/training' }
         ]
       },
       { title: 'Notes', link: '/notes', description: 'Short dated thoughts' },
@@ -125,8 +152,7 @@ export const theme: ThemeUserConfig = {
         title: 'Travelling',
         link: 'https://www.travellings.cn/go',
         description: '随机去往他人博客'
-      },
-
+      }
     ]
   },
 
@@ -171,42 +197,13 @@ export const theme: ThemeUserConfig = {
 }
 
 export const integ: IntegrationUserConfig = {
-  // Links management
-  // See: https://astro-pure.js.org/docs/integrations/links
-  links: {
-    // Links page content now lives in `src/data/pages/links.mdx`.
-    logbook: [],
-    applyTip: [],
-    // Cache avatars in `public/avatars/` to improve user experience.
-    cacheAvatar: false,
-  },
   // Enable page search function
   pagefind: true,
   // Add a random quote to the footer (default on homepage footer)
   // See: https://astro-pure.js.org/docs/integrations/advanced#web-content-render
   quote: {
     server: 'data:application/json,{}',
-    target: `() => {
-      const quotes = 
-      ['保持平静，保持向外的爱，活在当下。', 
-      '好好活就是有意义，有意义就是好好活。',
-      '非淡薄无以明志，非宁静无以致远。',
-      '自尊而不自大。',
-      '持而盈之，不如其已；揣而锐之，不可长保。',
-      '自强不息。',
-      '挫其锐，解其纷，和其光，同其尘。',
-      '咕咕嘎嘎。',
-      '后其身而身先，外其身而身存。',
-      '温故而知新，敦厚以崇礼。 ',
-      '如切如磋，如琢如磨。',
-      '放下生活中的功利心，虚荣心，不必强求，只是经历过程。',
-      '唯之与阿，相去几何？美之与恶，相去若何？',
-      '虚其心，实其腹；弱其志，强其骨。',
-      '上士闻道，勤而行之。',
-      '曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。'
-      ]
-      return quotes[Math.floor(Math.random() * quotes.length)] || ''
-    }`
+    target: createRandomQuoteTarget(footerQuotes)
     // https://github.com/lukePeavey/quotable
     // server: 'https://api.quotable.io/quotes/random?maxLength=60',
     // target: `(data) => data[0].content || 'Error'`

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 // Astro
 import type { AstroIntegration, RehypePlugins, RemarkPlugins } from 'astro'
 // Integrations
+import { isUnifiedProcessor, unified } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import UnoCSS from 'unocss/astro'
@@ -16,15 +17,14 @@ import { UserConfigSchema, type UserInputConfig } from './types/user-config'
 import { parseWithFriendlyErrors } from './utils/error-map'
 
 export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegration {
-  let integrations: AstroIntegration[] = []
-  let remarkPlugins: RemarkPlugins = []
-  let rehypePlugins: RehypePlugins = []
+  const integrations: AstroIntegration[] = []
+  const remarkPlugins: RemarkPlugins = []
+  const rehypePlugins: RehypePlugins = []
   return {
     name: 'astro-pure',
     hooks: {
       'astro:config:setup': async ({ config, updateConfig }) => {
-        let userConfig = parseWithFriendlyErrors(
-          // @ts-ignore
+        const userConfig = parseWithFriendlyErrors(
           UserConfigSchema,
           opts,
           'Invalid config passed to astro-pure integration'
@@ -70,14 +70,26 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         const selfIndex = config.integrations.findIndex((i) => i.name === 'astro-pure')
         config.integrations.splice(selfIndex + 1, 0, ...integrations)
 
+        const configuredProcessor = config.markdown.processor
+        const configuredProcessorOptions =
+          configuredProcessor && isUnifiedProcessor(configuredProcessor)
+            ? configuredProcessor.options
+            : {
+                remarkPlugins: [],
+                rehypePlugins: [],
+                remarkRehype: {}
+              }
+
         updateConfig({
           vite: {
-            // @ts-ignore
             plugins: [vitePluginUserConfig(userConfig, config)]
           },
           markdown: {
-            remarkPlugins: [...(config.markdown.remarkPlugins || []), ...remarkPlugins],
-            rehypePlugins: [...(config.markdown.rehypePlugins || []), ...rehypePlugins]
+            processor: unified({
+              ...configuredProcessorOptions,
+              remarkPlugins: [...configuredProcessorOptions.remarkPlugins, ...remarkPlugins],
+              rehypePlugins: [...configuredProcessorOptions.rehypePlugins, ...rehypePlugins]
+            })
             // rehypePlugins: [rehypeRtlCodeSupport()],
             // shikiConfig:
             // Configure Shiki theme if the user is using the default github-dark theme.
@@ -94,12 +106,28 @@ export default function AstroPureIntegration(opts: UserInputConfig): AstroIntegr
         const targetDir = fileURLToPath(dir)
         const cwd = dirname(fileURLToPath(import.meta.url))
         const relativeDir = relative(cwd, targetDir)
-        return new Promise<void>((resolve) => {
-          spawn('npx', ['-y', 'pagefind', '--site', relativeDir], {
+        return new Promise<void>((resolve, reject) => {
+          const pagefind = spawn('npx', ['-y', 'pagefind', '--site', relativeDir], {
             stdio: 'inherit',
             shell: true,
             cwd
-          }).on('close', () => resolve())
+          })
+
+          pagefind.on('error', reject)
+          pagefind.on('close', (code, signal) => {
+            if (code === 0) {
+              resolve()
+              return
+            }
+
+            reject(
+              new Error(
+                `Pagefind exited unsuccessfully${
+                  signal ? ` after signal ${signal}` : ` with code ${code ?? 'unknown'}`
+                }.`
+              )
+            )
+          })
         })
       }
     }

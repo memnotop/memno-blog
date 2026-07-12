@@ -18,7 +18,7 @@ draft: false
 
 ## 基本电流镜
 
-![[Pasted image 20260624202351.png]]
+![[Pasted image 20260624202351.webp]]
 
 作用在 $M_2$ 栅级的 $V_{G2}=V_{DS1}=V_{GS1}$ ，所以$V_{GS2}=V_{GS1}=f^{-1}(I_{REF})$
 
@@ -36,7 +36,7 @@ $I_{out}=\frac{1}{2}\mu_{n}C_{ox}(\frac{W}{L})_{2}(V_{GS}-V_{TH})^{2}$
 
 **图例**
 
-![[Pasted image 20260624204110.png]]
+![[Pasted image 20260624204110.webp]]
 
 吃透这两个图。
 
@@ -59,7 +59,7 @@ $I_{D}=\frac{1}{2}\mu_{n}C_{ox}(\frac{W}{L})_{1}(V_{GS}-V_{TH})^{2}(1+\lambda V_
 
 在第三章中我们知道，共源共栅器件可以屏蔽电流源
 
-![[Pasted image 20260625081643.png]]
+![[Pasted image 20260625081643.webp]]
 
 在图（a）中，即使 $V_{P}$ 变化很大，$V_{Y}$ 仍保持相对不变。
 
@@ -73,13 +73,13 @@ $I_{D}=\frac{1}{2}\mu_{n}C_{ox}(\frac{W}{L})_{1}(V_{GS}-V_{TH})^{2}(1+\lambda V_
 
 P 点允许的最小电压为 $V_{N}-V_{TH}=V_{GS0}+V_{GS1}-V_{TH}=(V_{GS0}-V_{TH})+(V_{GS1}-V_{TH})+V_{TH}$
 
-![[Pasted image 20260625091042.png]] 
+![[Pasted image 20260625091042.webp]]
 
 （a）不精确但是最低电平更低，（b）更精确但是电压的余量小。
 
 ### 方法二：迫使 $V_{DS1}=V_{DS2}$
 
-![[Pasted image 20260625151706.png]]
+![[Pasted image 20260625151706.webp]]
 
 可以看出，若 $V_{GS0}=V_{GS3}$，则可以迫使 $V_{DS1}=V_{DS2}$
 
@@ -91,7 +91,7 @@ $M_{0}$ 在饱和区要求 $V_{b}-V_{TH0}\le V_{X}(=V_{GS1})$，所以 $V_{GS1}-
 
 ### 无源负载差动对
 
-![[Pasted image 20260625164001.png]]
+![[Pasted image 20260625164001.webp]]
 
 $I_{out}$ 由 M 1 和 M 2 同时产生，各有一半的功劳。所以 $G_{m}=\frac{I_{out}}{V_{in}}=(g_{m1}V_{in}/2)/V_{in}=g_{m1}/2$
 
@@ -103,7 +103,7 @@ $I_{out}$ 由 M 1 和 M 2 同时产生，各有一半的功劳。所以 $G_{m}=\
 
 ### 五管 OTA
 
-![[Pasted image 20260626105339.png]]
+![[Pasted image 20260626105339.webp]]
 
 
 当 $V_{in1}=V_{in2}$ 时，假设电路完全对称，则 $V_{out}=V_{F}=V_{DD}-|V_{GS3}|$
@@ -131,5 +131,3 @@ $R_{out}\approx r_{o2}||r_{o4}$，故而 $A_{v}=G_{m}R_{out}=g_{m1}\cdot(r_{o2}|
 $A_{V,CM}=\frac{\Delta V_{out}}{\Delta V_{in,CM}}=-\frac{(\frac{1}{g_{m3}}||r_{o3})}{(\frac{1}{g_{m3}}+2R_{SS})}\approx -\frac{1}{1+2g_{m}R_{SS}}\frac{g_{m1}}{g_{m3}}$
 
 $CMRR = |\frac{A_{V,DM}}{A_{V,CM}}|=(1+2g_{m1,2}R_{SS})g_{m3,4}(r_{o1,2}||r_{o3,4})$
-
-

@@ -188,7 +188,7 @@ async function loadDatabase(): Promise<ArticleDatabase> {
   try {
     const content = await fs.readFile(DATABASE_FILE, 'utf-8')
     return JSON.parse(content)
-  } catch (error) {
+  } catch {
     infoLog('Creating new database...')
     return {}
   }
@@ -303,7 +303,9 @@ async function main(): Promise<void> {
     const database = await loadDatabase()
 
     const markdownFiles = await collectMarkdownFiles(CONTENT_DIR)
-    const relativeMarkdownFiles = markdownFiles.map((filePath) => path.relative(CONTENT_DIR, filePath))
+    const relativeMarkdownFiles = markdownFiles.map((filePath) =>
+      path.relative(CONTENT_DIR, filePath)
+    )
 
     infoLog(`Found ${relativeMarkdownFiles.length} markdown files`)
 

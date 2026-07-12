@@ -9,10 +9,17 @@ import { Button, FormattedDate, Icon } from '../user'
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   post: CollectionEntry<CollectionKey>
   detailed?: boolean
+  imageLoading?: 'eager' | 'lazy'
   class?: string
 }
 
-const { as: Tag = 'div', post, detailed = false, class: className } = Astro.props
+const {
+  as: Tag = 'div',
+  post,
+  detailed = false,
+  imageLoading = 'lazy',
+  class: className
+} = Astro.props
 
 const { id, data } = post
 const heroImage = data.heroImageSrc
@@ -26,7 +33,7 @@ const heroImage = data.heroImageSrc
 const showHeroImage = !!heroImage && data.showHeroImage !== false
 
 const { remarkPluginFrontmatter } = await render(post)
-const postDate = data.updatedDate ?? data.publishDate
+const postDate = data.updatedDate || data.publishDate
 ---
 
 <li
@@ -54,7 +61,10 @@ const postDate = data.updatedDate ?? data.publishDate
         <Image
           alt={data.heroImageAlt || data.title}
           class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover/card:opacity-70 md:h-full md:w-3/5'
-          loading='eager'
+          loading={imageLoading}
+          fetchpriority={imageLoading === 'eager' ? 'high' : 'auto'}
+          sizes='(max-width: 767px) calc(100vw - 2rem), 42rem'
+          widths={[360, 600, 900]}
           {...heroImage}
         />
       )
@@ -65,7 +75,7 @@ const postDate = data.updatedDate ?? data.publishDate
     <Tag class='z-10 flex-grow'>
       {/* title */}
       <div class='flex justify-between'>
-        <div class={detailed && 'font-medium'}>
+        <div class={detailed ? 'font-medium' : undefined}>
           {data.draft && <span class='text-red-500'>(Draft) </span>}
           {data.title}
         </div>

@@ -1,16 +1,14 @@
 ---
 import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
+import { groupCollectionsByYear } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { getArticlePosts } from '@/utils/blog'
+import { getSortedArticlePosts } from '@/utils/blog'
 
 export const prerender = true
 
-const allPosts = await getBlogCollection()
-const archivePosts = getArticlePosts(allPosts)
-const allPostsByDate = sortMDByDate(archivePosts)
-const allPostsByYear = groupCollectionsByYear(allPostsByDate)
+const archivePosts = await getSortedArticlePosts()
+const allPostsByYear = groupCollectionsByYear(archivePosts)
 
 const meta = {
   description: 'A list of all the years of creating my posts',
@@ -18,7 +16,7 @@ const meta = {
 }
 ---
 
-<PageLayout {meta} comment>
+<PageLayout {meta}>
   <Button title='Back' href='/blog' variant='back' />
 
   <main class='mt-6 lg:mt-10'>

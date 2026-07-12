@@ -28,7 +28,7 @@ draft: false
 
 ## 需要掌握的放大器类型
 
-![[Pasted image 20260616164213.png]]
+![[Pasted image 20260616164213.webp]]
 
 ## 共源极
 **电压**---跨导--->**电流**---电阻--->**电压**
@@ -37,17 +37,17 @@ draft: false
 
 $V_{in}-V_{out}曲线$
 
-![[Pasted image 20260616164919.png]]
+![[Pasted image 20260616164919.webp]]
 
 需要工作在饱和区，若不在饱和区：
 
-![[Pasted image 20260616165040.png]]
+![[Pasted image 20260616165040.webp]]
 
 增益 $A_{v}$ 会下降
 
 饱和区的范围
 
-![[Pasted image 20260618085226.png]]
+![[Pasted image 20260618085226.webp]]
 
 饱和区时，沟道被夹断，$V_{DS}>=V_{GS}-V_{TH}$，其中，$V_{DS}$ 是 $V_{out}$ ，$V_{GS}$ 是 $V_{in}$
 
@@ -67,13 +67,13 @@ $A_{v}=\frac{\partial V_{out}}{\partial V_{in}}=-\frac{\mu_{n}C_{ox}（\frac{W}{
 
 两者图像为：
 
-![[Pasted image 20260618092815.png]]
+![[Pasted image 20260618092815.webp]]
 
 其中 $V_{in1}$ 是饱和区和线性区的分界
 
 **小信号分析**
 
-![[Pasted image 20260618110824.png]]
+![[Pasted image 20260618110824.webp]]
 
 ### 二极管负载
 
@@ -81,13 +81,13 @@ $A_{v}=\frac{\partial V_{out}}{\partial V_{in}}=-\frac{\mu_{n}C_{ox}（\frac{W}{
 
 测量等效阻抗
 
-![[Pasted image 20260618114920.png]]
+![[Pasted image 20260618114920.webp]]
 
 可知，$\frac{V_{X}}{I_{X}}=\frac{1}{g_{m}}||r_{o}\approx \frac{1}{g_{m}}$
 
 考虑到体效应
 
-![[Pasted image 20260618115839.png]]
+![[Pasted image 20260618115839.webp]]
 
 $V_{1}=-V_{x}$
 
@@ -119,7 +119,7 @@ $A_{v}=-\frac{\sqrt{2\mu_{n}C_{ox}(W/L)_{1}I_{D1}}}{\sqrt{2\mu_{n}C_{ox}(W/L)_{2
 
 **增益的偏导推导**
 
-![[Pasted image 20260618152146.png]]
+![[Pasted image 20260618152146.webp]]
 
 电流相等：
 
@@ -137,7 +137,7 @@ $\sqrt{(\frac{W}{L})_{1}}=\sqrt{(\frac{W}{L})_{2}}(-\frac{\partial V_{out}}{\par
 
 链式法则：
 
-![[Pasted image 20260618153446.png]]
+![[Pasted image 20260618153446.webp]]
 
 最终依然有
 
@@ -145,14 +145,14 @@ $A_{v}=-\sqrt{\frac{(W/L)_{1}}{(W/L)_{2}}}\frac{1}{1+\eta}$
 
 **输入输出分析**
 
-![[Pasted image 20260618154022.png]]
+![[Pasted image 20260618154022.webp]]
 
 分为三个阶段，$V_{in}<V_{TH1}$ 时，$V_{out}=V_{DD}-V_{TH2}$；$V_{TH1}<V_{in}<V_{out}+V_{TH1}$ 时，$V_{out}$ 近似线性变化；$V_{in}>V_{out}+V_{TH1}$ 进入线性区，呈非线性变化。
 
 
 ### 电流源负载
 
-![[Pasted image 20260618155456.png]]
+![[Pasted image 20260618155456.webp]]
 
 从 $V_{out}$ 看输出阻抗：
 
@@ -166,7 +166,7 @@ $A_{v}=-g_{m1}(r_{o1}||r_{o2})$
 
 输出电压的摆幅
 
-![[Pasted image 20260619111332.png]] 
+![[Pasted image 20260619111332.webp]]
 
 当 $V_{in}$ 下降到接近 $V_{TH1}$ 时，最大输出电阻接近 $V_{DD}$ 或 $V_{DD}-|V_{GS2}-V_{TH2}|$
 
@@ -174,7 +174,7 @@ $A_{v}=-g_{m1}(r_{o1}||r_{o2})$
 
 ### 有源负载
 
-![[Pasted image 20260619111905.png]]
+![[Pasted image 20260619111905.webp]]
 
 $V_{in}$ 增加会产生两个变化：
 
@@ -194,7 +194,7 @@ $V_{in}$ 增加会产生两个变化：
 
 ### 带源极负反馈
 
-![[Pasted image 20260620155113.png]]
+![[Pasted image 20260620155113.webp]]
 
 等效跨导：
 
@@ -204,7 +204,7 @@ $A_{v}=-G_{m}R_{D}$
 
 **小信号分析**
 
-![[Pasted image 20260620155317.png]]
+![[Pasted image 20260620155317.webp]]
 
 此时的电流
 
@@ -214,13 +214,13 @@ $I_{out}=g_{m}V_{1}-g_{mb}V_{X}-\frac{I_{out}R_{s}}{r_{o}}=g_{m}(V_{in}-I_{out}R
 
 **源极负反馈的线性性**
 
-![[Pasted image 20260620160708.png]]
+![[Pasted image 20260620160708.webp]]
 
 图 a 中，可以看到不带源极负反馈的 $g_{m}$ 变化情况。当 $\frac{1}{g_{m}}<<R_{s}$ 时，$G_{m}\approx \frac{1}{R_{s}}$，此时近视线性。
 
 **二极管做负反馈电阻**
 
-![[Pasted image 20260620161831.png]]
+![[Pasted image 20260620161831.webp]]
 
 为什么这里是 $\frac{1}{g_{m2}}$？实际上是 $r_{o2}||\frac{1}{g_{m2}}$，其中，$r_{o2}>>\frac{1}{g_{m2}}$，故而近似于 $\frac{1}{g_{m2}}$ 。
 
@@ -228,7 +228,7 @@ $I_{out}=g_{m}V_{1}-g_{mb}V_{X}-\frac{I_{out}R_{s}}{r_{o}}=g_{m}(V_{in}-I_{out}R
 
 **输出电阻**
 
-![[Pasted image 20260620163113.png]]
+![[Pasted image 20260620163113.webp]]
 
 $V_{1}=-I_{x}R_{s}$
 
@@ -242,7 +242,7 @@ $\Rightarrow R_{out}=[1+(g_{m}+g_{mb})R_{s}]r_{o}+R_{s}$
 
 ### 辅助定理
 
-![[Pasted image 20260620164428.png]]
+![[Pasted image 20260620164428.webp]]
 
 $A_{v}=-G_{m}R_{out}$
 
@@ -253,7 +253,7 @@ $A_{v}=-G_{m}R_{out}$
 
 ### 电阻偏置
 
-![[Pasted image 20260620204254.png]]
+![[Pasted image 20260620204254.webp]]
 
 **增益求解**
 
@@ -273,7 +273,7 @@ $\frac{1}{2}\mu_{n}C_{ox}\frac{W}{L}2(V_{in}-V_{TH}-V_{out})(1-\frac{\partial V_
 
 **小信号求解**
 
-![[Pasted image 20260620205653.png]]
+![[Pasted image 20260620205653.webp]]
 
 $V_{in}-V_{1}=V_{out}，V_{bs}=-V_{out}$
 
@@ -281,7 +281,7 @@ $V_{in}-V_{1}=V_{out}，V_{bs}=-V_{out}$
 
 可以得到：$V_{out}/V_{in}=g_{m}R_{S}/[1+(g_{m}+g_{mb})R_{S}]$
 
-![[Pasted image 20260620210357.png]]
+![[Pasted image 20260620210357.webp]]
 
 $\eta = \partial V_{TH} /\partial V_{SB}$
 
@@ -291,7 +291,7 @@ $\eta = \partial V_{TH} /\partial V_{SB}$
 
 输出阻抗计算
 
-![[Pasted image 20260620211224.png]]
+![[Pasted image 20260620211224.webp]]
 
 由图所示，从下向上看，$R_{out}=\frac{1}{g_{m}+g_{mb}}$
 
@@ -301,11 +301,11 @@ $\eta = \partial V_{TH} /\partial V_{SB}$
 
 $A_{v}=\frac{\frac{1}{g_{mb}}}{\frac{1}{g_{m}}+\frac{1}{g_{mb}}}$
 
-![[Pasted image 20260621194037.png]]
+![[Pasted image 20260621194037.webp]]
 
 驱动源随器的往往是有限负载
 
-![[Pasted image 20260621194237.png]]
+![[Pasted image 20260621194237.webp]]
 
 $A_{v}=\frac{R_{eq}}{R_{eq}+\frac{1}{g_{m}}}$
 
@@ -313,10 +313,10 @@ $A_{v}=\frac{R_{eq}}{R_{eq}+\frac{1}{g_{m}}}$
 
 **例题**
 
-![[Pasted image 20260621205220.png]]
+![[Pasted image 20260621205220.webp]]
 ## 共栅级
 
-![[Pasted image 20260621205909.png]]
+![[Pasted image 20260621205909.webp]]
 
 **小信号增益公式求解**
 
@@ -330,11 +330,11 @@ $A_{v}=\frac{\partial V_{out}}{\partial V_{in}}=-\mu_{n}C_{ox}\frac{W}{L}(V_{b}-
 
 故：$A_{v}=g_{m}(1+\eta)R_{D}$
 
-![[Pasted image 20260622114355.png]]
+![[Pasted image 20260622114355.webp]]
 
 **小信号电路分析（考虑体效应）**
 
-![[Pasted image 20260622115111.png|500]]
+![[Pasted image 20260622115111.webp|500]]
 
 流过 $R_{s}$ 的电流是 $-V_{out}/R_{D}$
 
@@ -352,7 +352,7 @@ $\Rightarrow \frac{V_{out}}{V_{in}}=\frac{(g_{m}+g_{mb})r_{O}+1}{r_{O}+(g_{m}+g_
 
 **输入输出电阻**
 
-![[Pasted image 20260622165247.png]]
+![[Pasted image 20260622165247.webp]]
 
 $V_{1}=-V_{X}$
 
@@ -368,7 +368,7 @@ $V_{1}=-V_{X}$
 
 表明，源端看输入阻抗时，漏端的阻抗(R_D)要除以 $(g_{m}+g_{mb})r_{O}$
 
-![[Pasted image 20260622171852.png|400]]
+![[Pasted image 20260622171852.webp|400]]
 
 计算输出电阻，与源极负反馈的共源极相似
 

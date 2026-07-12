@@ -1,6 +1,7 @@
 ---
-import { Content, frontmatter } from '../data/pages/promise.mdx'
 import PageLayout from '@/layouts/BaseLayout.astro'
+
+import { Content, frontmatter } from '../data/pages/promise.mdx'
 
 const meta = {
   description: frontmatter.description,
@@ -8,6 +9,6 @@ const meta = {
 }
 ---
 
-<PageLayout {meta} comment>
+<PageLayout {meta}>
   <Content />
 </PageLayout>

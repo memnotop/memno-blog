@@ -14,8 +14,7 @@ import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
 import config from 'virtual:config'
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { getArticlePosts } from '@/utils/blog'
+import { getSortedArticlePosts } from '@/utils/blog'
 import remarkObsidian from '@/plugins/remark-obsidian'
 
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
@@ -81,9 +80,7 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
 }
 
 const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(
-    getArticlePosts(await getBlogCollection())
-  ) as CollectionEntry<'blog'>[]
+  const allPostsByDate = (await getSortedArticlePosts()) as CollectionEntry<'blog'>[]
   const siteUrl = context.site ?? new URL(import.meta.env.SITE)
 
   return rss({
@@ -102,12 +99,13 @@ const GET = async (context: AstroGlobal) => {
           typeof post.data.heroImageSrc === 'string'
             ? post.data.heroImageSrc
             : post.data.heroImageSrc?.src
+        const heroImageUrl = heroImage ? new URL(heroImage, siteUrl).href : undefined
 
         return {
           pubDate: post.data.publishDate,
           link: `/blog/${post.id}`,
-          customData: heroImage
-            ? `<h:img src="${heroImage}" /><enclosure url="${heroImage}" />`
+          customData: heroImageUrl
+            ? `<h:img src="${heroImageUrl}" /><enclosure url="${heroImageUrl}" />`
             : undefined,
           content: await renderContent(post, siteUrl),
           ...post.data

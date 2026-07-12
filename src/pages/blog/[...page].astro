@@ -3,16 +3,16 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, getUniqueTags, sortMDByDate } from 'astro-pure/server'
+import { getUniqueTags } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { getArticlePosts } from '@/utils/blog'
+import { getSortedArticlePosts } from '@/utils/blog'
 import config from '@/site-config'
 
 export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const collections = sortMDByDate(getArticlePosts(await getBlogCollection()))
+  const collections = await getSortedArticlePosts()
   const uniqueTags = getUniqueTags(collections)
   const collectionsCount = collections.length
   return paginate(collections, {
@@ -50,7 +50,7 @@ const paginationProps = {
 }
 ---
 
-<PageLayout {meta} comment>
+<PageLayout {meta}>
   <Button title='Back' href='/' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
@@ -73,8 +73,8 @@ const paginationProps = {
             </div>
             {/* posts */}
             <ul class='flex flex-col gap-y-4 text-start'>
-              {page.data.map((post) => (
-                <PostPreview {post} detailed />
+              {page.data.map((post, index) => (
+                <PostPreview {post} detailed imageLoading={index === 0 ? 'eager' : 'lazy'} />
               ))}
             </ul>
             <Paginator {...paginationProps} />

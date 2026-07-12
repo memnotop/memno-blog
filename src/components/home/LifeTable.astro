@@ -1,0 +1,173 @@
+---
+import Section from '@/components/home/Section.astro'
+import { formatLocalDate, parseLocalDate } from '@/utils/date'
+import {
+  getLifeSnapshot,
+  LIFE_DEFAULT_BIRTHDAY,
+  LIFE_EXPECTANCY_YEARS,
+  LIFE_GRID_TOTAL
+} from '@/utils/life'
+
+const today = new Date()
+const birthdayDate = parseLocalDate(LIFE_DEFAULT_BIRTHDAY)
+if (!birthdayDate) throw new Error(`Invalid default birthday: ${LIFE_DEFAULT_BIRTHDAY}`)
+
+const life = getLifeSnapshot(birthdayDate, today)
+---
+
+<Section title='Life Table' class='mem-centered-section mem-life-section'>
+  <div
+    class='mem-life-count'
+    data-life-count
+    data-birthday={LIFE_DEFAULT_BIRTHDAY}
+    data-total-years={LIFE_EXPECTANCY_YEARS}
+    data-total-cells={LIFE_GRID_TOTAL}
+    style={`--life-fill: ${life.percent.toFixed(2)}%`}
+  >
+    <div class='mem-life-overview'>
+      <div class='mem-life-overview-main'>
+        <span class='mem-life-kicker'>请填写你的生日</span>
+        <label class='mem-life-birthday'>
+          <input
+            type='date'
+            value={LIFE_DEFAULT_BIRTHDAY}
+            min='1900-01-01'
+            max={formatLocalDate(today)}
+            data-life-birthday-input
+            aria-label='请填写你的生日'
+          />
+        </label>
+      </div>
+      <p>以 {LIFE_EXPECTANCY_YEARS} 岁为尺度，把时间拆成 {LIFE_GRID_TOTAL} 个方块。</p>
+    </div>
+
+    <div class='mem-life-main'>
+      <div class='mem-life-copy'>
+        <h3>你的人生小格</h3>
+        <p>绿色为已经走过的时间，其他颜色是对余下时间的粗略估算。</p>
+      </div>
+      <div
+        class='mem-life-grid'
+        data-life-grid
+        role='img'
+        aria-label={`${life.elapsedDays.toLocaleString('en')} days lived, ${life.filledCells} of ${LIFE_GRID_TOTAL} squares filled`}
+      >
+      </div>
+      <p class='mem-life-foot' aria-live='polite'>
+        <span>
+          <strong data-life-squares>{life.filledCells}</strong> / {LIFE_GRID_TOTAL} 方块
+        </span>
+        <span>
+          <strong data-life-days>{life.elapsedDays.toLocaleString('en')}</strong> 天
+        </span>
+      </p>
+    </div>
+
+    <div
+      class='mem-life-liquid'
+      role='img'
+      aria-label={`${life.percent.toFixed(2)} percent of the ${LIFE_EXPECTANCY_YEARS}-year scale has passed`}
+    >
+      <div class='mem-life-liquid-head'>
+        <h3>你的人生已经过去了</h3>
+        <strong data-life-percent>{life.percent.toFixed(2)}%</strong>
+      </div>
+      <div class='mem-life-liquid-panel'>
+        <div class='mem-life-liquid-face'>
+          <span>人生已经过去</span>
+          <strong data-life-percent-face>{life.percent.toFixed(0)}%</strong>
+        </div>
+        <div class='mem-life-liquid-water' aria-hidden='true'>
+          <svg
+            class='mem-life-liquid-wave'
+            viewBox='0 0 240 72'
+            preserveAspectRatio='none'
+            focusable='false'
+            aria-hidden='true'
+          >
+            <path
+              class='mem-life-liquid-wave-back'
+              d='M-60 42 C-20 30 20 54 60 42 S140 30 180 42 S260 54 300 42 V120 H-60 Z'></path>
+            <path
+              class='mem-life-liquid-wave-front'
+              d='M-60 36 C-20 24 20 48 60 36 S140 24 180 36 S260 48 300 36 V120 H-60 Z'></path>
+          </svg>
+        </div>
+        <div class='mem-life-liquid-stats'>
+          <span>
+            <strong data-life-years-total>{life.elapsedParts.years}</strong>
+            <small>年</small>
+          </span>
+          <span>
+            <strong data-life-months-total>{life.totalMonths}</strong>
+            <small>月</small>
+          </span>
+          <span>
+            <strong data-life-days-total>{life.elapsedDays}</strong>
+            <small>天</small>
+          </span>
+          <span>
+            <strong data-life-hours-total>{life.totalHours}</strong>
+            <small>小时</small>
+          </span>
+          <span>
+            <strong data-life-minutes-total>{life.totalMinutes}</strong>
+            <small>分钟</small>
+          </span>
+          <span>
+            <strong data-life-seconds-total>{life.totalSeconds}</strong>
+            <small>秒</small>
+          </span>
+        </div>
+      </div>
+      <p>
+        <span data-life-age>
+          {life.elapsedParts.years} 年 {life.elapsedParts.months} 月 {life.elapsedParts.days} 天
+        </span>
+        <span>{LIFE_EXPECTANCY_YEARS} 岁人生尺度</span>
+      </p>
+    </div>
+
+    <div class='mem-life-note'>
+      <p class='mem-life-note-kicker'>参考说明</p>
+      <h4>假设我们的寿命是 {LIFE_EXPECTANCY_YEARS} 岁，分为 {LIFE_GRID_TOTAL} 个方块。</h4>
+      <ul class='mem-life-legend'>
+        <li>
+          <span class='is-lived'></span>
+          你已经走过的生命
+        </li>
+        <li>
+          <span class='is-sleep'></span>
+          余下生命里睡眠占用的时间
+        </li>
+        <li>
+          <span class='is-work'></span>
+          退休前每天工作 8 小时占用的时间
+        </li>
+        <li>
+          <span class='is-retire'></span>
+          65 岁，退休节点
+        </li>
+        <li>
+          <span class='is-child'></span>
+          如果 28 岁生孩子，孩子 18 岁前每天陪伴 5 小时
+        </li>
+        <li>
+          <span class='is-parent'></span>
+          如果每年陪父母一个月，这是你剩余生命里的陪伴时间
+        </li>
+        <li>
+          <span class='is-left'></span>
+          除了以上之外，剩下的所有日子
+        </li>
+      </ul>
+      <p class='mem-life-note-foot'>数据只做视觉估算，重点是把时间看见。</p>
+    </div>
+  </div>
+</Section>
+
+<script>
+  import { initLifeTables } from '@/scripts/life-table'
+
+  initLifeTables()
+</script>

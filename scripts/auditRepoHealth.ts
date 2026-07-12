@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import { execFile as execFileCallback } from 'node:child_process'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
-import { execFile as execFileCallback } from 'node:child_process'
-import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
+import { promisify } from 'node:util'
 
 const execFile = promisify(execFileCallback)
 
@@ -208,7 +208,9 @@ async function main() {
   console.log(`Content size: ${formatBytes(contentBytes)}`)
   console.log(`Public size: ${formatBytes(publicBytes)}`)
   console.log(`Built site size: ${formatBytes(distBytes)}`)
-  console.log(`Git object store: ${formatBytes(gitTotalBytes)} (${gitStats.objectCount} loose objects)`)
+  console.log(
+    `Git object store: ${formatBytes(gitTotalBytes)} (${gitStats.objectCount} loose objects)`
+  )
 
   if (gitTotalBytes >= thresholds.gitFailBytes) {
     issues.push({
@@ -252,7 +254,8 @@ async function main() {
   } else {
     issues.push({
       level: 'ok',
-      message: 'No tracked local-state files under .astro/, .makemd/, .trash/, dist/, node_modules/, or .obsidian/workspace.json.'
+      message:
+        'No tracked local-state files under .astro/, .makemd/, .trash/, dist/, node_modules/, or .obsidian/workspace.json.'
     })
   }
 
@@ -298,15 +301,23 @@ async function main() {
   if (largeImages.length) {
     printSection('Large images')
     for (const file of [...largeImages].sort((a, b) => b.size - a.size).slice(0, 15)) {
-      const optimizationHint = isOptimizedImagePath(file.path) ? '' : '  -> convert to WebP/AVIF if web-facing'
+      const optimizationHint = isOptimizedImagePath(file.path)
+        ? ''
+        : '  -> convert to WebP/AVIF if web-facing'
       console.log(`${formatBytes(file.size).padStart(9)}  ${file.path}${optimizationHint}`)
     }
   }
 
   printSection('Recommendations')
-  console.log('- Keep article cover images in the article directory and reference them with relative paths such as ./cover.webp.')
-  console.log(`- Treat ${formatBytes(thresholds.imageWarnBytes)} as the default warning line for web-facing images.`)
-  console.log('- Move original photos, raw screenshots, and downloadable attachments to external object storage before they dominate Git history.')
+  console.log(
+    '- Keep article cover images in the article directory and reference them with relative paths such as ./cover.webp.'
+  )
+  console.log(
+    `- Treat ${formatBytes(thresholds.imageWarnBytes)} as the default warning line for web-facing images.`
+  )
+  console.log(
+    '- Move original photos, raw screenshots, and downloadable attachments to external object storage before they dominate Git history.'
+  )
   console.log('- Run `npm run audit:repo` before large content imports and before release.')
 
   const hasFailure = issues.some((issue) => issue.level === 'fail')

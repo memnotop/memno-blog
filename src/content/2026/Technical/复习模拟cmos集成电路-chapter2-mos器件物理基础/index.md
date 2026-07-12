@@ -27,7 +27,7 @@ draft: false
    其中，全大写表示大信号，全小写表示小信号。
 2. 图像表示
 
-![[Pasted image 20260616090943.png]] 
+![[Pasted image 20260616090943.webp]]
 
 
 ## gm 推导
@@ -43,7 +43,7 @@ $v_{out}=-i_{d}R_{D}=-[\mu_{n}C_{ox}\frac{W}{L}(V_{B}-V_{TH})]\cdot v_{a} sin(\o
 
 ## 小信号电路图 
 
-![[Pasted image 20260616093312.png]]
+![[Pasted image 20260616093312.webp]]
 
 ## gm 的形式变换
 $g_{m}=\mu_{n}C_{ox} \frac{W}{L}(V_{GS}-V_{TH})$
@@ -52,7 +52,7 @@ $=\sqrt{2\mu_{n}C_{ox}\frac{W}{L}I_{D}}$
 
 $=\frac{2I_{D}}{V_{GS}-V_{TH}}$
 
-![[Pasted image 20260616093735.png]]
+![[Pasted image 20260616093735.webp]]
 
 
 ## 二级效应
@@ -84,19 +84,19 @@ I_D ≈ 1/2 μn Cox W/L (V_GS - V_TH)^2 (1 + λV_DS)
 
 ## 二级效应在小信号模型中的体现
 
-![[Pasted image 20260616160443.png]]
+![[Pasted image 20260616160443.webp]]
 
 其中，$g_{mb}$ 是体效应的体现，$r_{o}$ 是沟道长度调制
 
 ## 电容分析
 
-![[Pasted image 20260616161030.png]]
+![[Pasted image 20260616161030.webp]]
 
-![[Pasted image 20260616161100.png]]
+![[Pasted image 20260616161100.webp]]
 
 **栅源和栅漏电容随的 $V_{GS}$ 变化曲线**
 
-![[Pasted image 20260616161517.png]]
+![[Pasted image 20260616161517.webp]]
 
 为什么随着 $V_{GS}$ 增加电容会有变化？
 

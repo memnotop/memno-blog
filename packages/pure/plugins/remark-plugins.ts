@@ -1,4 +1,4 @@
-import type { Node, Root } from 'mdast'
+import type { Image, Root } from 'mdast'
 import type { Plugin } from 'unified'
 import { visit } from 'unist-util-visit'
 
@@ -10,8 +10,22 @@ export const remarkAddZoomable: Plugin<[{ className?: string }], Root> = functio
   className = 'zoomable'
 }) {
   return function (tree) {
-    visit(tree, 'image', (node: Node) => {
-      node.data = { hProperties: { class: className } }
+    visit(tree, 'image', (node: Image) => {
+      const hProperties = node.data?.hProperties ?? {}
+      const currentClassName = hProperties.className
+      const classNames = Array.isArray(currentClassName)
+        ? currentClassName.map(String)
+        : typeof currentClassName === 'string'
+          ? currentClassName.split(/\s+/).filter(Boolean)
+          : []
+
+      node.data = {
+        ...node.data,
+        hProperties: {
+          ...hProperties,
+          className: Array.from(new Set([...classNames, className]))
+        }
+      }
     })
   }
 }

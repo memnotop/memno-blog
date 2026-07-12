@@ -13,8 +13,7 @@ const externalLinkAttrs = (link: string) =>
   <a
     class='z-30 text-xl font-semibold group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3'
     style='transition:margin-inline 0.3s'
-    href='/'
-    aria-label='Brand'>{config.title}</a
+    href='/'>{config.title}</a
   >
 
   <div class='flex items-center gap-x-2'>
@@ -32,7 +31,6 @@ const externalLinkAttrs = (link: string) =>
               <a
                 href={item.link}
                 class='block py-2 font-medium transition-none hover:text-primary sm:px-3'
-                aria-label='Nav menu item'
                 {...externalLinkAttrs(item.link)}
               >
                 {item.title}
@@ -50,7 +48,6 @@ const externalLinkAttrs = (link: string) =>
                       <a
                         href={child.link}
                         class='header-submenu-link rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-primary dark:hover:bg-background'
-                        aria-label='Nav submenu item'
                         {...externalLinkAttrs(child.link)}
                       >
                         {child.title}
@@ -85,6 +82,8 @@ const externalLinkAttrs = (link: string) =>
       <button
         id='toggleMenu'
         class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+        aria-controls='headerExpandContent'
+        aria-expanded='false'
       >
         <span class='sr-only'>Menu</span>
         <Icon class='size-5' name='menu' />
@@ -104,37 +103,71 @@ const externalLinkAttrs = (link: string) =>
   import { setTheme, showToast } from '../../utils'
 
   class Header extends HTMLElement {
-    constructor() {
-      super()
+    preScrollY = 0
+    darkModeBtn: HTMLElement | null = null
+    menuBtn: HTMLButtonElement | null = null
+    menuContent: HTMLElement | null = null
+    mobileMenuQuery: MediaQueryList | null = null
+
+    handleScroll = () => {
+      this.classList.toggle('not-top', window.scrollY > 20)
+      this.dataset.show = (window.scrollY < 350 || window.scrollY < this.preScrollY).toString()
+      this.preScrollY = window.scrollY
+    }
+
+    handleDarkModeClick = () => {
+      if (!this.darkModeBtn) return
+
+      const newTheme = setTheme(undefined, true)
+      this.darkModeBtn.dataset.theme = newTheme
+      showToast({ message: `Set theme to ${newTheme}` })
+    }
+
+    handleMenuToggle = () => {
+      this.classList.toggle('expanded')
+      this.syncMenuState()
+    }
+
+    syncMenuState = () => {
+      if (!this.menuBtn || !this.menuContent || !this.mobileMenuQuery) return
+
+      const isMobile = this.mobileMenuQuery.matches
+      const isExpanded = isMobile && this.classList.contains('expanded')
+
+      this.menuBtn.setAttribute('aria-expanded', isExpanded.toString())
+      this.menuContent.toggleAttribute('inert', isMobile && !isExpanded)
+
+      if (isMobile) {
+        this.menuContent.setAttribute('aria-hidden', (!isExpanded).toString())
+      } else {
+        this.menuContent.removeAttribute('aria-hidden')
+      }
     }
 
     connectedCallback() {
       // Header
-      let preScrollY = window.scrollY
-      this.classList.toggle('not-top', preScrollY > 20)
-      window.addEventListener('scroll', () => {
-        this.classList.toggle('not-top', window.scrollY > 20)
-        this.dataset.show = (window.scrollY < 350 || window.scrollY < preScrollY).toString()
-        preScrollY = window.scrollY
-      })
+      this.preScrollY = window.scrollY
+      this.classList.toggle('not-top', this.preScrollY > 20)
+      window.addEventListener('scroll', this.handleScroll, { passive: true })
 
       // Dark Mode
-      const darkModeBtn = this.querySelector('#toggleDarkMode') as HTMLElement
-      darkModeBtn.addEventListener('click', () => {
-        // Old way: dispatch event
-        // const toggleDarkModeEvent = new CustomEvent('theme-change', {
-        //   detail: { theme: localStorage.getItem('theme') === 'light' ? 'dark' : 'light' }
-        // })
-        // document.dispatchEvent(toggleDarkModeEvent)
-        const newTheme = setTheme(undefined, true)
-        darkModeBtn.dataset.theme = newTheme
-        showToast({ message: `Set theme to ${newTheme}` })
-      })
+      this.darkModeBtn = this.querySelector<HTMLElement>('#toggleDarkMode')
+      this.darkModeBtn?.addEventListener('click', this.handleDarkModeClick)
 
       // Menu
-      this.querySelector('#toggleMenu')?.addEventListener('click', () => {
-        this.classList.toggle('expanded')
-      })
+      this.menuBtn = this.querySelector<HTMLButtonElement>('#toggleMenu')
+      this.menuContent = this.querySelector<HTMLElement>('#headerExpandContent')
+      this.mobileMenuQuery = window.matchMedia('(max-width: 640px)')
+      this.menuBtn?.addEventListener('click', this.handleMenuToggle)
+      this.mobileMenuQuery.addEventListener('change', this.syncMenuState)
+      this.syncMenuState()
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this.handleScroll)
+      this.darkModeBtn?.removeEventListener('click', this.handleDarkModeClick)
+      this.menuBtn?.removeEventListener('click', this.handleMenuToggle)
+      this.mobileMenuQuery?.removeEventListener('change', this.syncMenuState)
     }
   }
 

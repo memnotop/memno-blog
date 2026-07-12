@@ -17,14 +17,14 @@ draft: false
 <!-- 这里先写一句你想表达的核心观点。 -->
 
 ## 单端与差动的工作方式
-![[Pasted image 20260623114359.png]]
+![[Pasted image 20260623114359.webp]]
 差动对可以降低噪声的影响
 
 如图所示，如果是电源的跃变，会导致形成一个突出的信号，通过差动的耦合，可以使电路有更好的抗干扰能力。
 
 **降低电源噪声**
 
-![[Pasted image 20260623114730.png]]
+![[Pasted image 20260623114730.webp]]
 
 如果 $V_{DD}$ 变化了 $\Delta V$，则 $V_{out}$ 几乎有相同的变化，但是使用噪声会同时印象 $V_{X}$ 和 $V_{Y}$，但不影响 $V_{X}-V_{Y}$
 
@@ -34,29 +34,29 @@ draft: false
 
 输入共模电平会影响到晶体管的饱和与截止，实际上相当于大信号。
 
-![[Pasted image 20260623142833.png]]
+![[Pasted image 20260623142833.webp]]
 
 如何解决这些问题呢
 
 引入一个电流源 $I_{SS}$
 
-![[Pasted image 20260623142903.png]]
+![[Pasted image 20260623142903.webp]]
 
 ### 定性分析
 
-![[Pasted image 20260623155630.png]]
+![[Pasted image 20260623155630.webp]]
 
 开始 $V_{in1}$ 小，M 1 截止，故而 $V_{out1}=V_{DD}$。图像两边对称，$V_{in1}=V_{in2}$ 时，$V_{out1}=V_{out2}=V_{DD}-\frac{R_{D}I_{SS}}{2}$
 
 **共模特性分析**
 
-![[Pasted image 20260623161344.png]]
+![[Pasted image 20260623161344.webp]]
 
 $V_{b}$ 这里是一个电流源。
 
 首先令 $V_{in1}=V_{in2}=V_{in,CM}$，使 $V_{in,CM}$ 从 0 变化到 $V_{DD}$
 
-![[Pasted image 20260623161305.png]]
+![[Pasted image 20260623161305.webp]]
 
 当 $V_{in,CM}=0$ 时，$I_{D1}=I_{D2}=0$，所以 $I_{D3}=0$，故而 $V_{P}=0$
 
@@ -70,7 +70,7 @@ $V_{b}$ 这里是一个电流源。
 
 #### 大信号分析
 
-![[Pasted image 20260623170522.png]]
+![[Pasted image 20260623170522.webp]]
 
 $V_{out1}=V_{DD}-R_{D1}I_{D1}, V_{out2}=V_{DD}-R_{D2}I_{D2}$
 
@@ -104,7 +104,7 @@ $\frac{\partial \Delta I_{D}}{\partial \Delta V_{in}}=\frac{1}{2}\mu_{n}C_{ox}\f
 
 故 $|A_{v}|=\sqrt{\mu_{n}C_{ox}\frac{W}{L}I_{SS}}R_{D}$
 
-![[Pasted image 20260623201831.png]]
+![[Pasted image 20260623201831.webp]]
 
 如图，当 $\Delta V_{in}>\Delta V_{in1}$ 时，$G_{m}$ 降低为 0。
 
@@ -112,7 +112,7 @@ $\frac{\partial \Delta I_{D}}{\partial \Delta V_{in}}=\frac{1}{2}\mu_{n}C_{ox}\f
 
 **叠加法**
 
-![[Pasted image 20260623202901.png]]
+![[Pasted image 20260623202901.webp]]
 
 此时，电路是带有负反馈调节的共源极。
 
@@ -122,7 +122,7 @@ $\frac{\partial \Delta I_{D}}{\partial \Delta V_{in}}=\frac{1}{2}\mu_{n}C_{ox}\f
 
 分析 $V_{Y}$:
 
-![[Pasted image 20260623203759.png]]
+![[Pasted image 20260623203759.webp]]
 
 得到其增益为：$\frac{V_{Y}}{V_{in1}}=\frac{R_{D}}{\frac{1}{g_{m2}}+\frac{1}{g_{m1}}}$
 
@@ -138,7 +138,7 @@ $(V_{X}-V_{Y})|_{Due\ to\ V_{in1}}=\frac{-2R_{D}}{\frac{1}{g_{m1}}+\frac{1}{g_{m
 
 **辅助定理（半边电路法）**
 
-![[Pasted image 20260624102839.png]]
+![[Pasted image 20260624102839.webp]]
 
 此时电路对称，从 P 点打开，作为虚地。
 

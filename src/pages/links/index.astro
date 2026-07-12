@@ -1,10 +1,11 @@
 ---
-import { Content, frontmatter, getHeadings } from '../../data/pages/links.mdx'
 import PageLayout from '@/layouts/CommonPage.astro'
+
+import { Content, frontmatter, getHeadings } from '../../data/pages/links.mdx'
 
 const headings = getHeadings()
 ---
 
-<PageLayout title={frontmatter.title} {headings} comment>
+<PageLayout title={frontmatter.title} {headings}>
   <Content />
 </PageLayout>

@@ -8,8 +8,17 @@ export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
-  // Ignore files
   {
-    ignores: ['public/scripts/*', 'scripts/*', '.astro/', 'src/env.d.ts']
+    ignores: [
+      '.astro/**',
+      '.obsidian/**',
+      'dist/**',
+      'node_modules/**',
+      'packages/pure/**',
+      'public/**',
+      'source/**',
+      'src/content/**',
+      'src/env.d.ts'
+    ]
   }
 ]

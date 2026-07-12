@@ -1,11 +1,11 @@
 // @ts-check
 
-import { rehypeHeadingIds } from '@astrojs/markdown-remark'
+import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
-import { remarkAlert } from 'remark-github-blockquote-alert'
 import remarkGfm from 'remark-gfm'
+import { remarkAlert } from 'remark-github-blockquote-alert'
 import remarkMath from 'remark-math'
 
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
@@ -22,6 +22,7 @@ import config from './src/site.config.ts'
 
 export default defineConfig({
   site: 'https://memno.top',
+  compressHTML: true,
   trailingSlash: 'never',
   image: {
     responsiveStyles: true,
@@ -36,19 +37,23 @@ export default defineConfig({
     allowedHosts: ['localhost', '127.0.0.1']
   },
   markdown: {
-    remarkPlugins: [remarkGfm, remarkMath, remarkObsidian, remarkAlert],
-    rehypePlugins: [
-      [rehypeKatex, { strict: false }],
-      rehypeHeadingIds,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: 'append',
-          properties: { className: ['anchor'] },
-          content: { type: 'text', value: '#' }
-        }
+    // Astro 7 defaults to Sätteri. Keep Unified so the Obsidian, math and
+    // existing remark/rehype plugin pipeline continues to behave identically.
+    processor: unified({
+      remarkPlugins: [remarkGfm, remarkMath, remarkObsidian, remarkAlert],
+      rehypePlugins: [
+        [rehypeKatex, { strict: false }],
+        rehypeHeadingIds,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'append',
+            properties: { className: ['anchor'] },
+            content: { type: 'text', value: '#' }
+          }
+        ]
       ]
-    ],
+    }),
     // https://docs.astro.build/en/guides/syntax-highlighting/
     shikiConfig: {
       themes: {
