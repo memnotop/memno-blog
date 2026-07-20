@@ -1,6 +1,7 @@
 // @ts-check
 
 import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark'
+import sitemap from '@astrojs/sitemap'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
@@ -20,17 +21,25 @@ import {
 } from './src/plugins/shiki-transformers.ts'
 import config from './src/site.config.ts'
 
+const excludedIndexPaths = new Set(['/404', '/search'])
+
+function shouldIncludeInSitemap(page: string) {
+  const pathname = new URL(page).pathname.replace(/\/$/, '') || '/'
+  return !excludedIndexPaths.has(pathname)
+}
+
 export default defineConfig({
   site: 'https://memno.top',
   compressHTML: true,
   trailingSlash: 'never',
   image: {
+    breakpoints: [480, 720, 960, 1200],
     responsiveStyles: true,
     service: {
       entrypoint: 'astro/assets/services/sharp'
     }
   },
-  integrations: [AstroPureIntegration(config)],
+  integrations: [sitemap({ filter: shouldIncludeInSitemap }), AstroPureIntegration(config)],
   prefetch: true,
   server: {
     host: true,
@@ -40,7 +49,12 @@ export default defineConfig({
     // Astro 7 defaults to Sätteri. Keep Unified so the Obsidian, math and
     // existing remark/rehype plugin pipeline continues to behave identically.
     processor: unified({
-      remarkPlugins: [remarkGfm, remarkMath, remarkObsidian, remarkAlert],
+      remarkPlugins: [
+        remarkGfm,
+        remarkMath,
+        [remarkObsidian, { publicAssets: 'import' }],
+        remarkAlert
+      ],
       rehypePlugins: [
         [rehypeKatex, { strict: false }],
         rehypeHeadingIds,

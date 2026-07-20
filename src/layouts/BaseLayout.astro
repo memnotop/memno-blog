@@ -11,22 +11,30 @@ import '@/assets/styles/app.css'
 interface Props {
   meta: SiteMeta
   highlightColor?: string
+  pagefindIgnore?: boolean
+  robots?: 'noindex, follow' | 'noindex, nofollow'
 }
 
 const {
   meta: { description = config.description, modifiedDate, ogImage, publishedDate, title },
   highlightColor,
+  pagefindIgnore = false,
+  robots,
   ...props
 } = Astro.props
 ---
 
 <html lang={config.locale.lang}>
   <head>
-    <BaseHead {description} {modifiedDate} {ogImage} {publishedDate} {title} />
+    <BaseHead {description} {modifiedDate} {ogImage} {publishedDate} {robots} {title} />
     <ThemeProvider />
   </head>
 
-  <body class='flex justify-center bg-background text-foreground' {...props}>
+  <body
+    class='flex justify-center bg-background text-foreground'
+    data-pagefind-ignore={pagefindIgnore || undefined}
+    {...props}
+  >
     {
       highlightColor && (
         <div
@@ -40,11 +48,13 @@ const {
       class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
     >
       <Header />
-      <div class='flex-1 w-full'>
+      <div class='flex-1 w-full' data-pagefind-body={!pagefindIgnore || undefined}>
         <slot />
       </div>
       <Footer />
     </div>
+
+    <slot name='body-end' />
 
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>

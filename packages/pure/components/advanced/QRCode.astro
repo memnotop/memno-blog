@@ -1,21 +1,49 @@
 ---
-import config from 'virtual:config'
-
 const { content, class: className, ...props } = Astro.props
 ---
 
-<div id='qrcode-container' class={className} {...props}></div>
+<div id='qrcode-container' class={className} data-content={content} {...props}></div>
 
-<script is:inline src={`${config.npmCDN}/qrcodejs/qrcode.min.js`}></script>
-<script is:inline define:vars={{ content }}>
-  const renderContent = content ?? window.location.href
-  // Load qrcode
-  function loadQRcode(qrcodeContainer) {
-    if (!qrcodeContainer) throw new Error('qrcode container not found')
-    if (qrcodeContainer.innerHTML !== '') return
-    new QRCode(qrcodeContainer, renderContent)
-  }
+<script>
   const qrcodeContainer = document.getElementById('qrcode-container')
-  if (!qrcodeContainer) throw new Error('qrcode container not found')
-  loadQRcode(qrcodeContainer)
+  const trigger = document.getElementById('get-qrcode')
+
+  if (qrcodeContainer && trigger) {
+    let renderPromise: Promise<void> | undefined
+
+    const renderQRCode = () => {
+      if (qrcodeContainer.childElementCount) return Promise.resolve()
+
+      renderPromise ??= import('uqr')
+        .then(({ renderSVG }) => {
+          if (qrcodeContainer.childElementCount) return
+
+          qrcodeContainer.innerHTML = renderSVG(
+            qrcodeContainer.dataset.content ?? window.location.href,
+            {
+              border: 4,
+              ecc: 'H'
+            }
+          )
+          const svg = qrcodeContainer.querySelector('svg')
+          if (svg) {
+            svg.setAttribute('height', '256')
+            svg.setAttribute('width', '256')
+            svg.setAttribute('aria-hidden', 'true')
+            svg.style.height = 'auto'
+            svg.style.maxWidth = '100%'
+          }
+        })
+        .catch(() => {
+          renderPromise = undefined
+        })
+
+      return renderPromise
+    }
+
+    const loadQRCode = () => void renderQRCode()
+    trigger.addEventListener('pointerenter', loadQRCode, { once: true, passive: true })
+    trigger.addEventListener('focus', loadQRCode, { once: true })
+    trigger.addEventListener('click', loadQRCode, { once: true })
+  }
 </script>

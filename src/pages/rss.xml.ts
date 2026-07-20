@@ -23,11 +23,25 @@ const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
 const projectRoot = process.cwd()
 
 const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
-  const getLocalImagePath = (url: string) => {
-    if (/^[a-z]+:/i.test(url)) return undefined
-    if (!post.filePath) return undefined
+  const resolveImagePath = (url: string) => {
+    if (/^[a-z]+:/i.test(url) || !post.filePath) return undefined
+    return path.resolve(path.dirname(post.filePath), url)
+  }
 
-    const resolvedPath = path.resolve(path.dirname(post.filePath), url)
+  const getPublicImageUrl = (url: string) => {
+    const resolvedPath = resolveImagePath(url)
+    if (!resolvedPath) return undefined
+
+    const publicRoot = path.join(projectRoot, 'public')
+    const relativePath = path.relative(publicRoot, resolvedPath)
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) return undefined
+
+    return new URL(`/${relativePath.split(path.sep).join('/')}`, site).href
+  }
+
+  const getLocalImagePath = (url: string) => {
+    const resolvedPath = resolveImagePath(url)
+    if (!resolvedPath) return undefined
     const relativePath = path.relative(projectRoot, resolvedPath)
     if (relativePath.startsWith('..')) return undefined
 
@@ -46,6 +60,12 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
         if (node.url.startsWith('/')) {
           node.url = `${site}${node.url.replace('/', '')}`
         } else {
+          const publicImageUrl = getPublicImageUrl(node.url)
+          if (publicImageUrl) {
+            node.url = publicImageUrl
+            return
+          }
+
           const imagePath = getLocalImagePath(node.url)
           const promise =
             imagePath &&

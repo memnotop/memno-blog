@@ -13,11 +13,12 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
     aria-label='Back to Top'
     class='relative size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 sm:size-12 opacity-0'
     id='to-top-btn'
+    type='button'
   >
     <div
       class='top-text absolute bottom-0 end-0 start-0 top-0 flex items-center justify-center group-[.ended]:opacity-0'
     >
-      <span class='text'>10</span>
+      <span class='text' data-scroll-percent>10</span>
       <span class='text-xs'>%</span>
     </div>
     <Icon name='up' class='top-icon group-[.ended]:opacity-100' />
@@ -27,48 +28,57 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
 <script is:inline define:vars={{ headerName, contentName, needPercent }}>
   const actionBtns = document.getElementById('action-buttons')
   const scrollBtn = document.getElementById('to-top-btn')
-  const scrollPercentEl = scrollBtn.children[0].children[0]
+  const scrollPercentEl = scrollBtn?.querySelector('[data-scroll-percent]')
   const targetHeader = document.getElementById(headerName)
   const articleElement = document.getElementById(contentName)
 
-  // scroll to top
-  function callback(entries) {
-    entries.forEach((entry) => {
-      // only show the action buttons when the heading is out of view
-      actionBtns.classList.toggle('show', !entry.isIntersecting)
-    })
-  }
-  scrollBtn.addEventListener('click', () => {
-    document.documentElement.scrollTo({ behavior: 'smooth', top: 0 })
-  })
-  if (targetHeader) {
-    const observer = new IntersectionObserver(callback)
-    observer.observe(targetHeader)
-  } else {
-    console.error(`Element with ID ${headerName} not found.`)
-  }
-  if (needPercent) {
-    // scroll percentage
-    const scrollHeight = articleElement.scrollHeight // total height
-    const articleTop = articleElement.offsetTop // article top
-    const clientHeight = document.documentElement.clientHeight // client height
+  if (actionBtns && scrollBtn && actionBtns.dataset.backToTopReady !== 'true') {
+    actionBtns.dataset.backToTopReady = 'true'
 
-    function calculateScrollPercent() {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      if (scrollTop < articleTop) return
-      return Math.round(((scrollTop - articleTop) / (scrollHeight - clientHeight)) * 100)
+    scrollBtn.addEventListener('click', () => {
+      document.documentElement.scrollTo({ behavior: 'smooth', top: 0 })
+    })
+
+    if (targetHeader) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          actionBtns.classList.toggle('show', !entry.isIntersecting)
+        })
+      })
+      observer.observe(targetHeader)
     }
 
-    document.addEventListener('scroll', () => {
-      const scrollPercent = calculateScrollPercent()
-      if (scrollPercent === undefined) return
-      scrollPercentEl.innerText = scrollPercent.toString()
+    if (needPercent && articleElement && scrollPercentEl) {
+      let animationFrame = null
 
-      // If percent is 100, percent won't need to show
-      actionBtns.classList.toggle('ended', scrollPercent > 100)
-    })
-  } else {
-    actionBtns.classList.add('ended')
+      const updateScrollPercent = () => {
+        animationFrame = null
+        const articleTop = articleElement.getBoundingClientRect().top + window.scrollY
+        if (window.scrollY < articleTop) return
+
+        const scrollRange = Math.max(articleElement.scrollHeight - window.innerHeight, 1)
+        const scrollPercent = Math.min(
+          100,
+          Math.max(0, Math.round(((window.scrollY - articleTop) / scrollRange) * 100))
+        )
+        scrollPercentEl.textContent = scrollPercent.toString()
+        actionBtns.classList.toggle('ended', scrollPercent >= 100)
+      }
+
+      const scheduleUpdate = () => {
+        if (animationFrame !== null) return
+        animationFrame = window.requestAnimationFrame(updateScrollPercent)
+      }
+
+      document.addEventListener('scroll', scheduleUpdate, { passive: true })
+      window.addEventListener('resize', scheduleUpdate)
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(scheduleUpdate).observe(articleElement)
+      }
+      scheduleUpdate()
+    } else {
+      actionBtns.classList.add('ended')
+    }
   }
 </script>
 

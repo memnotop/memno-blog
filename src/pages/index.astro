@@ -135,7 +135,11 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
             <img
               src={githubChartUrl}
               alt={`${githubUsername} GitHub contribution chart`}
+              width='663'
+              height='104'
               loading='lazy'
+              decoding='async'
+              fetchpriority='low'
             />
           </a>
           <div class='mem-github-foot'>

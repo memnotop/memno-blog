@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { slug } from 'github-slugger'
 import type {
@@ -19,6 +19,10 @@ type ParentWithChildren = {
 
 type MarkdownFile = {
   path?: string | null
+}
+
+type RemarkObsidianOptions = {
+  publicAssets?: 'import' | 'url'
 }
 
 type InlineToken =
@@ -71,27 +75,36 @@ const OBSIDIAN_CALLOUT_TYPE_MAP: Record<string, string> = {
 }
 
 const IMAGE_EXTENSIONS = new Set(['apng', 'avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp'])
+let cachedContentRoutes: { contentRoot: string; routes: ObsidianContentRoute[] } | undefined
 
-export default function remarkObsidian() {
+export default function remarkObsidian({ publicAssets = 'url' }: RemarkObsidianOptions = {}) {
   return (tree: Root, file: MarkdownFile) => {
     const markdownFilePath = typeof file.path === 'string' ? file.path : undefined
     transformObsidianCallouts(tree)
-    transformParagraphs(tree, markdownFilePath)
-    transformInlineSyntax(tree, markdownFilePath)
+    transformParagraphs(tree, markdownFilePath, publicAssets)
+    transformInlineSyntax(tree, markdownFilePath, publicAssets)
   }
 }
 
-function transformParagraphs(tree: Root, markdownFilePath?: string) {
+function transformParagraphs(
+  tree: Root,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+) {
   visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
     if (!parent || typeof index !== 'number') return
-    const replacement = paragraphToEmbedBlock(node, markdownFilePath)
+    const replacement = paragraphToEmbedBlock(node, markdownFilePath, publicAssets)
     if (!replacement) return
 
     parent.children.splice(index, 1, replacement)
   })
 }
 
-function paragraphToEmbedBlock(node: Paragraph, markdownFilePath?: string): Paragraph | null {
+function paragraphToEmbedBlock(
+  node: Paragraph,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+): Paragraph | null {
   const nonBreakChildren = node.children.filter((child) => child.type !== 'break')
   if (nonBreakChildren.length !== 1) return null
 
@@ -108,7 +121,7 @@ function paragraphToEmbedBlock(node: Paragraph, markdownFilePath?: string): Para
       children: [
         {
           type: 'image',
-          url: resolveObsidianAssetUrl(parsed.target, markdownFilePath),
+          url: resolveObsidianAssetUrl(parsed.target, markdownFilePath, publicAssets),
           alt: parsed.alias || parsed.target,
           title: null,
           data: {
@@ -135,7 +148,7 @@ function paragraphToEmbedBlock(node: Paragraph, markdownFilePath?: string): Para
     children: [
       {
         type: 'link',
-        url: wikiTargetToUrl(parsed),
+        url: wikiTargetToUrl(parsed, markdownFilePath),
         title: null,
         children: [{ type: 'text', value: parsed.alias || parsed.target }]
       } satisfies Link
@@ -149,25 +162,40 @@ function paragraphToEmbedBlock(node: Paragraph, markdownFilePath?: string): Para
   }
 }
 
-function transformInlineSyntax(tree: Root, markdownFilePath?: string) {
+function transformInlineSyntax(
+  tree: Root,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+) {
+  const linkedTextNodes = new WeakSet<Text>()
+  const textNodes: Array<{ node: Text; parent: ParentWithChildren }> = []
+
   visit(tree, (node) => {
-    if (!hasPhrasingChildren(node)) return
-
-    const nextChildren: PhrasingContent[] = []
-    for (const child of node.children) {
-      if (child.type !== 'text') {
-        nextChildren.push(child)
-        continue
-      }
-
-      nextChildren.push(...transformTextNode(child, markdownFilePath))
-    }
-
-    node.children = nextChildren
+    if (node.type !== 'link' && node.type !== 'linkReference') return
+    visit(node, 'text', (textNode) => {
+      linkedTextNodes.add(textNode)
+    })
   })
+
+  visit(tree, 'text', (node, _index, parent) => {
+    if (linkedTextNodes.has(node)) return
+    if (!parent || parent.type === 'link' || parent.type === 'linkReference') return
+    if (!hasPhrasingChildren(parent)) return
+    textNodes.push({ node, parent })
+  })
+
+  for (const { node, parent } of textNodes) {
+    const index = parent.children.indexOf(node)
+    if (index === -1) continue
+    parent.children.splice(index, 1, ...transformTextNode(node, markdownFilePath, publicAssets))
+  }
 }
 
-function transformTextNode(node: Text, markdownFilePath?: string): PhrasingContent[] {
+function transformTextNode(
+  node: Text,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+): PhrasingContent[] {
   const parts: PhrasingContent[] = []
   let cursor = 0
 
@@ -176,7 +204,7 @@ function transformTextNode(node: Text, markdownFilePath?: string): PhrasingConte
       parts.push({ type: 'text', value: node.value.slice(cursor, match.start) })
     }
 
-    const replacement = tokenToNodes(match.token, markdownFilePath)
+    const replacement = tokenToNodes(match.token, markdownFilePath, publicAssets)
     if (replacement.length) parts.push(...replacement)
     cursor = match.end
   }
@@ -278,7 +306,11 @@ function findTagToken(value: string, start: number) {
   }
 }
 
-function tokenToNodes(token: InlineToken, markdownFilePath?: string): PhrasingContent[] {
+function tokenToNodes(
+  token: InlineToken,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+): PhrasingContent[] {
   if (token.type === 'comment') return []
 
   if (token.type === 'delete') {
@@ -325,7 +357,7 @@ function tokenToNodes(token: InlineToken, markdownFilePath?: string): PhrasingCo
     return [
       {
         type: 'image',
-        url: resolveObsidianAssetUrl(parsed.target, markdownFilePath),
+        url: resolveObsidianAssetUrl(parsed.target, markdownFilePath, publicAssets),
         alt: parsed.alias || parsed.target,
         title: null,
         data: {
@@ -344,7 +376,7 @@ function tokenToNodes(token: InlineToken, markdownFilePath?: string): PhrasingCo
     return [
       {
         type: 'link',
-        url: wikiTargetToUrl(parsed),
+        url: wikiTargetToUrl(parsed, markdownFilePath),
         title: null,
         children: [{ type: 'text', value: parsed.alias || parsed.target }],
         data: {
@@ -359,7 +391,7 @@ function tokenToNodes(token: InlineToken, markdownFilePath?: string): PhrasingCo
   return [
     {
       type: 'link',
-      url: wikiTargetToUrl(parsed),
+      url: wikiTargetToUrl(parsed, markdownFilePath),
       title: null,
       children: [{ type: 'text', value: parsed.alias || parsed.target }],
       data: {
@@ -463,18 +495,21 @@ function parseWikiTarget(value: string) {
   }
 }
 
-function wikiTargetToUrl({
-  block,
-  heading,
-  target
-}: {
-  alias: string
-  block: string
-  heading: string
-  target: string
-  width: string
-}) {
-  const base = target ? `/blog/${encodeURIComponent(fileBasename(target))}` : ''
+function wikiTargetToUrl(
+  {
+    block,
+    heading,
+    target
+  }: {
+    alias: string
+    block: string
+    heading: string
+    target: string
+    width: string
+  },
+  markdownFilePath?: string
+) {
+  const base = target ? resolveObsidianNoteUrl(target, markdownFilePath) : ''
   const hash = heading || block
 
   if (!base && hash) return `#${encodeURIComponent(slug(hash))}`
@@ -483,8 +518,154 @@ function wikiTargetToUrl({
   return `${base}#${encodeURIComponent(slug(hash))}`
 }
 
-function resolveObsidianAssetUrl(value: string, markdownFilePath?: string) {
-  if (/^(https?:|\/|\.\.\/|\.\/)/i.test(value)) return value
+type ObsidianContentRoute = {
+  id: string
+  noteName: string
+}
+
+function resolveObsidianNoteUrl(target: string, markdownFilePath?: string) {
+  const fallbackUrl = `/blog/${encodeURIComponent(getObsidianNoteName(target))}`
+  const contentRoot = join(process.cwd(), 'src', 'content')
+  if (!existsSync(contentRoot)) return fallbackUrl
+
+  const routes = getObsidianContentRoutes(contentRoot)
+  const routeCandidates = getObsidianRouteCandidates(target, markdownFilePath, contentRoot)
+  const exactMatches = routes.filter((route) => routeCandidates.has(route.id))
+  const exactMatch = selectObsidianRoute(exactMatches, markdownFilePath, contentRoot)
+  if (exactMatch) return contentRouteToUrl(exactMatch)
+
+  const normalizedTarget = normalizeObsidianRoutePath(target)
+  if (normalizedTarget.includes('/')) {
+    const suffixMatches = routes.filter((route) => route.id.endsWith(`/${normalizedTarget}`))
+    const suffixMatch = selectObsidianRoute(suffixMatches, markdownFilePath, contentRoot)
+    if (suffixMatch) return contentRouteToUrl(suffixMatch)
+  }
+
+  const noteName = slug(getObsidianNoteName(target))
+  if (noteName === 'training') return '/training'
+
+  const nameMatches = routes.filter((route) => route.noteName === noteName)
+  const nameMatch = selectObsidianRoute(nameMatches, markdownFilePath, contentRoot)
+  return nameMatch ? contentRouteToUrl(nameMatch) : fallbackUrl
+}
+
+function collectObsidianContentRoutes(contentRoot: string) {
+  const routes: ObsidianContentRoute[] = []
+
+  const visitDirectory = (directoryPath: string) => {
+    for (const entry of readdirSync(directoryPath, { withFileTypes: true })) {
+      const entryPath = join(directoryPath, entry.name)
+      if (entry.isDirectory()) {
+        visitDirectory(entryPath)
+        continue
+      }
+
+      if (!entry.isFile() || !/\.(?:md|mdx)$/i.test(entry.name)) continue
+      const id = normalizeObsidianRoutePath(relative(contentRoot, entryPath))
+      if (!id) continue
+
+      routes.push({
+        id,
+        noteName: slug(getObsidianNoteName(entryPath))
+      })
+    }
+  }
+
+  visitDirectory(contentRoot)
+  return routes
+}
+
+function getObsidianContentRoutes(contentRoot: string) {
+  if (process.env.NODE_ENV === 'development') return collectObsidianContentRoutes(contentRoot)
+  if (cachedContentRoutes?.contentRoot === contentRoot) return cachedContentRoutes.routes
+
+  const routes = collectObsidianContentRoutes(contentRoot)
+  cachedContentRoutes = { contentRoot, routes }
+  return routes
+}
+
+function getObsidianRouteCandidates(
+  target: string,
+  markdownFilePath: string | undefined,
+  contentRoot: string
+) {
+  const candidates = new Set<string>()
+  const normalizedTarget = normalizeObsidianRoutePath(target)
+  if (normalizedTarget) candidates.add(normalizedTarget)
+
+  const targetWithoutContentPrefix = target.replace(/\\/g, '/').replace(/^\/?src\/content\//i, '')
+  const contentRelativeCandidate = normalizeObsidianRoutePath(targetWithoutContentPrefix)
+  if (contentRelativeCandidate) candidates.add(contentRelativeCandidate)
+
+  if (markdownFilePath) {
+    const resolvedPath = join(dirname(markdownFilePath), target)
+    const relativePath = relative(contentRoot, resolvedPath)
+    if (!relativePath.startsWith('..')) {
+      const relativeCandidate = normalizeObsidianRoutePath(relativePath)
+      if (relativeCandidate) candidates.add(relativeCandidate)
+    }
+  }
+
+  return candidates
+}
+
+function selectObsidianRoute(
+  routes: ObsidianContentRoute[],
+  markdownFilePath: string | undefined,
+  contentRoot: string
+) {
+  if (routes.length === 1) return routes[0]
+  if (!markdownFilePath || routes.length === 0) return undefined
+
+  const currentId = normalizeObsidianRoutePath(relative(contentRoot, markdownFilePath))
+  const currentSegments = currentId.split('/')
+  const sameYear = routes.filter((route) => route.id.split('/')[0] === currentSegments[0])
+  if (sameYear.length === 1) return sameYear[0]
+
+  const sameSection = sameYear.filter((route) => route.id.split('/')[1] === currentSegments[1])
+  return sameSection.length === 1 ? sameSection[0] : undefined
+}
+
+function contentRouteToUrl(route: ObsidianContentRoute) {
+  if (route.noteName === 'training') return '/training'
+  return `/blog/${route.id.split('/').map(encodeURIComponent).join('/')}`
+}
+
+function normalizeObsidianRoutePath(value: string) {
+  const withoutPrefix = value
+    .replace(/\\/g, '/')
+    .replace(/^\/?src\/content\//i, '')
+    .replace(/\.(?:md|mdx)$/i, '')
+  const segments: string[] = []
+
+  for (const segment of withoutPrefix.split('/')) {
+    if (!segment || segment === '.') continue
+    if (segment === '..') {
+      segments.pop()
+      continue
+    }
+    segments.push(slug(segment))
+  }
+
+  if (segments.at(-1) === 'index') segments.pop()
+  return segments.join('/')
+}
+
+function getObsidianNoteName(value: string) {
+  const normalizedValue = value
+    .replace(/\\/g, '/')
+    .replace(/\.(?:md|mdx)$/i, '')
+    .replace(/\/index$/i, '')
+  return normalizedValue.split('/').filter(Boolean).pop() ?? normalizedValue
+}
+
+function resolveObsidianAssetUrl(
+  value: string,
+  markdownFilePath: string | undefined,
+  publicAssets: 'import' | 'url'
+) {
+  if (/^(https?:|\.\.\/|\.\/)/i.test(value)) return value
+  if (value.startsWith('/') && (publicAssets === 'url' || !markdownFilePath)) return value
 
   const fallbackUrl = `/attachments/${encodePublicAssetPath(value)}`
   if (!markdownFilePath) return fallbackUrl
@@ -492,6 +673,12 @@ function resolveObsidianAssetUrl(value: string, markdownFilePath?: string) {
   const currentDir = dirname(markdownFilePath)
   const noteAssetDir = fileBasename(markdownFilePath)
   const projectRoot = process.cwd()
+
+  if (value.startsWith('/')) {
+    const publicPath = join(projectRoot, 'public', value.replace(/^\/+/, ''))
+    return existsSync(publicPath) ? toRelativeImportPath(relative(currentDir, publicPath)) : value
+  }
+
   const importCandidatePaths = [join(currentDir, value), join(currentDir, noteAssetDir, value)]
 
   for (const candidatePath of importCandidatePaths) {
@@ -512,7 +699,9 @@ function resolveObsidianAssetUrl(value: string, markdownFilePath?: string) {
 
   for (const candidatePath of publicCandidatePaths) {
     if (!existsSync(candidatePath.path)) continue
-    return candidatePath.url
+    return publicAssets === 'import'
+      ? toRelativeImportPath(relative(currentDir, candidatePath.path))
+      : candidatePath.url
   }
 
   return fallbackUrl

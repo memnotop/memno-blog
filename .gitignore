@@ -44,4 +44,6 @@ backup/
 .trash/
 .tmp-preview/
 .makemd/
-.obsidian/workspace.json
+
+# Obsidian vault settings and plugins are local-only.
+.obsidian/

@@ -182,31 +182,32 @@ async function collectImageCandidates() {
 async function convertImages(imagePaths: string[]) {
   const mappings: ImageMapping[] = []
   let convertedCount = 0
-  let reusedCount = 0
+  const skippedCollisions: string[] = []
 
   for (const sourceAbsolutePath of imagePaths) {
     const sourceRelativePath = toRelativePath(sourceAbsolutePath)
     const targetRelativePath = getTargetRelativePath(sourceRelativePath)
     const targetAbsolutePath = path.join(repoRoot, targetRelativePath)
 
-    if (!(await exists(targetAbsolutePath))) {
-      const image = sharp(sourceAbsolutePath).rotate()
-      const metadata = await image.metadata()
-      const { maxLongEdge } = getOptimizationPreset(sourceRelativePath)
-      await fs.mkdir(path.dirname(targetAbsolutePath), { recursive: true })
-      await image
-        .resize({
-          width: maxLongEdge,
-          height: maxLongEdge,
-          fit: 'inside',
-          withoutEnlargement: true
-        })
-        .webp(getWebpOptions(sourceRelativePath, metadata))
-        .toFile(targetAbsolutePath)
-      convertedCount += 1
-    } else {
-      reusedCount += 1
+    if (await exists(targetAbsolutePath)) {
+      skippedCollisions.push(targetRelativePath)
+      continue
     }
+
+    const image = sharp(sourceAbsolutePath).rotate()
+    const metadata = await image.metadata()
+    const { maxLongEdge } = getOptimizationPreset(sourceRelativePath)
+    await fs.mkdir(path.dirname(targetAbsolutePath), { recursive: true })
+    await image
+      .resize({
+        width: maxLongEdge,
+        height: maxLongEdge,
+        fit: 'inside',
+        withoutEnlargement: true
+      })
+      .webp(getWebpOptions(sourceRelativePath, metadata))
+      .toFile(targetAbsolutePath)
+    convertedCount += 1
 
     mappings.push({
       sourceAbsolutePath,
@@ -216,7 +217,7 @@ async function convertImages(imagePaths: string[]) {
     })
   }
 
-  return { convertedCount, mappings, reusedCount }
+  return { convertedCount, mappings, skippedCollisions }
 }
 
 function buildAliasPair(
@@ -477,14 +478,14 @@ function formatBytes(bytes: number) {
 async function main() {
   const imageCandidates = await collectImageCandidates()
   let convertedCount = 0
-  let reusedCount = 0
+  let skippedCollisions: string[] = []
   let updatedFileCount = 0
   let removedOriginalCount = 0
 
   if (imageCandidates.length) {
     const result = await convertImages(imageCandidates)
     convertedCount = result.convertedCount
-    reusedCount = result.reusedCount
+    skippedCollisions = result.skippedCollisions
     updatedFileCount = await rewriteReferences(result.mappings)
     await removeSourceImages(result.mappings)
     removedOriginalCount = result.mappings.length
@@ -495,13 +496,21 @@ async function main() {
   console.log(
     [
       `Converted: ${convertedCount}`,
-      `Reused existing webp: ${reusedCount}`,
+      `Skipped existing webp collisions: ${skippedCollisions.length}`,
       `Updated files: ${updatedFileCount}`,
       `Removed originals: ${removedOriginalCount}`,
       `Optimized existing images: ${optimizedCount}`,
       `Saved: ${formatBytes(savedBytes)}`
     ].join('\n')
   )
+
+  if (skippedCollisions.length) {
+    console.warn(
+      `Source images were kept because these targets already exist:\n${skippedCollisions
+        .map((filePath) => `- ${filePath}`)
+        .join('\n')}`
+    )
+  }
 }
 
 main().catch((error) => {

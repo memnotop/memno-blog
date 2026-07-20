@@ -95,10 +95,12 @@ const meta = {
 
     <p class='notes-empty' id='notes-empty' hidden>No matching notes.</p>
   </main>
+
+  <Fragment slot='body-end'>
+    <script>
+      import { initNotesPage } from '@/scripts/notes'
+
+      initNotesPage()
+    </script>
+  </Fragment>
 </PageLayout>
-
-<script>
-  import { initNotesPage } from '@/scripts/notes'
-
-  initNotesPage()
-</script>

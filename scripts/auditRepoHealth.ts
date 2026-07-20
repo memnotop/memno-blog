@@ -29,7 +29,7 @@ const localStatePrefixes = [
   '.astro/',
   '.makemd/',
   '.trash/',
-  '.obsidian/workspace.json',
+  '.obsidian/',
   'dist/',
   'node_modules/'
 ]
@@ -255,7 +255,7 @@ async function main() {
     issues.push({
       level: 'ok',
       message:
-        'No tracked local-state files under .astro/, .makemd/, .trash/, dist/, node_modules/, or .obsidian/workspace.json.'
+        'No tracked local-state files under .astro/, .makemd/, .trash/, .obsidian/, dist/, or node_modules/.'
     })
   }
 

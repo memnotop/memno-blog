@@ -28,13 +28,16 @@ jobs:
           node-version: 24
           cache: npm
 
+      - name: Use project package manager
+        run: corepack enable && corepack npm --version
+
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: corepack npm ci --no-audit --no-fund
 
       - name: Verify and build
         env:
           PUBLIC_WALINE_SERVER: ${{ vars.PUBLIC_WALINE_SERVER }}
-        run: npm run verify
+        run: corepack npm run verify
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

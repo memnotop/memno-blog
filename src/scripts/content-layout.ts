@@ -1,6 +1,7 @@
 const FOLDABLE_HEADING_SELECTOR = 'h2, h3, h4, h5, h6'
 const FOLDED_HEADING_CLASS = 'heading-fold-collapsed'
 const HIDDEN_SECTION_CLASS = 'heading-fold-hidden'
+const MOBILE_SIDEBAR_QUERY = '(max-width: 767.9px)'
 
 function initSidebar() {
   const sidebarButton = document.getElementById('sidebar-btn')
@@ -10,14 +11,72 @@ function initSidebar() {
   if (!sidebarButton || !sidebar || !sidebarShade) return
   if (sidebarButton.dataset.sidebarReady === 'true') return
 
-  const toggleSidebar = () => {
-    const isOpen = sidebar.classList.toggle('show')
-    sidebarShade.style.display = isOpen ? 'block' : 'none'
+  const controller = new AbortController()
+  const mobileSidebarQuery = window.matchMedia(MOBILE_SIDEBAR_QUERY)
+  let isOpen = false
+
+  const syncSidebarState = () => {
+    const isMobileOpen = mobileSidebarQuery.matches && isOpen
+    const isSidebarVisible = !mobileSidebarQuery.matches || isMobileOpen
+
+    sidebar.classList.toggle('show', isMobileOpen)
+    sidebarShade.style.display = isMobileOpen ? 'block' : 'none'
+    sidebar.toggleAttribute('inert', !isSidebarVisible)
+    if (isSidebarVisible) sidebar.removeAttribute('aria-hidden')
+    else sidebar.setAttribute('aria-hidden', 'true')
+    sidebarButton.setAttribute('aria-expanded', String(isMobileOpen))
   }
 
-  sidebarShade.addEventListener('click', toggleSidebar)
-  sidebarButton.addEventListener('click', toggleSidebar)
+  const closeSidebar = (restoreFocus = false) => {
+    if (!isOpen) return
+    const focusIsInside =
+      document.activeElement instanceof Node && sidebar.contains(document.activeElement)
+    isOpen = false
+    syncSidebarState()
+    if ((restoreFocus || focusIsInside) && mobileSidebarQuery.matches) sidebarButton.focus()
+  }
+
+  const toggleSidebar = () => {
+    if (!mobileSidebarQuery.matches) return
+    isOpen = !isOpen
+    syncSidebarState()
+  }
+
+  const handleBreakpointChange = () => {
+    const focusWillBeHidden =
+      mobileSidebarQuery.matches &&
+      document.activeElement instanceof Node &&
+      sidebar.contains(document.activeElement)
+
+    isOpen = false
+    syncSidebarState()
+    if (focusWillBeHidden) sidebarButton.focus()
+  }
+
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || !mobileSidebarQuery.matches || !isOpen) return
+    event.preventDefault()
+    closeSidebar(true)
+  }
+
+  sidebarShade.addEventListener('click', () => closeSidebar(), { signal: controller.signal })
+  sidebarButton.addEventListener('click', toggleSidebar, { signal: controller.signal })
+  document.addEventListener('keydown', handleKeydown, { signal: controller.signal })
+  mobileSidebarQuery.addEventListener('change', handleBreakpointChange, {
+    signal: controller.signal
+  })
+  window.addEventListener(
+    'pagehide',
+    (event) => {
+      isOpen = false
+      syncSidebarState()
+      if (!event.persisted) controller.abort()
+    },
+    { signal: controller.signal }
+  )
+
   sidebarButton.dataset.sidebarReady = 'true'
+  syncSidebarState()
 }
 
 function getHeadingLevel(element: Element | null) {

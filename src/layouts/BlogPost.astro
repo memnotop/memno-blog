@@ -72,6 +72,8 @@ const primaryColor = data.heroImageColor ?? 'hsl(var(--primary) / var(--un-text-
   </Fragment>
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
-</PageLayout>
 
-{integ.mediumZoom.enable && <MediumZoom />}
+  <Fragment slot='body-end'>
+    {integ.mediumZoom.enable && <MediumZoom />}
+  </Fragment>
+</PageLayout>

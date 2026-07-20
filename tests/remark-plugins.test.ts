@@ -30,6 +30,8 @@ test('zoomable images preserve Obsidian rendering properties', async () => {
     className: ['obsidian-image-inline', 'zoomable'],
     loading: 'lazy',
     decoding: 'async',
-    width: 500
+    width: 500,
+    layout: 'constrained',
+    sizes: '(max-width: 768px) calc(100vw - 2rem), 65ch'
   })
 })

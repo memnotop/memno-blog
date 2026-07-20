@@ -14,6 +14,7 @@ This repository is the active source for `https://memno.top`.
 - Prefer repo-local patterns and keep edits narrow.
 - Avoid changing `packages/pure/` unless the requested change really needs theme-level behavior changes.
 - Preserve existing Chinese content structure and naming unless the user asks for a migration.
+- Treat `.obsidian/` as local-only Vault state; do not track or synchronize it with Git.
 
 ## Important paths
 

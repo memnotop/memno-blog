@@ -11,9 +11,27 @@ const { selector = config.integ.mediumZoom.selector, background = 'hsl(var(--bac
   Astro.props
 ---
 
-<script is:inline src={`${config.npmCDN}/medium-zoom/dist/pure/medium-zoom.min.umd.js`}></script>
-<script is:inline define:vars={{ selector, background }}>
-  mediumZoom(selector, { background })
+<template id='medium-zoom-config' data-selector={selector} data-background={background}></template>
+
+<script>
+  const zoomConfig = document.getElementById('medium-zoom-config')
+  const selector = zoomConfig?.dataset.selector
+  const background = zoomConfig?.dataset.background
+
+  if (selector && document.querySelector(selector)) {
+    const loadZoom = async () => {
+      const { default: mediumZoom } = await import('medium-zoom/dist/pure/index.js')
+      mediumZoom(selector, { background })
+    }
+
+    const initZoom = () => void loadZoom().catch(() => undefined)
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(initZoom, { timeout: 2000 })
+    } else {
+      window.setTimeout(initZoom, 0)
+    }
+  }
 </script>
 <style is:global>
   .medium-zoom-overlay {

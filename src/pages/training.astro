@@ -1,11 +1,31 @@
 ---
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { loadTrainingRecords } from '@/utils/training'
+import {
+  createTrainingCalendar,
+  getDateInTimeZone,
+  TRAINING_LEVEL_LABELS,
+  TRAINING_TIME_ZONE
+} from '@/utils/training-calendar'
 
 import '@/assets/styles/training.css'
 
 const trainingRecords = await loadTrainingRecords()
-const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
+const calendar = createTrainingCalendar(trainingRecords, getDateInTimeZone(TRAINING_TIME_ZONE))
+const selectedRecord = trainingRecords.find((record) => record.date === calendar.selectedKey)
+const trainingJson = JSON.stringify(
+  trainingRecords.map(({ date, title, level, items, rpe, htmlBody }) => ({
+    date,
+    title,
+    level,
+    items,
+    rpe,
+    htmlBody
+  }))
+).replace(/</g, '\\u003c')
+const initialStatus = selectedRecord
+  ? `已选择 ${selectedRecord.date}，${selectedRecord.title}`
+  : `已选择 ${calendar.selectedKey}，暂无训练记录`
 ---
 
 <PageLayout meta={{ title: 'Training' }} highlightColor='#8fcf91'>
@@ -29,8 +49,21 @@ const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
       </div>
 
       <div class='training-heatmap' aria-label='训练日期选择'>
+        <p class='sr-only' id='training-keyboard-help'>
+          使用方向键在日期间移动，Home 和 End 移动到当前星期行的开头和结尾。
+        </p>
         <div class='training-chart-wrap'>
-          <div class='training-months' id='training-months'></div>
+          <div
+            class='training-months'
+            id='training-months'
+            style={`--training-weeks: ${calendar.weekCount}`}
+          >
+            {
+              calendar.months.map((month) => (
+                <span style={`grid-column: ${month.week + 1} / span 1`}>{month.label}</span>
+              ))
+            }
+          </div>
           <div class='training-chart'>
             <div class='training-weekdays' aria-hidden='true'>
               <span></span>
@@ -41,19 +74,94 @@ const trainingJson = JSON.stringify(trainingRecords).replace(/</g, '\\u003c')
               <span>Fri</span>
               <span></span>
             </div>
-            <div class='training-grid' id='training-grid'></div>
+            <div
+              class='training-grid'
+              id='training-grid'
+              role='radiogroup'
+              aria-label='过去一年的训练日期'
+              aria-describedby='training-keyboard-help'
+              aria-controls='training-detail'
+              style={`--training-weeks: ${calendar.weekCount}`}
+            >
+              {
+                calendar.days.map((day) => {
+                  const isSelected = day.date === calendar.selectedKey
+
+                  return (
+                    <button
+                      class:list={[
+                        'training-day',
+                        `level-${day.level}`,
+                        { future: day.isFuture, active: isSelected }
+                      ]}
+                      type='button'
+                      data-day={day.date}
+                      disabled={day.isFuture}
+                      tabindex={isSelected ? 0 : -1}
+                      role='radio'
+                      aria-checked={isSelected ? 'true' : 'false'}
+                      aria-current={day.date === calendar.todayKey ? 'date' : undefined}
+                      aria-label={`${day.date} ${day.label}`}
+                      title={`${day.date} ${day.label}`}
+                    />
+                  )
+                })
+              }
+            </div>
           </div>
         </div>
       </div>
 
-      <div class='training-detail' id='training-detail'></div>
+      <p class='sr-only' id='training-status' role='status' aria-live='polite' aria-atomic='true'>
+        {initialStatus}
+      </p>
+
+      <div class='training-detail' id='training-detail' role='region' aria-label='训练详情'>
+        {
+          selectedRecord ? (
+            <article class='training-entry active'>
+              <div class='training-entry-head'>
+                <span>{selectedRecord.date}</span>
+                <strong class={`level-text level-${selectedRecord.level}`}>
+                  {selectedRecord.level} - {TRAINING_LEVEL_LABELS[selectedRecord.level]}
+                </strong>
+              </div>
+              <h2>{selectedRecord.title}</h2>
+              {selectedRecord.items.length > 0 && (
+                <ul>
+                  {selectedRecord.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              )}
+              {selectedRecord.rpe && <p class='training-rpe'>RPE：{selectedRecord.rpe}</p>}
+              {selectedRecord.htmlBody && (
+                <div class='training-body' set:html={selectedRecord.htmlBody} />
+              )}
+            </article>
+          ) : (
+            <article class='training-entry active'>
+              <div class='training-entry-head'>
+                <span>{calendar.selectedKey}</span>
+                <strong class='level-text level-0'>暂无记录</strong>
+              </div>
+              <h2>这一天还没有训练记录</h2>
+              <p>
+                <del>忘了吧，大概？</del>
+              </p>
+            </article>
+          )
+        }
+      </div>
     </div>
   </main>
+
+  <Fragment slot='body-end'>
+    <script id='training-data' type='application/json' is:inline set:html={trainingJson} />
+    <script>
+      import { initTrainingPage } from '@/scripts/training'
+
+      initTrainingPage()
+    </script>
+  </Fragment>
 </PageLayout>
-
-<script id='training-data' type='application/json' is:inline set:html={trainingJson} />
-<script>
-  import { initTrainingPage } from '@/scripts/training'
-
-  initTrainingPage()
-</script>

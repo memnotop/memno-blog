@@ -73,6 +73,8 @@ function initLifeTable(root: HTMLElement) {
   const savedBirthday = getSavedBirthday()
   let birthDate = parseLocalDate(savedBirthday || '') ?? parseLocalDate(root.dataset.birthday || '')
   let cellStateSignature = ''
+  let renderTimer: number | undefined
+  const controller = new AbortController()
 
   if (birthdayInput) {
     birthdayInput.max = formatLocalDate(new Date())
@@ -174,14 +176,60 @@ function initLifeTable(root: HTMLElement) {
     render()
   }
 
-  birthdayInput?.addEventListener('input', () => {
-    if (birthdayInput.value.length === 10) setBirthday(birthdayInput.value)
+  const stopRendering = () => {
+    if (renderTimer === undefined) return
+    window.clearInterval(renderTimer)
+    renderTimer = undefined
+  }
+
+  const cleanup = () => {
+    stopRendering()
+    controller.abort()
+    delete root.dataset.lifeTableReady
+  }
+
+  const startRendering = () => {
+    if (document.hidden || renderTimer !== undefined) return
+    if (!root.isConnected) {
+      cleanup()
+      return
+    }
+
+    render()
+    renderTimer = window.setInterval(() => {
+      if (!root.isConnected) cleanup()
+      else render()
+    }, 1000)
+  }
+
+  const handleVisibilityChange = () => {
+    if (document.hidden) stopRendering()
+    else startRendering()
+  }
+
+  const handlePageHide = (event: PageTransitionEvent) => {
+    stopRendering()
+    if (!event.persisted) cleanup()
+  }
+
+  birthdayInput?.addEventListener(
+    'input',
+    () => {
+      if (birthdayInput.value.length === 10) setBirthday(birthdayInput.value)
+    },
+    { signal: controller.signal }
+  )
+  birthdayInput?.addEventListener('change', () => setBirthday(birthdayInput.value), {
+    signal: controller.signal
   })
-  birthdayInput?.addEventListener('change', () => setBirthday(birthdayInput.value))
+  document.addEventListener('visibilitychange', handleVisibilityChange, {
+    signal: controller.signal
+  })
+  window.addEventListener('pagehide', handlePageHide, { signal: controller.signal })
+  window.addEventListener('pageshow', startRendering, { signal: controller.signal })
 
   root.dataset.lifeTableReady = 'true'
-  render()
-  window.setInterval(render, 1000)
+  startRendering()
 }
 
 export function initLifeTables() {

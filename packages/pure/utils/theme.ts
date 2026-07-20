@@ -1,10 +1,15 @@
+let systemThemeListenerReady = false
+
 export function getTheme() {
   return localStorage.getItem('theme')
 }
 
-export function listenThemeChange(theme?: string) {
-  if (theme && theme !== 'system') return // if theme is specified, no need to listen window theme change
+export function listenThemeChange(theme = getTheme() ?? 'system') {
+  if (theme !== 'system' || systemThemeListenerReady) return
+
+  systemThemeListenerReady = true
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if ((getTheme() ?? 'system') !== 'system') return
     setTheme(e.matches ? 'dark' : 'light')
   })
 }

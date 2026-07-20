@@ -14,12 +14,6 @@ interface friend_list {
   link_list: friend[]
 }
 
-function shuffle(arr: friend[]) {
-  return arr.sort(function () {
-    return Math.random() - 0.5
-  })
-}
-
 interface Props {
   title?: string
   list: friend_list
@@ -31,7 +25,7 @@ const { title, list: friendList, ...props } = Astro.props
 <div class='grid gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3' {...props}>
   {
     friendList.link_list.length > 0 ? (
-      shuffle(friendList.link_list).map((frd: friend) => (
+      friendList.link_list.map((frd: friend) => (
         <a
           href={frd.link}
           target='_blank'

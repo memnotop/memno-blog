@@ -23,7 +23,11 @@ export const remarkAddZoomable: Plugin<[{ className?: string }], Root> = functio
         ...node.data,
         hProperties: {
           ...hProperties,
-          className: Array.from(new Set([...classNames, className]))
+          className: Array.from(new Set([...classNames, className])),
+          loading: hProperties.loading ?? 'lazy',
+          decoding: hProperties.decoding ?? 'async',
+          layout: hProperties.layout ?? 'constrained',
+          sizes: hProperties.sizes ?? '(max-width: 768px) calc(100vw - 2rem), 65ch'
         }
       }
     })

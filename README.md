@@ -12,7 +12,7 @@ sticker: emoji//2763-fe0f
 ```text
 web/
 ├─ .github/workflows/        GitHub Pages 自动部署配置
-├─ .obsidian/                Obsidian 仓库配置与插件
+├─ .obsidian/                本地 Obsidian 配置与插件（Git 忽略）
 ├─ public/                   直接原样发布的静态资源
 │  ├─ attachments/           兼容旧文章的 Obsidian 公共附件
 │  ├─ favicon/               标签栏图标、PWA 图标
@@ -302,8 +302,10 @@ showHeroImage: false
 
 ### Obsidian 兼容方式
 
-这个仓库可以继续直接作为 Obsidian Vault 打开，`.obsidian/` 配置会保留。文章仍可使用
-Obsidian Wiki Link，例如：
+这个仓库可以继续直接作为 Obsidian Vault 打开，但 `.obsidian/` 仅作为本地配置目录，Git 不再同步
+插件、主题、快捷键和工作区状态。新设备克隆仓库后，由 Obsidian 在本地重新生成配置即可。
+
+文章内容与附件结构仍保持 Obsidian 兼容，可以继续使用 Wiki Link，例如：
 
 ```md
 ![[image-01.webp]]
@@ -388,6 +390,7 @@ src/content/2026/Training.md
 - 友链内容与数据：`src/data/pages/links.mdx`
 
 友链条目、资源链接和变更历史只维护 `src/data/pages/links.mdx`，不再另建公开 JSON 数据源。
+页面会严格按照各 `link_list` 的书写顺序展示，调整顺序时直接移动对应条目即可。
 
 ### 改头像、图标、图片
 

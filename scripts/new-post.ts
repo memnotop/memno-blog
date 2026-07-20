@@ -85,10 +85,10 @@ description: "一句话摘要"
 publishDate: "${nowString()}"
 tags:${toYamlList(tags)}
 repositories:${toYamlList(repositories)}
-# heroImageSrc: ./cover.webp
-# heroImageAlt: 封面图说明
-# heroImageColor: "#659EB9"
-# showHeroImage: true
+heroImageSrc: ../../../../../public/img/covers/book2.webp
+heroImageAlt: ${toYamlString(`${title}封面`)}
+heroImageColor: "#659EB9"
+showHeroImage: true
 language: "中文"
 draft: false
 ---
