@@ -16,13 +16,14 @@ function diveChildren(item: TocItem, depth: number): TocItem[] {
 export function generateToc(headings: readonly MarkdownHeading[]) {
   // this ignores/filters out h1 element(s)
   const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)]
+  const topLevelDepth = bodyHeadings[0]?.depth ?? 2
   const toc: TocItem[] = []
 
   bodyHeadings.forEach((h) => {
     const heading: TocItem = { ...h, subheadings: [] }
 
-    // add h2 elements into the top level
-    if (heading.depth === 2) {
+    // Treat the first body heading level as the top level when a document skips h2.
+    if (heading.depth <= topLevelDepth) {
       toc.push(heading)
     } else {
       const lastItemInToc = toc[toc.length - 1]!
