@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
+
 import { generateToc } from '../packages/pure/plugins/toc'
 
 test('TOC supports documents that start with h3 headings', () => {
