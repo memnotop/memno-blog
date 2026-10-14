@@ -1,4 +1,6 @@
 export const BuiltInIcons = {
+  train:
+    '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M7 3h10a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z"/><path d="M4 11h16M8 7h.01M16 7h.01M8 14h8M8 18l-2 3m10-3 2 3"/></g>',
   // === Social ===
   // mingcute:github-line
   github:

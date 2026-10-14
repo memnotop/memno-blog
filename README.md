@@ -4,8 +4,7 @@ sticker: emoji//2763-fe0f
 
 # memno-blog
 
-`~/Mycode/web` 是当前实际发布到 `https://memno.top` 的仓库。  
-`~/Mycode/web-arthals-ink` 只是之前下载和整理时用的副本，后续维护请以这个仓库为准。
+这是我的个人博客的构建系统，包含了具体的内容，
 
 ## 项目结构
 
@@ -54,7 +53,7 @@ web/
 - `src/content/`
   - 所有文章内容
   - 直接按年份组织，例如 `2026/`、`2027/`
-  - 每个年份下固定分为 `daily life/`、`Reading/`、`Technical/`、`Picture/` 和 `Training.md`
+  - 每个年份下按 `Life/`、`Books/`、`Movies/`、`Technical/` 分类，训练记录放在 `Training.md`
   - 普通文章用 `文章目录/index.md` 组织，配图直接放在文章目录里
 - `src/assets/styles/`
   - 站内页面样式
@@ -89,7 +88,7 @@ npm run dev
 更多命令：
 
 ```bash
-npm run new:post               # 交互式新建文章 / Training 年度文件
+npm run new:post               # 交互式新建普通文章
 npm run date                   # 按内容变化更新 updatedDate
 npm run audit:repo             # 检查仓库体积、图片大小、本地状态文件
 npm run images:webp            # 转换图片并同步更新 Markdown / Obsidian 引用
@@ -204,12 +203,12 @@ npm run new:post -- "文章标题"
 脚本会交互询问：
 
 - 年份，例如 `2026`
-- `repositories`，例如 `technical`、`reading`、`daily-life`、`picture`、`training`
+- `repositories`，使用 `life`、`books`、`movies`、`technical` 四个分类
 
 然后自动构建到对应位置：
 
 - 普通文章：`src/content/2026/Technical/my-post/index.md`
-- Training 年度文件：`src/content/2026/Training.md`
+- Training 年度文件需要手动维护：`src/content/2026/Training.md`
 
 然后打开新文件，填写正文。
 
@@ -328,16 +327,16 @@ npm run images:webp
 
 专题页配置在 [src/site.config.ts](./src/site.config.ts) 的 `blogTopics`。
 
-现在四个专题页都按 `repositories` 字段筛选：
+四个专题页按 `repositories` 字段筛选：Life 使用 `life`，Books 使用 `books`，Movies 使用 `movies`，Technical 使用 `technical`。原 `daily life` 与 `Picture` 文章已统一归入 Life。例如：
 
 ```ts
 {
-  slug: 'daily-life',
-  title: 'daily life',
-  description: '生活记录、想法和日常记录。',
+  slug: 'life',
+  title: 'Life',
+  description: '生活记录、照片和日常想法。',
   source: {
     field: 'repositories',
-    values: ['daily-life']
+    values: ['life']
   }
 }
 ```
@@ -346,7 +345,7 @@ npm run images:webp
 
 ```yaml
 repositories:
-  - daily-life
+  - life
 ```
 
 ### 5. 更新训练记录
@@ -455,7 +454,7 @@ git push origin main
 
 - 交互询问年份和 `repositories`
 - 普通文章创建到 `src/content/<year>/<分类>/<slug>/index.md`
-- `training` 创建到 `src/content/<year>/Training.md`
+- 选项只有四个普通分类：`life`、`books`、`movies`、`technical`
 - 自动带上模板 frontmatter
 
 ### `npm run date`

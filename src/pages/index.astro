@@ -1,18 +1,17 @@
 ---
 import { Image } from 'astro:assets'
 
-import { Quote } from 'astro-pure/advanced'
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import LifeTable from '@/components/home/LifeTable.astro'
 import Section from '@/components/home/Section.astro'
 import { getSortedArticlePosts } from '@/utils/blog'
 import avatar from '@/assets/avatar.webp'
-import config from '@/site-config'
+import config, { footerQuotes } from '@/site-config'
 
 import '@/assets/styles/mem-home.css'
 
 const articlePosts = await getSortedArticlePosts()
+const footerQuote = footerQuotes[Math.floor(Math.random() * footerQuotes.length)]
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',
@@ -84,19 +83,32 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
     </section>
 
     <div id='content' class='mem-content animate flex flex-col gap-y-14 md:w-[88%] lg:w-[86%]'>
+      <div class='flex justify-center'>
+        <blockquote class='mem-home-quote'>
+          <div class='mem-home-quote-card'>
+            <span
+              class='relative flex h-2 w-2 flex-none items-center justify-center'
+              aria-hidden='true'
+            >
+              <span
+                class='absolute size-2 animate-ping rounded-full border border-green-400 bg-green-400 opacity-75'
+              ></span>
+              <span class='size-2 rounded-full bg-green-400'></span>
+            </span>
+            <p class='mem-home-quote-sentence'>{footerQuote}</p>
+          </div>
+        </blockquote>
+      </div>
+
       <Section title='About'>
-        <p class='mem-subtitle text-muted-foreground mt-1'>IC Student</p>
+        <p class='mem-subtitle text-muted-foreground mt-1'>你好，</p>
         <div class='mem-about-copy flex flex-col gap-2 leading-7 text-muted-foreground'>
-          <p>你好，我是 memnotop，一名集成电路专业的本科生，2023 级。</p>
-          <p>这个站点用来记录生活、想法、照片、资源、技术分享与训练。</p>
-          <p>主要记录生活琐事及想法。</p>
-          <p>技术上关注IC、SoC 设计、Linux 工具、课程学习和个人项目复盘。</p>
+          <p>现在我是一名2023级集成电路专业的本科生。</p>
+          <p>这个网站会用来记录思考、生活、训练等内容，</p>
+          <p>希望你能够喜欢这些内容！</p>
         </div>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
       </Section>
-      <div class='flex justify-center'>
-        <Quote class='mem-home-quote' />
-      </div>
 
       <Section title='Statistics' class='mem-centered-section'>
         <div class='mem-stat-grid'>
@@ -156,8 +168,6 @@ const githubChartUrl = `https://ghchart.rshah.org/${githubUsername}`
           </div>
         </div>
       </Section>
-
-      <LifeTable />
     </div>
   </main>
 </PageLayout>

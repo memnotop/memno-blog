@@ -16,21 +16,30 @@ export type BlogTopic = {
 
 export const blogTopics = [
   {
-    slug: 'daily-life',
-    title: 'daily life',
-    description: '生活记录、想法和日常记录。',
+    slug: 'life',
+    title: 'Life',
+    description: '生活记录、照片和日常想法。',
     source: {
       field: 'repositories',
-      values: ['daily-life']
+      values: ['life']
     }
   },
   {
-    slug: 'reading',
-    title: 'Reading',
+    slug: 'books',
+    title: 'Books',
     description: '阅读笔记、书籍、论文和资料整理。',
     source: {
       field: 'repositories',
-      values: ['reading']
+      values: ['books']
+    }
+  },
+  {
+    slug: 'movies',
+    title: 'Movies',
+    description: '电影观后感与影像记录。',
+    source: {
+      field: 'repositories',
+      values: ['movies']
     }
   },
   {
@@ -40,15 +49,6 @@ export const blogTopics = [
     source: {
       field: 'repositories',
       values: ['technical']
-    }
-  },
-  {
-    slug: 'picture',
-    title: 'Picture',
-    description: '照片、旅行和一些值得保存的画面。',
-    source: {
-      field: 'repositories',
-      values: ['picture']
     }
   }
 ] satisfies BlogTopic[]
@@ -61,11 +61,11 @@ export function getBlogTopic(slug: string) {
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), 'PUBLIC_')
 const walineServer = (process.env.PUBLIC_WALINE_SERVER ?? env.PUBLIC_WALINE_SERVER ?? '').trim()
-const footerQuotes = [
+export const footerQuotes = [
   '保持平静，保持向外的爱，活在当下。',
-  '好好活就是有意义，有意义就是好好活。',
+  '慈故能勇，俭故能广。',
   '非淡薄无以明志，非宁静无以致远。',
-  '自尊而不自大。',
+  '自知不自见，自爱不自贵。',
   '持而盈之，不如其已；揣而锐之，不可长保。',
   '自强不息。',
   '挫其锐，解其纷，和其光，同其尘。',
@@ -77,6 +77,7 @@ const footerQuotes = [
   '唯之与阿，相去几何？美之与恶，相去若何？',
   '虚其心，实其腹；弱其志，强其骨。',
   '上士闻道，勤而行之。',
+  '不失其所者久，死而不亡者寿。',
   '曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。',
   '甚爱必大废，多藏必厚亡。'
 ]
@@ -139,19 +140,17 @@ export const theme: ThemeUserConfig = {
       {
         title: 'Blog',
         link: '/blog',
-        children: [
-          ...blogTopics.map(({ slug, title }) => ({ title, link: `/blog/${slug}` })),
-          { title: 'Training', link: '/training' }
-        ]
+        children: blogTopics.map(({ slug, title }) => ({ title, link: `/blog/${slug}` }))
       },
+      { title: 'Training', link: '/training' },
       { title: 'Notes', link: '/notes', description: 'Short dated thoughts' },
-      { title: 'Archives', link: '/archives' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' },
       {
         title: 'Travelling',
         link: 'https://www.travellings.cn/go',
-        description: '随机去往他人博客'
+        description: '随机去往他人博客',
+        icon: 'train'
       }
     ]
   },

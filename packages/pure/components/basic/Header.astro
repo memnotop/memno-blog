@@ -33,6 +33,7 @@ const externalLinkAttrs = (link: string) =>
                 class='block py-2 font-medium transition-none hover:text-primary sm:px-3'
                 {...externalLinkAttrs(item.link)}
               >
+                {item.icon ? <Icon name={item.icon} class='me-1 inline-block size-4 align-[-0.14em]' /> : null}
                 {item.title}
                 {item.children?.length ? <span class='header-chevron ms-1 text-xs'>⌄</span> : null}
               </a>

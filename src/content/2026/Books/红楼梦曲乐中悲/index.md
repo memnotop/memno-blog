@@ -3,11 +3,11 @@ title: 红楼梦：曲 | 乐中悲
 description: 金陵十二钗曲，史湘云
 publishDate: 2026-06-12 21:10:26
 tags:
-  - reading
+  - books
   - 红楼梦
   - 史湘云
 repositories:
-  - reading
+  - books
 heroImageSrc: ../../../../../public/img/covers/汉字2.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"

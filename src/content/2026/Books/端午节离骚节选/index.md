@@ -3,11 +3,11 @@ title: 端午节：离骚（节选）
 description: 端午节
 publishDate: 2026-06-21 19:03:47
 tags:
-  - reading
+  - books
   - 端午
   - 离骚
 repositories:
-  - reading
+  - books
 heroImageSrc: ../../../../../public/img/photos/端午.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"

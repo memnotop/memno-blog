@@ -3,9 +3,9 @@ title: "九号楼的猫"
 description: "一句话摘要"
 publishDate: "2026-06-22 22:38:05"
 tags:
-  - picture
+  - life
 repositories:
-  - picture
+  - life
 heroImageSrc: ../../../../../public/img/photos/cover.webp
 heroImageAlt: 封面图说明
 heroImageColor: "#659EB9"

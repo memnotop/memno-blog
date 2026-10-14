@@ -3,10 +3,10 @@ title: 百年孤独：回忆没有归路
 description: 百年孤独中的句子
 publishDate: 2026-06-04 21:17:18
 tags:
-  - reading
+  - books
   - 百年孤独
 repositories:
-  - reading
+  - books
 language: 中文
 draft: false
 heroImageSrc: ../../../../../public/img/covers/book.webp

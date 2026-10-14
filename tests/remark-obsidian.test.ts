@@ -49,21 +49,21 @@ test('Obsidian syntax is not transformed in formatted link labels', async () => 
 })
 
 test('Obsidian note links resolve to the canonical Astro content route', async () => {
-  const filePath = path.join(process.cwd(), 'src/content/2026/Reading/百年孤独摘要/index.md')
+  const filePath = path.join(process.cwd(), 'src/content/2026/Books/百年孤独摘要/index.md')
   const html = await render('[[红楼梦曲乐中悲#章节]]', { filePath })
 
   assert.match(
     html,
-    /href="\/blog\/2026\/reading\/%E7%BA%A2%E6%A5%BC%E6%A2%A6%E6%9B%B2%E4%B9%90%E4%B8%AD%E6%82%B2#%E7%AB%A0%E8%8A%82"/
+    /href="\/blog\/2026\/books\/%E7%BA%A2%E6%A5%BC%E6%A2%A6%E6%9B%B2%E4%B9%90%E4%B8%AD%E6%82%B2#%E7%AB%A0%E8%8A%82"/
   )
 })
 
 test('Obsidian content paths and aliases resolve to the same article route', async () => {
-  const html = await render('[[src/content/2026/Reading/红楼梦曲乐中悲/index|红楼梦曲乐中悲]]')
+  const html = await render('[[src/content/2026/Books/红楼梦曲乐中悲/index|红楼梦曲乐中悲]]')
 
   assert.match(
     html,
-    /href="\/blog\/2026\/reading\/%E7%BA%A2%E6%A5%BC%E6%A2%A6%E6%9B%B2%E4%B9%90%E4%B8%AD%E6%82%B2"/
+    /href="\/blog\/2026\/books\/%E7%BA%A2%E6%A5%BC%E6%A2%A6%E6%9B%B2%E4%B9%90%E4%B8%AD%E6%82%B2"/
   )
   assert.match(html, />红楼梦曲乐中悲<\/a>/)
 })
@@ -75,7 +75,7 @@ test('public Obsidian images stay as root URLs outside the Astro image pipeline'
 })
 
 test('Astro content rendering can opt public Obsidian images into asset imports', async () => {
-  const filePath = path.join(process.cwd(), 'src/content/2026/Picture/九号楼的猫/index.md')
+  const filePath = path.join(process.cwd(), 'src/content/2026/Life/九号楼的猫/index.md')
   const html = await render('![[/img/photos/九号猫1.webp]]', {
     filePath,
     publicAssets: 'import'

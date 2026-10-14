@@ -6,7 +6,7 @@ tags:
   - 转载
   - 个人成长
 repositories:
-  - daily-life
+  - life
 heroImageSrc: ./cover.webp
 heroImageAlt: 【夜读】好的人生，可以慢慢来文章封面
 heroImageColor: "#659EB9"

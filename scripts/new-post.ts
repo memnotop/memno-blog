@@ -10,11 +10,10 @@ const __dirname = path.dirname(__filename)
 const contentDir = path.join(__dirname, '../src/content')
 
 const repositoryLayouts = {
-  'daily-life': { directory: 'daily life', defaultTags: [] },
-  reading: { directory: 'Reading', defaultTags: ['reading'] },
-  technical: { directory: 'Technical', defaultTags: ['technical'] },
-  picture: { directory: 'Picture', defaultTags: ['picture'] },
-  training: { file: 'Training.md', defaultTags: ['training'] }
+  life: { directory: 'Life', defaultTags: ['life'] },
+  books: { directory: 'Books', defaultTags: ['books'] },
+  movies: { directory: 'Movies', defaultTags: ['movies'] },
+  technical: { directory: 'Technical', defaultTags: ['technical'] }
 } as const
 
 type RepositoryKey = keyof typeof repositoryLayouts
@@ -54,9 +53,7 @@ function parseRepositories(input: string): RepositoryKey[] {
     .filter(Boolean)
 
   if (!repositories.length) {
-    throw new Error(
-      'repositories 不能为空。可选值：daily-life, reading, technical, picture, training。'
-    )
+    throw new Error('repositories 不能为空。可选值：life, books, movies, technical。')
   }
 
   const unsupported = repositories.filter(
@@ -95,28 +92,6 @@ draft: false
 
 <!-- 这里先写一句你想表达的核心观点。 -->
 
-`
-}
-
-function buildTrainingTemplate(year: string, repositories: RepositoryKey[], tags: string[]) {
-  return `---
-title: "Training ${year}"
-description: "${year} 年训练记录。"
-publishDate: "${year}-01-01 00:00:00"
-tags:${toYamlList(tags)}
-repositories:${toYamlList(repositories)}
-language: "中文"
-draft: false
----
-
-## ${year}-01-01｜训练主题｜level 3
-
-训练内容：
-- 动作 1
-- 动作 2
-RPE：12
-
-训练总结写在这里。
 `
 }
 
@@ -180,26 +155,11 @@ async function main() {
     }
 
     const repositories = parseRepositories(
-      await prompt(promptMode, 'repositories（逗号分隔，首个值决定目录）', 'technical')
+      await prompt(promptMode, 'repositories（life/books/movies/technical）', 'technical')
     )
     const primaryRepository = repositories[0]
     const layout = repositoryLayouts[primaryRepository]
     const tags = Array.from(new Set(layout.defaultTags))
-
-    if ('file' in layout) {
-      const filePath = path.join(contentDir, year, layout.file)
-
-      try {
-        await fs.access(filePath)
-        console.log(`Training 文件已存在：${filePath}`)
-        return
-      } catch {
-        await fs.mkdir(path.dirname(filePath), { recursive: true })
-        await fs.writeFile(filePath, buildTrainingTemplate(year, repositories, tags), 'utf8')
-        console.log(`Created: ${filePath}`)
-        return
-      }
-    }
 
     const title = rawTitle || (await prompt(promptMode, '文章标题'))
     if (!title) {

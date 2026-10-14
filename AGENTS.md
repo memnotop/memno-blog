@@ -31,7 +31,7 @@ This repository is the active source for `https://memno.top`.
 ## Content layout
 
 - Content is organized under `src/content/<year>/`
-- Common sections include `daily life/`, `Reading/`, `Technical/`, `Picture/`, and `Training.md`
+- Common sections include `Life/`, `Books/`, `Movies/`, `Technical/`, and `Training.md`
 - Normal posts are typically stored as `src/content/<year>/<Section>/<slug>/index.md`
 - Post assets should usually live beside the post, for example:
   `src/content/2026/Technical/my-post/{index.md,cover.webp,image-01.webp}`

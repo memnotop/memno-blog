@@ -4,39 +4,24 @@ export interface TocItem extends MarkdownHeading {
   subheadings: TocItem[]
 }
 
-function diveChildren(item: TocItem, depth: number): TocItem[] {
-  if (depth === 1 || !item.subheadings.length) {
-    return item.subheadings
-  } else {
-    // e.g., 2
-    return diveChildren(item.subheadings[item.subheadings.length - 1] as TocItem, depth - 1)
-  }
-}
-
 export function generateToc(headings: readonly MarkdownHeading[]) {
-  // this ignores/filters out h1 element(s)
-  const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)]
-  const topLevelDepth = bodyHeadings[0]?.depth ?? 2
+  const bodyHeadings = headings.filter(({ depth }) => depth > 1)
   const toc: TocItem[] = []
+  const stack: TocItem[] = []
 
-  bodyHeadings.forEach((h) => {
-    const heading: TocItem = { ...h, subheadings: [] }
+  bodyHeadings.forEach((heading) => {
+    const item: TocItem = { ...heading, subheadings: [] }
 
-    // Treat the first body heading level as the top level when a document skips h2.
-    if (heading.depth <= topLevelDepth) {
-      toc.push(heading)
-    } else {
-      const lastItemInToc = toc[toc.length - 1]!
-      if (heading.depth < lastItemInToc.depth) {
-        throw new Error(`Orphan heading found: ${heading.text}.`)
-      }
-
-      // higher depth
-      // push into children, or children's children
-      const gap = heading.depth - lastItemInToc.depth
-      const target = diveChildren(lastItemInToc, gap)
-      target.push(heading)
+    while (stack.length && stack[stack.length - 1].depth >= item.depth) {
+      stack.pop()
     }
+
+    const parent = stack[stack.length - 1]
+    if (parent) parent.subheadings.push(item)
+    else toc.push(item)
+
+    stack.push(item)
   })
+
   return toc
 }

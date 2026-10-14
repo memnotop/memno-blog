@@ -3,7 +3,7 @@ title: About
 subtitle: IC Student
 ---
 
-import { Button, Collapse, Signature, Timeline } from 'astro-pure/user'
+import { Button, Signature, Timeline } from 'astro-pure/user'
 
 export const focusItems = [
   { date: 'Blog', content: '阅读思考、生活趣事、训练记录。' },
@@ -27,24 +27,23 @@ export const siteHistory = [
 ## Categories
 
 - Home：主界面。
-- Blog：包括五个方面的博客内容。
-- Archives：所有博客按时间线展示。
+- Blog：Life、Books、Movies 和 Technical 四个专题。
+- Training：每日训练记录。
 - Links：友情链接和资源工具链接。
-- About：此界面，简单的介绍。
-- Travelling：发现其他有趣的博客！
+- About：此界面，对网站简单的介绍。
+- Travelling：一个项目，可以前往他人的博客。
 
 <Button title='Read blog' href='/blog' class='w-fit' />
 
 ## Plan
 
-- 6月：picture内容完善
-- 7月：movies补全
+- 6月：Life 内容完善。
+- 7月：Movies 补全。
+- 10月：改进结构，推进内容。
 
 ## Site History
 
-<Collapse title='Website History Book'>
-  <Timeline events={siteHistory} />
-</Collapse>
+<Timeline events={siteHistory} />
 
 ## Contact
 

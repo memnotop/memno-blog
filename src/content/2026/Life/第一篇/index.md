@@ -5,7 +5,7 @@ description: 这是这个博客的第一篇文章，用来记录建站初衷和�
 tags:
   - 说明
 repositories:
-  - daily-life
+  - life
 language: 中文
 heroImageSrc: ../../../../../public/img/covers/7.webp
 heroImageAlt: 封面图说明
@@ -26,10 +26,10 @@ showHeroImage: true
 
 我希望它不是一个只为了展示的页面，而是一个能长期维护的个人知识库：
 
-- **daily life**：日常思考、读书笔记、阶段总结。
+- **Life**：日常思考、生活记录和阶段总结。
 - **training**：每天训练，发发牢骚。
-- **reading**：读书的摘要或思考。
-- **照片**：生活、旅行和一些值得保存的画面。
+- **Books**：读书的摘要或思考。
+- **Life**：生活、旅行和一些值得保存的画面。
 - **links**：友链，常用工具、网站收藏、学习资料和实用链接。
 - **技术分享**：编程经验、项目记录、环境配置和踩坑笔记。
 

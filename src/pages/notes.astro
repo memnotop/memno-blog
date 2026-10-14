@@ -56,8 +56,8 @@ const meta = {
         <p class='notes-empty'>No notes yet.</p>
       ) : (
         <section class='notes-timeline' aria-label='Notes timeline'>
-          {noteMonths.map((group, index) => (
-            <details class='notes-month' data-notes-month open={index === 0}>
+          {noteMonths.map((group) => (
+            <details class='notes-month' data-notes-month open>
               <summary>
                 <span class='notes-month-title'>
                   <strong>{group.label}</strong>

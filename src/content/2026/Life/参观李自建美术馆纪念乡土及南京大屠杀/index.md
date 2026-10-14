@@ -6,7 +6,7 @@ tags:
   - 画展
   - 生活记录
 repositories:
-  - daily-life
+  - life
   - 画展
 heroImageSrc: ./静静的小河2caijian.webp
 heroImageAlt: 封面图说明
@@ -167,4 +167,3 @@ draft: false
 ![[川.webp]]
 
 ![[川2.webp]]
-
