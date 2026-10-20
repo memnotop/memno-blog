@@ -1,0 +1,250 @@
+---
+import PageLayout from '@/layouts/BaseLayout.astro'
+---
+
+<PageLayout
+  meta={{
+    title: '即将离开本站',
+    description: '你即将访问外部网站，请确认链接地址后继续。'
+  }}
+  pagefindIgnore
+  robots='noindex, nofollow'
+>
+  <main class='external-gateway'>
+    <section class='external-gateway-card' aria-labelledby='external-gateway-title'>
+      <div class='external-gateway-mark' aria-hidden='true'>
+        <svg viewBox='0 0 24 24' fill='none'>
+          <path d='M7 17 17 7M9 7h8v8'></path>
+        </svg>
+      </div>
+      <p class='external-gateway-kicker'>EXTERNAL LINK</p>
+      <h1 id='external-gateway-title'>即将离开本站</h1>
+      <p class='external-gateway-description'>你即将访问本站之外的页面，请确认链接地址后继续。</p>
+
+      <div class='external-gateway-target'>
+        <span class='external-gateway-target-label'>访问地址</span>
+        <span class='external-gateway-domain' data-external-domain>正在读取</span>
+        <code data-external-url>正在读取链接地址…</code>
+      </div>
+
+      <div class='external-gateway-actions'>
+        <a
+          class='external-gateway-primary'
+          href='/'
+          data-external-continue
+          data-external-link-bypass
+        >
+          继续访问
+          <svg viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+            <path d='M5 12h13M13 6l6 6-6 6'></path>
+          </svg>
+        </a>
+        <button class='external-gateway-secondary' type='button' data-external-back>返回本站</button
+        >
+      </div>
+
+      <p class='external-gateway-note'>请留意目标网站的域名，并自行判断其内容是否可信。</p>
+    </section>
+  </main>
+
+  <script>
+    import { goBackFromExternalGateway, initExternalGateway } from '@/scripts/external-links'
+
+    initExternalGateway()
+    document
+      .querySelector('[data-external-back]')
+      ?.addEventListener('click', goBackFromExternalGateway)
+  </script>
+</PageLayout>
+
+<style>
+  .external-gateway {
+    display: grid;
+    min-height: min(62dvh, 40rem);
+    place-items: center;
+    padding: clamp(2.25rem, 8vw, 5.5rem) 0;
+  }
+
+  .external-gateway-card {
+    position: relative;
+    width: min(100%, 38rem);
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 0.86);
+    border-radius: 1.5rem;
+    background:
+      linear-gradient(135deg, hsl(var(--primary) / 0.11), transparent 42%), hsl(var(--card) / 0.96);
+    box-shadow: 0 24px 60px hsl(var(--foreground) / 0.08);
+    padding: clamp(1.5rem, 5vw, 3rem);
+  }
+
+  .external-gateway-card::after {
+    position: absolute;
+    inset-inline-end: -3.5rem;
+    inset-block-start: -4.5rem;
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid hsl(var(--primary) / 0.18);
+    border-radius: 999px;
+    content: '';
+    pointer-events: none;
+  }
+
+  .external-gateway-mark {
+    display: grid;
+    width: 3.25rem;
+    height: 3.25rem;
+    place-items: center;
+    border: 1px solid hsl(var(--primary) / 0.32);
+    border-radius: 1rem;
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--primary));
+  }
+
+  .external-gateway-mark svg {
+    width: 1.55rem;
+    height: 1.55rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
+
+  .external-gateway-kicker {
+    margin: 1.75rem 0 0.55rem;
+    color: hsl(var(--primary));
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+
+  .external-gateway-card h1 {
+    margin: 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.75rem, 5vw, 2.4rem);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+  }
+
+  .external-gateway-description {
+    max-width: 32rem;
+    margin: 0.9rem 0 0;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.75;
+  }
+
+  .external-gateway-target {
+    display: grid;
+    gap: 0.32rem;
+    margin-top: 1.7rem;
+    border: 1px solid hsl(var(--border) / 0.9);
+    border-radius: 0.9rem;
+    background: hsl(var(--background) / 0.58);
+    padding: 0.9rem 1rem;
+  }
+
+  .external-gateway-target-label {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+  }
+
+  .external-gateway-domain {
+    color: hsl(var(--foreground));
+    font-size: 0.98rem;
+    font-weight: 600;
+  }
+
+  .external-gateway-target code {
+    display: block;
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-family: inherit;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .external-gateway-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .external-gateway-primary,
+  .external-gateway-secondary {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .external-gateway-primary {
+    gap: 0.5rem;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  .external-gateway-primary:hover,
+  .external-gateway-primary:focus-visible {
+    background: hsl(var(--primary) / 0.86);
+    color: hsl(var(--primary-foreground));
+    transform: translateY(-1px);
+  }
+
+  .external-gateway-primary svg {
+    width: 1rem;
+    height: 1rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .external-gateway-secondary {
+    border: 1px solid hsl(var(--border));
+    background: transparent;
+    color: hsl(var(--foreground));
+    cursor: pointer;
+  }
+
+  .external-gateway-secondary:hover,
+  .external-gateway-secondary:focus-visible {
+    border-color: hsl(var(--primary) / 0.55);
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+  }
+
+  .external-gateway-primary.is-disabled {
+    pointer-events: none;
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+  }
+
+  .external-gateway-note {
+    margin: 1.25rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    .external-gateway-card {
+      border-radius: 1.15rem;
+    }
+
+    .external-gateway-actions > * {
+      flex: 1 1 100%;
+    }
+  }
+</style>

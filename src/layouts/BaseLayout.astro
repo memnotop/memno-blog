@@ -56,6 +56,12 @@ const {
 
     <slot name='body-end' />
 
+    <script>
+      import { initExternalLinkGuard } from '@/scripts/external-links'
+
+      initExternalLinkGuard()
+    </script>
+
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {

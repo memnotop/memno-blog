@@ -67,16 +67,38 @@ export async function parseTrainingMarkdown(
     const rpeLine = lines.find((line) => /^RPE[：:]/i.test(line))
     const trainingStart = rawLines.findIndex((line) => /^训练内容[：:]/.test(line))
     const items: string[] = []
+    const htmlLines = [...rawLines]
 
     if (trainingStart !== -1) {
-      for (const line of rawLines.slice(trainingStart + 1)) {
+      let trainingEnd = trainingStart
+
+      for (let lineIndex = trainingStart + 1; lineIndex < rawLines.length; lineIndex += 1) {
+        const line = rawLines[lineIndex]
         if (!line && items.length) break
         if (!line) continue
-        if (/^RPE[：:]/i.test(line)) break
+        if (/^RPE[：:]/i.test(line)) {
+          trainingEnd = lineIndex
+          break
+        }
         if (/^(推荐|分享|今天|做一个总结|这里对|相信|坚持|细水|野火|寒假)/.test(line)) break
         items.push(line.replace(/^[-*]\s*/, ''))
+        trainingEnd = lineIndex
       }
+
+      htmlLines.splice(trainingStart, trainingEnd - trainingStart + 1)
     }
+
+    const normalizedTitle = match[2].trim().replace(/[“”‘’"'`\s]/g, '')
+    const firstContentLine = htmlLines.findIndex(Boolean)
+    if (
+      firstContentLine !== -1 &&
+      htmlLines[firstContentLine].replace(/[“”‘’"'`\s]/g, '') === normalizedTitle
+    ) {
+      htmlLines.splice(firstContentLine, 1)
+    }
+
+    const htmlRpeLine = htmlLines.findIndex((line) => /^RPE[：:]/i.test(line))
+    if (htmlRpeLine !== -1) htmlLines.splice(htmlRpeLine, 1)
 
     records.push({
       date: match[1],
@@ -85,7 +107,10 @@ export async function parseTrainingMarkdown(
       items,
       rpe: rpeLine ? rpeLine.replace(/^RPE[：:]\s*/i, '') : '',
       body: content,
-      htmlBody: await renderMarkdownFragment(normalizeTrainingMarkdown(content), filePath)
+      htmlBody: await renderMarkdownFragment(
+        normalizeTrainingMarkdown(htmlLines.join('\n')),
+        filePath
+      )
     })
   }
 

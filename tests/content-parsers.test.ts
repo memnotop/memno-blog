@@ -37,8 +37,9 @@ test('training parser keeps structured fields and escapes multiplier asterisks',
 title: Training 2026
 ---
 
-## 2026-07-01｜Pull｜level 4
+## 2026-07-01｜Training d11｜level 4
 
+“Training”d11
 训练内容：
 - Pull-up 3*10
 - Row 4*8
@@ -55,5 +56,6 @@ RPE：15
   assert.deepEqual(records[0]?.items, ['Pull-up 3*10', 'Row 4*8'])
   assert.equal(records[0]?.rpe, '15')
   assert.equal(records[0]?.level, 4)
-  assert.match(records[0]?.htmlBody ?? '', /Pull-up 3\*10/)
+  assert.doesNotMatch(records[0]?.htmlBody ?? '', /Training|Pull-up|Row|RPE/)
+  assert.match(records[0]?.htmlBody ?? '', /今天状态不错/)
 })

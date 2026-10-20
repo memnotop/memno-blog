@@ -21,7 +21,7 @@ import {
 } from './src/plugins/shiki-transformers.ts'
 import config from './src/site.config.ts'
 
-const excludedIndexPaths = new Set(['/404', '/search'])
+const excludedIndexPaths = new Set(['/404', '/go', '/search'])
 
 function shouldIncludeInSitemap(page: string) {
   const pathname = new URL(page).pathname.replace(/\/$/, '') || '/'
